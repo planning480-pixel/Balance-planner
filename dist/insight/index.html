@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excise Weekly Insight Update • จับตาข่าวและนโยบายกรมสรรพสามิต</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kanit:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pw-orange: #F26522;
+      --pw-orange-dark: #D94E0F;
+      --pw-navy: #0F2537;
+      --pw-teal: #0D5C63;
+      --pw-bg: #F6F7F9;
+    }
+    body {
+      font-family: 'Sarabun', 'Inter', sans-serif;
+      background-color: var(--pw-bg);
+      color: #1E293B;
+      background-image:
+        linear-gradient(135deg, rgba(242, 101, 34, 0.03) 0%, transparent 40%),
+        repeating-linear-gradient(-45deg, transparent, transparent 60px, rgba(15, 37, 55, 0.018) 60px, rgba(15, 37, 55, 0.018) 61px);
+    }
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Kanit', 'Inter', sans-serif;
+    }
+    .poster-text-shadow {
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.9);
+    }
+    .poster-stroke {
+      text-shadow: 0 2px 12px rgba(7, 18, 30, 0.85), 0 1px 2px rgba(0, 0, 0, 0.95);
+    }
+    .card-hover {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px -8px rgba(15, 37, 55, 0.12), 0 4px 12px -2px rgba(15, 37, 55, 0.06);
+    }
+    .pw-select-pill {
+      border: 1.5px solid #F26522;
+      border-radius: 9999px;
+      background-color: #FFFFFF;
+      transition: all 0.18s ease;
+    }
+    .pw-select-pill:focus-within {
+      box-shadow: 0 0 0 3px rgba(242, 101, 34, 0.18);
+    }
+    .pw-arrow-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s ease;
+    }
+    .read-more-btn:hover .read-more-circle {
+      background-color: #F26522;
+      color: #FFFFFF;
+      transform: translateX(3px);
+    }
+    .read-more-circle {
+      transition: all 0.2s ease;
+    }
+    @media print {
+      body {
+        background: #FFFFFF !important;
+        background-image: none !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .a4-print-sheet {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Brand Navigation Bar (Policy Watch Inspired) -->
+  <header class="bg-[#0F2537] text-white border-b border-slate-800 sticky top-0 z-30 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-[#F26522] flex items-center justify-center shadow-sm">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-heading font-extrabold tracking-tight text-lg leading-none">EXCISE INSIGHT</span>
+              <span class="text-[10px] font-semibold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded-full">Weekly Update</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-tight mt-0.5">ระบบสแกนและสรุปข่าวกรมสรรพสามิตรายสัปดาห์ • จับตาพิกัดสินค้าและนโยบายภาษี</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Section Switcher Tabs -->
+      <nav class="hidden md:flex items-center bg-slate-800/90 p-1 rounded-full border border-slate-700" aria-label="Main Views">
+        <button id="tab-all" type="button" data-view="all" class="view-tab-btn px-4 py-1.5 rounded-full text-xs font-heading font-medium transition-all bg-[#F26522] text-white shadow-sm">
+          บทความ &amp; รายสินค้า
+        </button>
+        <button id="tab-overview" type="button" data-view="overview" class="view-tab-btn px-4 py-1.5 rounded-full text-xs font-heading font-medium transition-all text-slate-300 hover:text-white">
+          ภาพรวม &amp; สถิติสัปดาห์นี้
+        </button>
+        <button id="tab-a4" type="button" data-view="a4" class="view-tab-btn px-4 py-1.5 rounded-full text-xs font-heading font-medium transition-all text-slate-300 hover:text-white">
+          สรุป 1 หน้า A4
+        </button>
+      </nav>
+
+      <!-- Schedule & Action Status -->
+      <div class="flex items-center gap-2.5">
+        <div class="hidden sm:flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 px-3 py-1 rounded-full text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>อัปเดตอัตโนมัติ: ทุกวันจันทร์ ~08:00 น.</span>
+        </div>
+        <button id="btn-copy-summary" type="button" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 px-3 py-1.5 rounded-lg text-xs font-heading transition-colors">
+          <svg class="w-3.5 h-3.5 text-[#F26522]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <span>คัดลอกสรุป</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="flex md:hidden border-t border-slate-800 bg-slate-900/90 px-3 py-2 gap-1.5 overflow-x-auto">
+      <button type="button" data-view="all" class="view-tab-btn flex-1 py-1.5 px-3 rounded-full text-xs font-heading font-medium text-center bg-[#F26522] text-white">
+        บทความ &amp; รายสินค้า
+      </button>
+      <button type="button" data-view="overview" class="view-tab-btn flex-1 py-1.5 px-3 rounded-full text-xs font-heading font-medium text-center text-slate-300">
+        ภาพรวม &amp; สถิติ
+      </button>
+      <button type="button" data-view="a4" class="view-tab-btn flex-1 py-1.5 px-3 rounded-full text-xs font-heading font-medium text-center text-slate-300">
+        สรุป 1 หน้า A4
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-7">
+
+    <!-- Top Policy Watch Header Row: Title + Category Dropdown + Edition Pager -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 no-print">
+      <div class="flex items-baseline gap-3">
+        <h1 id="main-section-heading" class="font-heading text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">บทความ</h1>
+        <span class="text-sm text-slate-500 font-medium">รอบสัปดาห์ที่ 24 – 31 ตุลาคม 2569</span>
+      </div>
+
+      <!-- Filter & Pager Controls (Matching Policy Watch Screenshot) -->
+      <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+        <div class="flex items-center gap-2">
+          <label for="category-select" class="text-sm font-medium text-slate-700 whitespace-nowrap">หมวดหมู่ :</label>
+          <div class="pw-select-pill relative flex items-center min-w-[220px] sm:min-w-[250px]">
+            <select id="category-select" class="w-full appearance-none bg-transparent py-1.5 pl-4 pr-9 text-sm font-medium text-slate-800 focus:outline-none cursor-pointer">
+              <option value="all">ทั้งหมด (ทุกพิกัดที่มีข่าว)</option>
+              <option value="oil">น้ำมันและผลิตภัณฑ์น้ำมัน (เด่นสุด)</option>
+              <option value="tobacco">ยาสูบ (อันดับ 2)</option>
+              <option value="liquor">สุรา และสถานบริการ</option>
+              <option value="auto">รถยนต์ (มาตรการ EV)</option>
+              <option value="motorcycle">รถจักรยานยนต์ (EV)</option>
+              <option value="ethanol">เอทานอล (เชื้อเพลิงชีวภาพ)</option>
+              <option value="zero">หมวดที่ไม่มีข่าวในสัปดาห์นี้ (0 ข่าว)</option>
+            </select>
+            <svg class="w-4 h-4 text-[#F26522] absolute right-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Page / Edition Indicator matching screenshot -->
+        <div class="flex items-center gap-2 text-sm text-slate-700 select-none">
+          <button id="btn-prev-view" type="button" title="สลับมุมมองก่อนหน้า" class="pw-arrow-btn border border-slate-300 text-slate-500 hover:border-[#F26522] hover:text-[#F26522]">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <span id="page-indicator-text" class="font-medium text-xs sm:text-sm px-1">สัปดาห์ 44/2569</span>
+          <button id="btn-next-view" type="button" title="สลับมุมมองถัดไป" class="pw-arrow-btn border border-[#F26522] text-[#F26522] hover:bg-[#F26522] hover:text-white">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Quick-Filter Pills Bar (รายสินค้าตามพิกัดกรมสรรพสามิต) -->
+    <div id="category-pills-bar" class="mb-7 no-print">
+      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-200/80 flex flex-wrap items-center gap-2">
+        <span class="text-xs font-heading font-semibold text-slate-500 px-2 py-1 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-[#F26522]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+          พิกัดสินค้าสรรพสามิต:
+        </span>
+        <div id="pill-buttons-container" class="flex flex-wrap items-center gap-1.5">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 1: ARTICLES & BY-PRODUCT (Policy Watch Style) ==================== -->
+    <section id="section-articles" class="space-y-8 no-print">
+
+      <!-- Weekly Insight Highlight Strip (Mini Overview Banner) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-slate-500">พิกัดที่มีข่าวมากที่สุด (อันดับ 1)</p>
+            <p class="font-heading text-lg font-bold text-slate-900 mt-0.5">น้ำมันและผลิตภัณฑ์น้ำมัน</p>
+            <p class="text-xs text-emerald-700 font-medium mt-1">ลดภาษี B20–E20 นาน 3 เดือน (4 สื่อหลัก)</p>
+          </div>
+          <span class="w-9 h-9 rounded-lg bg-orange-50 text-[#F26522] flex items-center justify-center font-heading font-bold text-sm border border-orange-200">#1</span>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-slate-500">พิกัดที่มีข่าวมาก (อันดับ 2)</p>
+            <p class="font-heading text-lg font-bold text-slate-900 mt-0.5">ยาสูบ</p>
+            <p class="text-xs text-amber-700 font-medium mt-1">ยึดบุหรี่เถื่อน 4.4 ล้านมวน &amp; ภาษีบาป</p>
+          </div>
+          <span class="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center font-heading font-bold text-sm border border-amber-200">#2</span>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-slate-500">พิกัดที่มีความเคลื่อนไหวรองลงมา</p>
+            <p class="font-heading text-base font-bold text-slate-900 mt-0.5">สุรา • รถยนต์ • จักรยานยนต์ • เอทานอล</p>
+            <p class="text-xs text-sky-700 font-medium mt-1">Sandbox ข้าวสาร &amp; แก้ประกาศ EV3/EV3.5</p>
+          </div>
+          <span class="w-9 h-9 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center font-heading font-bold text-xs border border-sky-200">4 หมวด</span>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-slate-500">พิกัดที่มีข่าวน้อยที่สุด (0 ข่าว)</p>
+            <p class="font-heading text-base font-bold text-slate-700 mt-0.5">เบียร์ • เครื่องดื่ม • แบตเตอรี่ • น้ำหอม</p>
+            <p class="text-xs text-slate-400 mt-1">ไม่มีข่าวเฉพาะหมวดในรอบสัปดาห์นี้</p>
+          </div>
+          <span class="w-9 h-9 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center font-heading font-bold text-xs border border-slate-200">0 ข่าว</span>
+        </div>
+      </div>
+
+      <!-- HERO FEATURED ARTICLE CARD (60/40 Policy Watch Split) -->
+      <div id="hero-card-container">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- 3-COLUMN ARTICLE CARDS GRID (Policy Watch Style) -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h2 id="grid-section-title" class="font-heading text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-1.5 h-6 rounded-full bg-[#F26522] inline-block"></span>
+            <span>เจาะลึกข่าวสารตามพิกัดกรมสรรพสามิต</span>
+          </h2>
+          <span id="articles-count-badge" class="text-xs font-medium text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200">แสดง 6 เรื่องเด่น</span>
+        </div>
+        <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== VIEW 2: OVERVIEW & STATISTICAL DASHBOARD ==================== -->
+    <section id="section-overview" class="space-y-7 mt-10 no-print">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/90">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-heading font-semibold uppercase tracking-wider text-[#F26522] bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200/60">
+              Statistical Overview • ภาพรวมรายสัปดาห์
+            </span>
+            <h2 class="font-heading text-2xl sm:text-3xl font-bold text-slate-900 mt-2">
+              สรุปสถิติความถี่ข่าวแยกตามพิกัดสินค้าสรรพสามิต (24 – 31 ต.ค. 2569)
+            </h2>
+            <p class="text-sm text-slate-600 mt-1">
+              วิเคราะห์สัดส่วนการรายงานข่าวจากสำนักข่าวชั้นนำในประเทศไทย ครอบคลุม 11 พิกัดสินค้าหลักของกรมสรรพสามิต
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-jump-a4" type="button" class="inline-flex items-center gap-2 bg-[#0F2537] hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-heading font-medium transition-colors shadow-sm">
+              <svg class="w-4 h-4 text-[#F26522]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>เปิดโหมดสรุป 1 หน้า A4</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chart + Most/Least Highlights Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-center">
+          <div class="lg:col-span-7 bg-slate-50/70 rounded-xl p-4 sm:p-5 border border-slate-200/70">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-heading text-sm font-bold text-slate-800">จำนวนแหล่งข่าวอ้างอิงและประเด็นข่าวแยกตามพิกัดสินค้า</h3>
+              <span class="text-[11px] text-slate-500">หน่วย: ชิ้นข่าว/แหล่งอ้างอิงที่ตรวจสอบแล้ว</span>
+            </div>
+            <div class="relative h-72 w-full">
+              <canvas id="exciseStatsChart"></canvas>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 space-y-4">
+            <div class="rounded-xl p-4 bg-gradient-to-br from-orange-50 to-amber-50/60 border border-orange-200/80">
+              <div class="flex items-center gap-2 text-[#D94E0F] font-heading font-bold text-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                <span>พิกัดที่มีข่าวมากที่สุด: น้ำมันและผลิตภัณฑ์น้ำมัน</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-700 mt-1.5 leading-relaxed">
+                ครองสัดส่วนข่าวสูงสุดจากมติ ครม. วันที่ 27 ต.ค. 2569 ออกกฎกระทรวงกำหนดพิกัดอัตราภาษีสรรพสามิต (ฉบับที่ 47) พ.ศ. 2569 ลดภาษีดีเซล B20 และแก๊สโซฮอล์ E20 นาน 3 เดือน โดยคงกลไกราคาคาร์บอน 200 บาท/ตัน CO₂e ตามมาด้วย <strong>พิกัดยาสูบ</strong> (อันดับ 2) จากปฏิบัติการยึดบุหรี่เถื่อน 4.4 ล้านมวน และข้อพิพาทภาษีบาป
+              </p>
+            </div>
+
+            <div class="rounded-xl p-4 bg-slate-50 border border-slate-200">
+              <div class="flex items-center gap-2 text-slate-700 font-heading font-bold text-sm">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+                </svg>
+                <span>พิกัดที่มีข่าวน้อยที่สุด (0 ข่าวในรอบสัปดาห์)</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                ได้แก่ <strong>เบียร์, เครื่องดื่ม (ไม่มีแอลกอฮอล์), แบตเตอรี่ และน้ำหอม</strong> ซึ่งไม่พบการรายงานข่าวเฉพาะหมวดในรอบวันที่ 24 – 31 ต.ค. 2569 จึงคัดกรองออกจากส่วนสรุปเนื้อหาหลักตามเกณฑ์กระชับ
+              </p>
+            </div>
+
+            <!-- Interactive Category Filter Matrix -->
+            <div class="rounded-xl p-4 bg-white border border-slate-200">
+              <p class="text-xs font-heading font-semibold text-slate-500 mb-2.5">คลิกเลือกพิกัดเพื่อกรองดูเฉพาะข่าวในหมวดนั้น:</p>
+              <div id="overview-category-matrix" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Complete Statistical Breakdown Table -->
+        <div class="mt-7 overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-white font-heading">
+                <th class="py-3 px-4 rounded-tl-xl">อันดับ / พิกัดสินค้าสรรพสามิต</th>
+                <th class="py-3 px-4">ระดับความถี่ข่าว</th>
+                <th class="py-3 px-4">สาระสำคัญโดยย่อในรอบสัปดาห์</th>
+                <th class="py-3 px-4 rounded-tr-xl">แหล่งอ้างอิง (คลิกอ่านต้นฉบับ)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 bg-white">
+              <tr class="hover:bg-orange-50/40 transition-colors">
+                <td class="py-3 px-4 font-heading font-semibold text-slate-900">
+                  <span class="inline-block w-2 h-2 rounded-full bg-[#F26522] mr-1.5"></span>1. น้ำมันและผลิตภัณฑ์น้ำมัน
+                </td>
+                <td class="py-3 px-4"><span class="bg-orange-100 text-[#D94E0F] font-semibold px-2.5 py-0.5 rounded-full text-xs">มากที่สุด (อันดับ 1)</span></td>
+                <td class="py-3 px-4 text-slate-700">ครม. ลดภาษีดีเซล B20 (-5.52 บ./ลิตร) และ E20 (-5.64 บ./ลิตร) นาน 3 เดือน (28 ต.ค. 69 – 27 ม.ค. 70) คงราคาคาร์บอน 200 บ./ตัน ดึงขายปลีกเหลือ 33.50 บ./ลิตร</td>
+                <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
+                  <a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยพับลิก้า</a> •
+                  <a href="https://www.prachachat.net/finance/news-2086735" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ประชาชาติธุรกิจ</a> •
+                  <a href="https://www.naewna.com/n/business-world/134510/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">แนวหน้า</a> •
+                  <a href="https://www.js100.com/en/site/news/view/165429" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">จส.100</a>
+                </td>
+              </tr>
+              <tr class="hover:bg-orange-50/40 transition-colors">
+                <td class="py-3 px-4 font-heading font-semibold text-slate-900">
+                  <span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>2. ยาสูบ
+                </td>
+                <td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">มาก (อันดับ 2)</span></td>
+                <td class="py-3 px-4 text-slate-700">ยึดบุหรี่เถื่อนชายแดนสระแก้ว 4.4 ล้านมวน (22 ล้านบาท), สรุปคดีปีงบ 69 พุ่ง 39,305 คดี, เล็งเก็บภาษีบุหรี่ส่งออกล่วงหน้า และข้อพิพาทภาษีบาป 4 กองทุน</td>
+                <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
+                  <a href="https://www.dailynews.co.th/news/6312687/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">เดลินิวส์</a> •
+                  <a href="https://www.fm91bkk.com/newsarticle/81165" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">สวพ.FM91</a> •
+                  <a href="https://www.naewna.com/n/todays-columns/business-columns/134452/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">แนวหน้า (1)</a> •
+                  <a href="https://www.naewna.com/n/breaking/140976/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">แนวหน้า (2)</a> •
+                  <a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">Hfocus</a>
+                </td>
+              </tr>
+              <tr class="hover:bg-orange-50/40 transition-colors">
+                <td class="py-3 px-4 font-heading font-semibold text-slate-900">
+                  <span class="inline-block w-2 h-2 rounded-full bg-indigo-500 mr-1.5"></span>3. สุรา และอื่นๆ (สถานบริการ)
+                </td>
+                <td class="py-3 px-4"><span class="bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">ปานกลาง (อันดับ 3)</span></td>
+                <td class="py-3 px-4 text-slate-700">บูรณาการนำร่อง Sandbox ถนนข้าวสาร–รามบุตรี ทบทวนโซนนิ่งปี 2545 ขยายเวลาจำหน่ายสุราหลังเที่ยงคืนรับปีใหม่ และค้านยกเลิก Earmarked Tax 2%</td>
+                <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
+                  <a href="https://www.thairath.co.th/news/politic/2969392" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยรัฐออนไลน์</a> •
+                  <a href="https://www.thaipbs.or.th/news/content/571900" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยพีบีเอส</a> •
+                  <a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">Hfocus</a>
+                </td>
+              </tr>
+              <tr class="hover:bg-orange-50/40 transition-colors">
+                <td class="py-3 px-4 font-heading font-semibold text-slate-900">
+                  <span class="inline-block w-2 h-2 rounded-full bg-teal-500 mr-1.5"></span>4. รถยนต์ และรถจักรยานยนต์
+                </td>
+                <td class="py-3 px-4"><span class="bg-teal-100 text-teal-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">ปานกลาง (อันดับ 4)</span></td>
+                <td class="py-3 px-4 text-slate-700">เปิดรับฟังความเห็นแก้ประกาศ EV 3 ฉบับ กำหนดวันสิ้นสุดยื่นขอเงินอุดหนุน EV3 (5 ธ.ค. 69) และ EV3.5 (30 มิ.ย. 71) พร้อมปรับชื่อชิ้นส่วน Integrated Inverter</td>
+                <td class="py-3 px-4 whitespace-nowrap">
+                  <a href="https://www.prachachat.net/finance/news-2085812" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ประชาชาติธุรกิจ</a>
+                </td>
+              </tr>
+              <tr class="hover:bg-orange-50/40 transition-colors">
+                <td class="py-3 px-4 font-heading font-semibold text-slate-900">
+                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>5. เอทานอล
+                </td>
+                <td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">น้อย (อันดับ 5)</span></td>
+                <td class="py-3 px-4 text-slate-700">ส่งเสริมการใช้เอทานอล (ผสม 20% ในแก๊สโซฮอล์ E20) เพื่อดูดซับผลผลิตอ้อยและมันสำปะหลัง ช่วยพยุงราคาพืชผลเกษตรกรไทย</td>
+                <td class="py-3 px-4 whitespace-nowrap">
+                  <a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยพับลิก้า</a>
+                </td>
+              </tr>
+              <tr class="bg-slate-50/80 text-slate-500">
+                <td class="py-3 px-4 font-heading font-medium">
+                  <span class="inline-block w-2 h-2 rounded-full bg-slate-300 mr-1.5"></span>6. เบียร์, เครื่องดื่ม, แบตเตอรี่, น้ำหอม
+                </td>
+                <td class="py-3 px-4"><span class="bg-slate-200 text-slate-600 font-medium px-2.5 py-0.5 rounded-full text-xs">น้อยที่สุด (0 ข่าว)</span></td>
+                <td class="py-3 px-4">ไม่มีรายงานข่าวความเคลื่อนไหวเฉพาะพิกัดในรอบสัปดาห์ที่ผ่านมา</td>
+                <td class="py-3 px-4">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: ONE-PAGE A4 EXECUTIVE BRIEF (สำหรับอัปเดตเว็บ / พิมพ์ 1 หน้า A4) ==================== -->
+    <section id="section-a4" class="mt-8 hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4 no-print">
+        <div>
+          <h2 class="font-heading text-xl font-bold text-slate-900">แผ่นสรุปผู้บริหาร 1 หน้า A4 (Excise Weekly Insight Update)</h2>
+          <p class="text-xs text-slate-500">จัดรูปแบบกระชับไม่เกิน 1 หน้า A4 พร้อมพิมพ์หรือนำไปอัปเดตลงเว็บไซต์ได้ทันที</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-print-a4" type="button" class="inline-flex items-center gap-1.5 bg-[#F26522] hover:bg-[#D94E0F] text-white px-4 py-2 rounded-xl text-xs font-heading font-semibold shadow-sm transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            <span>พิมพ์ / บันทึก PDF (1 หน้า A4)</span>
+          </button>
+          <button id="btn-back-articles" type="button" class="inline-flex items-center gap-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-heading font-medium transition-colors">
+            <span>กลับหน้าบทความการ์ด</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- A4 Sheet Container -->
+      <div class="a4-print-sheet bg-white max-w-4xl mx-auto rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 text-slate-800 space-y-4">
+        <div class="border-b-2 border-[#0F2537] pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-[#F26522] text-white text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded">EXCISE WEEKLY INSIGHT UPDATE</span>
+              <span class="text-xs text-slate-500 font-medium">สัปดาห์ที่ 44/2569</span>
+            </div>
+            <h2 class="font-heading text-xl sm:text-2xl font-bold text-[#0F2537] mt-1">สรุปข่าวกรมสรรพสามิตรายสัปดาห์แยกตามพิกัดสินค้า</h2>
+          </div>
+          <div class="text-xs text-slate-600 sm:text-right">
+            <p class="font-semibold text-slate-800">รอบวันที่ 24 – 31 ตุลาคม 2569</p>
+            <p>สถานะตารางอัตโนมัติ: อัปเดตทุกวันจันทร์ เวลา ~08:00 น.</p>
+          </div>
+        </div>
+
+        <!-- Concise Bullet Summary by Product -->
+        <div class="space-y-2.5 text-xs sm:text-[13px] leading-relaxed">
+          <h3 class="font-heading font-bold text-sm text-[#0F2537] uppercase tracking-wide">1. สรุปสาระสำคัญแยกตามพิกัดสินค้าสรรพสามิต (เฉพาะหมวดที่มีข่าว)</h3>
+          <ul class="space-y-2 list-disc pl-5">
+            <li>
+              <strong>พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน:</strong> ครม. มีมติเมื่อ 27 ต.ค. 2569 ออกกฎกระทรวงกำหนดพิกัดอัตราภาษีสรรพสามิต (ฉบับที่ 47) พ.ศ. 2569 ลดภาษีสรรพสามิตดีเซล B20 ลง 5.522 บาท/ลิตร (เหลือ 0.431 บาท/ลิตร) และแก๊สโซฮอล์ E20 ลง 5.642 บาท/ลิตร (เหลือ 0.358 บาท/ลิตร) เป็นเวลา 3 เดือน (28 ต.ค. 2569 – 27 ม.ค. 2570) คาดสูญเสียรายได้ราว 15,000 ล้านบาท โดยคงสัดส่วนกลไกราคาคาร์บอนที่ 200 บาท/ตัน CO₂e ส่งผลให้ราคาขายปลีก B20 และ E20 ลดลงมาอยู่ที่ 33.50 บาท/ลิตรเท่ากัน
+              (<a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยพับลิก้า</a>,
+              <a href="https://www.prachachat.net/finance/news-2086735" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ประชาชาติธุรกิจ</a>,
+              <a href="https://www.naewna.com/n/business-world/134510/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">แนวหน้า</a>,
+              <a href="https://www.js100.com/en/site/news/view/165429" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">จส.100</a>)
+            </li>
+            <li>
+              <strong>พิกัดยาสูบ:</strong> (1) สรรพสามิตสนธิกำลังศุลกากรอรัญประเทศและกองกำลังบูรพา ยึดบุหรี่ต่างประเทศผิดกฎหมาย 4.4 ล้านมวน มูลค่ากว่า 22 ล้านบาท ที่ชายแดน จ.สระแก้ว เมื่อ 28 ต.ค. 2569
+              (<a href="https://www.dailynews.co.th/news/6312687/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">เดลินิวส์</a>,
+              <a href="https://www.fm91bkk.com/newsarticle/81165" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">สวพ.FM91</a>)
+              (2) สรุปผลปราบปรามปีงบ 2569 จับกุมรวม 39,305 คดี (+7.81%) ค่าปรับ 1,069 ล้านบาท โดยบุหรี่เถื่อนครองแชมป์ผ่านขนส่งออนไลน์ พร้อมเร่งแก้ระเบียบเก็บภาษีบุหรี่ส่งออกล่วงหน้าสกัดการเวียนเทียนขายในประเทศ
+              (<a href="https://www.naewna.com/n/todays-columns/business-columns/134452/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">แนวหน้า 28 ต.ค.</a>,
+              <a href="https://www.naewna.com/n/breaking/140976/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">แนวหน้า 31 ต.ค.</a>)
+              และ (3) ภาคีสุขภาพ 491 องค์กร คัดค้านการยกเลิกจัดสรรภาษีบาปส่วนเพิ่ม 2% (Earmarked Tax) และทวงถามภาษีบุหรี่อัตราเดียว
+              (<a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">Hfocus</a>)
+            </li>
+            <li>
+              <strong>พิกัดรถยนต์ และพิกัดรถจักรยานยนต์:</strong> กรมสรรพสามิตเปิดรับฟังความคิดเห็น (22 – 29 ต.ค. 2569) ร่างประกาศแก้ไขมาตรการ EV 3 ฉบับ กำหนดวันสิ้นสุดการยื่นคำขอรับเงินอุดหนุนรถยนต์และรถจักรยานยนต์ไฟฟ้าตามมาตรการ EV3 ภายใน 5 ธ.ค. 2569 และมาตรการ EV3.5 ภายใน 30 มิ.ย. 2571 พร้อมปรับชื่อรายการชิ้นส่วนรถยนต์ไฟฟ้าที่ผลิตในประเทศจาก "PCU Inverter" เป็น "ระบบตัวแปลงกระแสไฟฟ้า (Integrated Inverter)"
+              (<a href="https://www.prachachat.net/finance/news-2085812" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ประชาชาติธุรกิจ</a>)
+            </li>
+            <li>
+              <strong>พิกัดสุรา และพิกัดอื่นๆ (สถานบริการ):</strong> กรมสรรพสามิตร่วมประชุมบูรณาการกับสำนักนายกฯ กทม. บช.น. และ ป.ป.ท. เมื่อ 30 ต.ค. 2569 เดินหน้านำร่อง "Sandbox ถนนข้าวสาร–รามบุตรี" ทบทวนโซนนิ่งปี 2545 และพิจารณาขยายเวลาจำหน่ายแอลกอฮอล์หลัง 24.00 น. ควบคู่เกณฑ์ความปลอดภัย 17 ข้อ ให้ได้ข้อสรุปใน 15 วันรับเทศกาลปีใหม่
+              (<a href="https://www.thairath.co.th/news/politic/2969392" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยรัฐออนไลน์</a>,
+              <a href="https://www.thaipbs.or.th/news/content/571900" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยพีบีเอส</a>)
+              รวมถึงข้อคัดค้านการยกเลิกจัดสรรภาษีสุรา 2% ให้ 4 กองทุนสาธารณะ
+              (<a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">Hfocus</a>)
+            </li>
+            <li>
+              <strong>พิกัดเอทานอล:</strong> การลดภาษีสรรพสามิตแก๊สโซฮอล์ E20 (ที่มีส่วนผสมเอทานอล 20% มากกว่า E10 ถึง 2 เท่า) มุ่งเพิ่มความต้องการใช้อ้อยและมันสำปะหลังเพื่อสร้างรายได้หมุนเวียนแก่เกษตรกรไทย
+              (<a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยพับลิก้า</a>)
+            </li>
+          </ul>
+          <p class="text-[11px] text-slate-500 italic">หมายเหตุ: พิกัดเบียร์, เครื่องดื่ม, แบตเตอรี่ และน้ำหอม ไม่มีรายงานข่าวเฉพาะหมวดในรอบสัปดาห์ที่ผ่านมา</p>
+        </div>
+
+        <!-- Statistical Summary Box -->
+        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 text-xs">
+          <h3 class="font-heading font-bold text-sm text-[#0F2537] mb-1.5">2. สรุปสถิติความถี่ข่าวรายพิกัด</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <span class="font-semibold text-[#D94E0F]">• พิกัดที่มีข่าวมากที่สุด:</span>
+              <span><strong>น้ำมันและผลิตภัณฑ์น้ำมัน</strong> (อันดับ 1) และ <strong>ยาสูบ</strong> (อันดับ 2)</span>
+            </div>
+            <div>
+              <span class="font-semibold text-slate-700">• พิกัดที่มีข่าวน้อยที่สุด:</span>
+              <span><strong>เบียร์, เครื่องดื่ม, แบตเตอรี่, น้ำหอม</strong> (0 ข่าว) | ที่่มีข่าวแต่ความถี่น้อยสุดคือ <strong>เอทานอล</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Article Detail Modal (In-Page Policy Watch Drawer/Modal) -->
+  <div id="article-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/70 backdrop-blur-xs p-4 overflow-y-auto no-print" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="bg-white rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl border border-slate-200 my-8">
+      <div id="modal-banner-container" class="relative h-56 sm:h-64 w-full bg-slate-900 overflow-hidden">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="p-6 sm:p-7 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span id="modal-category-badge" class="text-xs font-heading font-semibold px-3 py-1 rounded-full bg-orange-100 text-[#D94E0F]"></span>
+          <span id="modal-date" class="text-xs text-slate-500"></span>
+        </div>
+        <h3 id="modal-title" class="font-heading text-xl sm:text-2xl font-bold text-slate-900 leading-snug"></h3>
+        <p id="modal-summary" class="text-sm sm:text-base text-slate-700 leading-relaxed"></p>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <h4 class="font-heading text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">สาระสำคัญและตัวเลขสำคัญ (Key Insights)</h4>
+          <ul id="modal-bullets" class="space-y-1.5 text-xs sm:text-sm text-slate-700 list-disc pl-5"></ul>
+        </div>
+        <div class="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-semibold text-slate-500 block mb-1">แหล่งอ้างอิงที่น่าเชื่อถือ (คลิกเพื่ออ่านข่าวต้นฉบับ):</span>
+            <div id="modal-sources" class="flex flex-wrap gap-2"></div>
+          </div>
+          <button id="btn-close-modal" type="button" class="self-end sm:self-center bg-slate-900 hover:bg-slate-800 text-white font-heading text-xs font-medium px-5 py-2.5 rounded-xl transition-colors">
+            ปิดหน้าต่าง
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copy Notification Toast -->
+  <div id="toast-notification" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg border border-slate-700 text-xs font-heading items-center gap-2 no-print">
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span id="toast-message">คัดลอกสรุปข่าวลงคลิปบอร์ดเรียบร้อยแล้ว</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-6 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#F26522]"></span>
+        <span class="font-heading font-semibold text-slate-700">Excise Weekly Insight Update</span>
+        <span>• ระบบประมวลผลข่าวสารกรมสรรพสามิตรายสัปดาห์</span>
+      </div>
+      <div>
+        <span>ข้อมูลอ้างอิงจาก: ไทยพับลิก้า, ประชาชาติธุรกิจ, ไทยรัฐออนไลน์, ไทยพีบีเอส, เดลินิวส์, แนวหน้า, สวพ.FM91, จส.100 และ Hfocus</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Image paths (will be inlined as base64 data URIs for standalone Canvas preview)
+    const IMAGES = {
+      heroFuel: "img/oil.jpg",
+      tobaccoSeizure: "img/tobacco.jpg",
+      evPolicy: "img/auto.jpg",
+      khaosanSandbox: "img/liquor.jpg",
+      ethanolBiofuel: "img/ethanol.jpg",
+      earmarkedTax: "img/health-tax.jpg",
+      onlineEnforcement: "img/enforcement.jpg"
+    };
+
+    // Excise Product Categories Metadata
+    const CATEGORIES = [
+      { id: "all", name: "ทั้งหมด", count: 7, hasNews: true },
+      { id: "oil", name: "น้ำมันและผลิตภัณฑ์น้ำมัน", count: 1, rank: "อันดับ 1 (ข่าวมากสุด)", hasNews: true },
+      { id: "tobacco", name: "ยาสูบ", count: 3, rank: "อันดับ 2", hasNews: true },
+      { id: "liquor", name: "สุรา และสถานบริการ", count: 2, rank: "อันดับ 3", hasNews: true },
+      { id: "auto", name: "รถยนต์", count: 1, rank: "อันดับ 4", hasNews: true },
+      { id: "motorcycle", name: "รถจักรยานยนต์", count: 1, rank: "อันดับ 4 ร่วม", hasNews: true },
+      { id: "ethanol", name: "เอทานอล", count: 1, rank: "อันดับ 5", hasNews: true },
+      { id: "zero", name: "เบียร์ • เครื่องดื่ม • แบตเตอรี่ • น้ำหอม", count: 0, rank: "0 ข่าว (น้อยสุด)", hasNews: false }
+    ];
+
+    // Verified Weekly Articles Data (24 - 31 Oct 2569)
+    const ARTICLES = [
+      {
+        id: "art-fuel-b20-e20",
+        isHero: true,
+        categories: ["oil", "ethanol"],
+        categoryLabel: "พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน",
+        date: "27 ตุลาคม 2569",
+        image: IMAGES.heroFuel,
+        posterTopLine: "เคาะลดภาษีน้ำมัน 3 เดือน",
+        posterBottomLine: "ดึง B20 – E20 เหลือ 33.50 บ./ลิตร",
+        posterBadgeText: "฿ -5.64 บ.",
+        title: "ครม. ไฟเขียวลดภาษีสรรพสามิตน้ำมัน B20 และ E20 นาน 3 เดือน คงกลไกราคาคาร์บอนมุ่งสู่ Net Zero",
+        summary: "คณะรัฐมนตรีมีมติเมื่อวันที่ 27 ต.ค. 2569 ออกกฎกระทรวงกำหนดพิกัดอัตราภาษีสรรพสามิต (ฉบับที่ 47) พ.ศ. 2569 ปรับลดภาษีสรรพสามิตน้ำมันดีเซล B20 และแก๊สโซฮอล์ E20 ลิตรละกว่า 5.50–5.64 บาท เป็นเวลา 3 เดือน (28 ต.ค. 2569 – 27 ม.ค. 2570) เพื่อช่วยแบ่งเบาภาระกองทุนน้ำมันเชื้อเพลิงและบรรเทาค่าครองชีพประชาชน โดยยังคงสัดส่วนภาษีคาร์บอน 200 บาท/ตัน CO₂e",
+        bullets: [
+          "ลดภาษีสรรพสามิตน้ำมันดีเซล B20 ลง 5.522 บาท/ลิตร (จาก 5.953 เหลือ 0.431 บาท/ลิตร) และแก๊สโซฮอล์ E20 ลง 5.642 บาท/ลิตร (จาก 6.000 เหลือ 0.358 บาท/ลิตร)",
+          "กบน. ปรับลดราคาขายปลีก B20 ลง 3.69 บาท/ลิตร และ E20 ลง 2.19 บาท/ลิตร ส่งผลให้ราคาขายปลีกทั้งสองชนิดอยู่ที่ 33.50 บาท/ลิตร มีผลตั้งแต่ 28 ต.ค. 2569",
+          "คงสัดส่วนกลไกราคาคาร์บอน (Carbon Price) ที่ 200 บาทต่อตันคาร์บอนไดออกไซด์เทียบเท่า เพื่อรักษามาตรฐานสิ่งแวดล้อมและมุ่งสู่เป้าหมาย Net Zero โดยคาดว่ากระทบรายได้รัฐราว 15,000 ล้านบาท"
+        ],
+        sources: [
+          { name: "ไทยพับลิก้า", url: "https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" },
+          { name: "ประชาชาติธุรกิจ", url: "https://www.prachachat.net/finance/news-2086735" },
+          { name: "แนวหน้า", url: "https://www.naewna.com/n/business-world/134510/" },
+          { name: "จส.100", url: "https://www.js100.com/en/site/news/view/165429" }
+        ]
+      },
+      {
+        id: "art-tobacco-seizure",
+        isHero: false,
+        categories: ["tobacco"],
+        categoryLabel: "พิกัดยาสูบ",
+        date: "28 ตุลาคม 2569",
+        image: IMAGES.tobaccoSeizure,
+        posterTopLine: "สกัดจับชายแดนสระแก้ว!",
+        posterBottomLine: "ยึดบุหรี่เถื่อน 4.4 ล้านมวน",
+        posterBadgeText: "22 ล้านบาท",
+        title: "สรรพสามิตสนธิกำลังศุลกากร-ทหาร ยึดบุหรี่ต่างประเทศผิดกฎหมาย 4.4 ล้านมวน มูลค่ากว่า 22 ล้านบาท",
+        summary: "เจ้าหน้าที่สรรพสามิตร่วมกับด่านศุลกากรอรัญประเทศ กองกำลังบูรพา และหน่วยเฉพาะกิจคลองหาด แถลงผลตรวจยึดบุหรี่ต่างประเทศไม่ผ่านพิธีการทางภาษีล็อตใหญ่ซุกป่าทึบแนวชายแดนไทย–กัมพูชา อ.คลองหาด จ.สระแก้ว",
+        bullets: [
+          "ตรวจยึดบุหรี่เมืองกำเนิดต่างประเทศผิดกฎหมายจำนวนประมาณ 4,400,000 มวน ประเมินมูลค่าของกลางรวมกว่า 22 ล้านบาท",
+          "ผู้ลักลอบขนย้ายประมาณ 5–10 คน ทิ้งของกลางหลบหนีข้ามแดนเมื่อพบเจ้าหน้าที่ลาดตระเวนช่วงเวลา 01.30 น. ของวันที่ 28 ต.ค. 2569",
+          "ยกระดับความเข้มงวดสกัดกั้นสินค้าหนีภาษีตามแนวชายแดนเพื่อปกป้องรายได้แผ่นดินและป้องกันการบิดเบือนกลไกราคาในประเทศ"
+        ],
+        sources: [
+          { name: "เดลินิวส์", url: "https://www.dailynews.co.th/news/6312687/" },
+          { name: "สวพ.FM91", url: "https://www.fm91bkk.com/newsarticle/81165" },
+          { name: "ข่าวสด", url: "https://www.khaosod.co.th/around-thailand/news_10453163" }
+        ]
+      },
+      {
+        id: "art-ev-policy",
+        isHero: false,
+        categories: ["auto", "motorcycle"],
+        categoryLabel: "พิกัดรถยนต์ & รถจักรยานยนต์",
+        date: "26 ตุลาคม 2569",
+        image: IMAGES.evPolicy,
+        posterTopLine: "แก้ประกาศอีวี 3 ฉบับ",
+        posterBottomLine: "ขีดเส้นวันสิ้นสุด EV3 – EV3.5",
+        posterBadgeText: "EV 3.0 / 3.5",
+        title: "สรรพสามิตเปิดรับฟังความเห็นแก้ประกาศมาตรการ EV 3 ฉบับ กำหนดวันสิ้นสุดยื่นขอเงินอุดหนุนและปรับชื่อชิ้นส่วน",
+        summary: "กรมสรรพสามิตเปิดรับฟังความคิดเห็น (22–29 ต.ค. 2569) ร่างประกาศเกี่ยวกับนโยบายยานยนต์ไฟฟ้า (รถยนต์และรถจักรยานยนต์) รวม 3 ฉบับ เพื่อบริหารงบประมาณภาครัฐอย่างคุ้มค่าและปรับชื่อชิ้นส่วนในประเทศให้สอดคล้องกัน",
+        bullets: [
+          "กำหนดวันสิ้นสุดการยื่นแบบคำขอรับเงินอุดหนุนรถยนต์และรถจักรยานยนต์ไฟฟ้าตามมาตรการ EV3 ภายในวันที่ 5 ธ.ค. 2569 (ภายใน 60 วันหลังมติ ครม. 6 ต.ค. 2569)",
+          "กำหนดวันสิ้นสุดการยื่นแบบคำขอรับเงินอุดหนุนตามมาตรการ EV3.5 ภายในวันที่ 30 มิ.ย. 2571 ให้สอดคล้องกับอายุหนังสือค้ำประกัน",
+          "แก้ไขชื่อรายการชิ้นส่วนรถยนต์ไฟฟ้าที่ผลิตในประเทศจากเดิม 'PCU Inverter' เป็น 'ระบบตัวแปลงกระแสไฟฟ้า (Integrated Inverter)' ให้ตรงกับประกาศรถยนต์ HEV และ PHEV"
+        ],
+        sources: [
+          { name: "ประชาชาติธุรกิจ", url: "https://www.prachachat.net/finance/news-2085812" }
+        ]
+      },
+      {
+        id: "art-khaosan-sandbox",
+        isHero: false,
+        categories: ["liquor"],
+        categoryLabel: "พิกัดสุรา & สถานบริการ",
+        date: "30 ตุลาคม 2569",
+        image: IMAGES.khaosanSandbox,
+        posterTopLine: "นำร่อง Sandbox ข้าวสาร",
+        posterBottomLine: "ทบทวนโซนนิ่ง-เวลาขายสุรา",
+        posterBadgeText: "สรุปใน 15 วัน",
+        title: "สรรพสามิตร่วมถก กทม.–ตร.–ป.ป.ท. ขับเคลื่อน Sandbox ข้าวสาร–รามบุตรี ทบทวนโซนนิ่งสถานบริการปี 45",
+        summary: "รมต.ประจำสำนักนายกรัฐมนตรี ประชุมบูรณาการร่วมกับกรมสรรพสามิต กทม. บช.น. และ ป.ป.ท. เตรียมใช้ถนนข้าวสารและรามบุตรีเป็นพื้นที่นำร่องปรับปรุงกฎระเบียบสถานบริการและเวลาจำหน่ายเครื่องดื่มแอลกอฮอล์รับไฮซีซันปลายปี",
+        bullets: [
+          "แก้ข้อจำกัด พ.ร.ฎ. โซนนิ่ง พ.ศ. 2545 ที่อนุญาตตั้งสถานบริการใน กทม. เพียง 3 เขต (RCA, พัฒน์พงษ์, รัชดาภิเษก) ซึ่งไม่สอดคล้องกับพื้นที่ท่องเที่ยวปัจจุบัน",
+          "เตรียมเสนอคณะกรรมการควบคุมเครื่องดื่มแอลกอฮอล์พิจารณาขยายเวลาเปิดบริการเกิน 24.00 น. ในพื้นที่ Sandbox ควบคู่เกณฑ์ความปลอดภัย 17 ข้อของ กทม.",
+          "เร่งจัดทำฐานข้อมูลใบอนุญาตจำหน่ายสุราและสถานบริการให้เป็นมาตรฐานเดียวกันเพื่อลดช่องว่างการเรียกรับสินบน โดยขีดเส้นสรุปผลใน 15 วัน"
+        ],
+        sources: [
+          { name: "ไทยรัฐออนไลน์", url: "https://www.thairath.co.th/news/politic/2969392" },
+          { name: "ไทยพีบีเอส", url: "https://www.thaipbs.or.th/news/content/571900" }
+        ]
+      },
+      {
+        id: "art-earmarked-tax",
+        isHero: false,
+        categories: ["tobacco", "liquor"],
+        categoryLabel: "พิกัดยาสูบ & สุรา",
+        date: "27 – 31 ตุลาคม 2569",
+        image: IMAGES.earmarkedTax,
+        posterTopLine: "491 เครือข่ายค้านแก้ พ.ร.บ.",
+        posterBottomLine: "ปกป้องภาษีบาป – จี้บุหรี่อัตราเดียว",
+        posterBadgeText: "Earmarked Tax",
+        title: "เครือข่ายสุขภาพ 491 องค์กรจี้ถอนร่างกฎหมายยกเลิกภาษีบาป 4 กองทุน พร้อมจับตาระเบียบภาษีบุหรี่ส่งออก",
+        summary: "ขบวนการสร้างเสริมสุขภาพประชาชนและภาคี 491 องค์กร ยื่นหนังสือคัดค้านการยกเลิกระบบจัดสรรภาษีสรรพสามิตสุราและยาสูบส่วนเพิ่ม 2% ให้ 4 กองทุนสาธารณะ ขณะที่สื่อเศรษฐกิจติดตามการแก้ระเบียบเก็บภาษีบุหรี่ส่งออกล่วงหน้า",
+        bullets: [
+          "นายกรัฐมนตรียืนยันเมื่อ 27 ต.ค. 2569 ว่ายังไม่ได้ลงนามรับรองร่างแก้ไข พ.ร.บ. 4 ฉบับ (สสส., ไทยพีบีเอส, กองทุนผู้สูงอายุ, กองทุนพัฒนาการกีฬาฯ) และอยู่ระหว่างพิจารณา",
+          "ภาคประชาสังคมทวงถามความคืบหน้าการปรับโครงสร้างภาษีบุหรี่เป็นอัตราเดียว (Single Tier) เพื่อลดการบิดเบือนราคาและเพิ่มรายได้รัฐ",
+          "ติดตามความคืบหน้ากรมสรรพสามิตในการปรับปรุงระเบียบให้บุหรี่ส่งออกต้องบวกภาษีไปก่อนและขอคืนเมื่อส่งออกจริง เพื่อสกัดขบวนการเวียนเทียนกลับเข้ามาขายในไทย"
+        ],
+        sources: [
+          { name: "Hfocus", url: "https://www.hfocus.org/content/2026/10/40033" },
+          { name: "แนวหน้า", url: "https://www.naewna.com/n/breaking/140976/" }
+        ]
+      },
+      {
+        id: "art-online-enforcement",
+        isHero: false,
+        categories: ["tobacco"],
+        categoryLabel: "พิกัดยาสูบ & ปราบปราม",
+        date: "28 ตุลาคม 2569",
+        image: IMAGES.onlineEnforcement,
+        posterTopLine: "ปราบสินค้าเถื่อนปี'69",
+        posterBottomLine: "พุ่ง 39,305 คดี รุกสกัดขนส่งออนไลน์",
+        posterBadgeText: "+7.81% YoY",
+        title: "เจาะผลงานปราบปรามสรรพสามิตปีงบ 2569 ทะลุ 39,305 คดี เร่งสกัดขบวนการกองทัพมดส่งบุหรี่เถื่อนออนไลน์",
+        summary: "บทวิเคราะห์เศรษฐกิจเปิดเผยผลงานสำนักตรวจสอบ ป้องกันและปราบปราม (สตป.) กรมสรรพสามิต ในปีงบประมาณ 2569 ที่จับกุมคดีเพิ่มขึ้น 7.81% ท่ามกลางความท้าทายจากผู้รับเหมาช่วงขนส่งพัสดุออนไลน์",
+        bullets: [
+          "สรุปผลปราบปรามปีงบประมาณ 2569 จับกุมรวม 39,305 คดี (เพิ่มขึ้น 2,848 คดี หรือ +7.81% จากปีงบ 2568) คิดเป็นค่าปรับรวมกว่า 1,069 ล้านบาท และประมาณการค่าปรับกว่า 5,420 ล้านบาท",
+          "สินค้ายาสูบ (บุหรี่เถื่อน) ยังคงเป็นสินค้าที่มีการกระทำผิดสูงสุดอันดับ 1 โดยเปลี่ยนรูปแบบจากโกดังใหญ่เป็นจุดกระจายย่อยผ่านแพลตฟอร์มขนส่งออนไลน์",
+          "เดินหน้ายกระดับความร่วมมือตาม MOU กับบริษัทขนส่งพัสดุเพื่อตรวจสอบผู้รับเหมาช่วง (กองทัพมด) ที่รับส่งสินค้าหนีภาษีถึงหน้าบ้าน"
+        ],
+        sources: [
+          { name: "แนวหน้า", url: "https://www.naewna.com/n/todays-columns/business-columns/134452/" }
+        ]
+      },
+      {
+        id: "art-ethanol-farmers",
+        isHero: false,
+        categories: ["ethanol", "oil"],
+        categoryLabel: "พิกัดเอทานอล & พืชพลังงาน",
+        date: "27 ตุลาคม 2569",
+        image: IMAGES.ethanolBiofuel,
+        posterTopLine: "หนุนเอทานอล E20 – B20",
+        posterBottomLine: "พยุงราคาอ้อย-มัน-ปาล์มเกษตรกร",
+        posterBadgeText: "เอทานอล 20%",
+        title: "มาตรการลดภาษีสรรพสามิต E20–B20 หนุนการใช้เอทานอลและไบโอดีเซล สร้างรายได้หมุนเวียนเกษตรกรไทย",
+        summary: "การเลือกปรับลดภาษีเฉพาะแก๊สโซฮอล์ E20 และดีเซล B20 มุ่งสร้างแรงจูงใจด้านราคาให้ผู้ใช้รถหันมาเติมพลังงานทางเลือกที่มีสัดส่วนวัตถุดิบทางการเกษตรในประเทศสูงกว่าน้ำมันพื้นฐานถึง 2–3 เท่า",
+        bullets: [
+          "น้ำมันแก๊สโซฮอล์ E20 มีส่วนผสมของเอทานอลร้อยละ 20 (ผลิตจากอ้อยและมันสำปะหลัง) ซึ่งมากกว่าแก๊สโซฮอล์ E10 ถึง 2 เท่าต่อลิตร",
+          "น้ำมันดีเซล B20 มีส่วนผสมของไบโอดีเซล B100 (ผลิตจากน้ำมันปาล์มดิบ) ร้อยละ 20 ซึ่งมากกว่าดีเซล B7 เกือบ 3 เท่าต่อลิตร",
+          "ช่วยให้รถยนต์นั่งที่เติม E20 เต็มถัง (45 ลิตร) ประหยัดได้ราว 380 บาท/ถัง และรถกระบะที่เติม B20 เต็มถัง (70 ลิตร) ประหยัดได้กว่า 700 บาท/ถัง เมื่อเทียบกับแก๊สโซฮอล์ 95 และดีเซล B7"
+        ],
+        sources: [
+          { name: "ไทยพับลิก้า", url: "https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" },
+          { name: "ประชาชาติธุรกิจ", url: "https://www.prachachat.net/finance/news-2086735" }
+        ]
+      }
+    ];
+
+    // App State
+    let currentCategory = "all";
+    let currentView = "all"; // 'all' | 'overview' | 'a4'
+    let statsChartInstance = null;
+
+    // Helper: Policy Watch Logo Overlay HTML
+    function renderPolicyWatchLogoOverlay(badgeText) {
+      return `
+        <div class="absolute top-3 left-3.5 right-3.5 flex items-center justify-between pointer-events-none z-10">
+          <div class="flex items-center gap-1.5 bg-slate-950/65 backdrop-blur-xs px-2.5 py-1 rounded-md border border-white/15">
+            <span class="font-heading font-extrabold text-[11px] tracking-tight text-white leading-none">EXCISE<br/><span class="text-[#F26522]">WATCH</span></span>
+            <span class="w-4 h-4 rounded-xs border border-cyan-300/80 flex items-center justify-center rotate-45 ml-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#F26522] -rotate-45"></span>
+            </span>
+          </div>
+          <div class="bg-[#F26522] text-white font-heading font-bold text-[11px] px-2.5 py-1 rounded-full shadow-md border border-white/25">
+            ${badgeText}
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Category Quick-Filter Pills
+    function renderCategoryPills() {
+      const container = document.getElementById("pill-buttons-container");
+      const matrixContainer = document.getElementById("overview-category-matrix");
+      if (!container) return;
+
+      container.innerHTML = CATEGORIES.map(cat => {
+        const active = currentCategory === cat.id;
+        const baseClass = active
+          ? "bg-[#F26522] text-white border-[#F26522] shadow-xs"
+          : cat.hasNews
+            ? "bg-slate-50 hover:bg-orange-50 text-slate-700 border-slate-200 hover:border-orange-300"
+            : "bg-slate-50/60 text-slate-400 border-slate-200 hover:bg-slate-100";
+        return `
+          <button type="button" data-cat="${cat.id}" class="cat-pill-btn px-3 py-1 rounded-full text-xs font-heading font-medium border transition-all flex items-center gap-1.5 ${baseClass}">
+            <span>${cat.name}</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full ${active ? 'bg-white/25 text-white' : 'bg-slate-200/80 text-slate-600'}">${cat.count}</span>
+          </button>
+        `;
+      }).join("");
+
+      if (matrixContainer) {
+        matrixContainer.innerHTML = CATEGORIES.filter(c => c.id !== "all").map(cat => {
+          const active = currentCategory === cat.id;
+          return `
+            <button type="button" data-cat="${cat.id}" class="cat-matrix-btn text-left p-2.5 rounded-lg border transition-all ${active ? 'border-[#F26522] bg-orange-50/70' : 'border-slate-200 hover:border-orange-300 bg-slate-50/50'}">
+              <div class="font-heading font-semibold text-xs text-slate-800 truncate">${cat.name}</div>
+              <div class="text-[11px] ${cat.hasNews ? 'text-[#D94E0F]' : 'text-slate-400'} mt-0.5">${cat.rank}</div>
+            </button>
+          `;
+        }).join("");
+      }
+
+      document.querySelectorAll(".cat-pill-btn, .cat-matrix-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const selected = btn.getAttribute("data-cat");
+          setCategoryFilter(selected);
+          if (currentView !== "all") {
+            setViewMode("all");
+          }
+        });
+      });
+    }
+
+    // Render Hero & Grid Cards matching Policy Watch Screenshot
+    function renderArticles() {
+      const heroContainer = document.getElementById("hero-card-container");
+      const gridContainer = document.getElementById("articles-grid");
+      const countBadge = document.getElementById("articles-count-badge");
+      const gridTitle = document.getElementById("grid-section-title");
+
+      if (currentCategory === "zero") {
+        heroContainer.innerHTML = "";
+        gridTitle.innerHTML = `<span class="w-1.5 h-6 rounded-full bg-slate-400 inline-block"></span><span>หมวดสินค้าที่ไม่มีรายงานข่าวในรอบสัปดาห์นี้ (24 – 31 ต.ค. 2569)</span>`;
+        countBadge.textContent = "0 ข่าว (คัดกรองออกตามเกณฑ์)";
+        gridContainer.innerHTML = `
+          <div class="col-span-full bg-white rounded-2xl p-8 border border-slate-200 text-center space-y-3">
+            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="font-heading text-lg font-bold text-slate-800">พิกัดเบียร์, เครื่องดื่ม, แบตเตอรี่ และน้ำหอม ไม่มีข่าวเฉพาะเจาะจงในสัปดาห์นี้</h3>
+            <p class="text-sm text-slate-600 max-w-xl mx-auto">
+              ตามเกณฑ์ของ Excise Weekly Insight Update หมวดสินค้าใดที่ไม่มีความเคลื่อนไหวหรือข่าวจากสำนักข่าวในรอบสัปดาห์จะไม่นำมาสรุปเนื้อหาย่อย แต่บันทึกไว้ในสถิติว่าเป็นกลุ่มพิกัดที่มีข่าวน้อยที่สุด (0 ข่าว)
+            </p>
+            <button id="btn-reset-filter" type="button" class="mt-2 inline-flex items-center gap-2 bg-[#F26522] hover:bg-[#D94E0F] text-white font-heading text-xs font-semibold px-4 py-2 rounded-full transition-colors">
+              <span>ดูพิกัดสินค้าที่มีข่าวทั้งหมด</span>
+            </button>
+          </div>
+        `;
+        const resetBtn = document.getElementById("btn-reset-filter");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => setCategoryFilter("all"));
+        }
+        return;
+      }
+
+      const filtered = currentCategory === "all"
+        ? ARTICLES
+        : ARTICLES.filter(a => a.categories.includes(currentCategory));
+
+      const heroArticle = filtered[0];
+      const gridArticles = currentCategory === "all" ? filtered.slice(1) : filtered;
+
+      // Render Hero Card (shown when 'all' or when viewing a category)
+      if (heroArticle && currentCategory === "all") {
+        const sourceLinksHtml = heroArticle.sources.map(s =>
+          `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-[#F26522] bg-slate-100 hover:bg-orange-50 px-2.5 py-1 rounded-md transition-colors border border-slate-200/80">
+            <span>${s.name}</span>
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>`
+        ).join("");
+
+        heroContainer.innerHTML = `
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden card-hover">
+            <div class="grid grid-cols-1 lg:grid-cols-12">
+              <!-- Left 7 Cols: Policy Watch Poster Illustration -->
+              <div class="lg:col-span-7 relative min-h-[270px] sm:min-h-[340px] bg-slate-900 overflow-hidden cursor-pointer hero-open-trigger" data-id="${heroArticle.id}">
+                <img src="${heroArticle.image}" alt="${heroArticle.title}" class="w-full h-full object-cover object-center opacity-90" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-slate-950/30"></div>
+                ${renderPolicyWatchLogoOverlay(heroArticle.posterBadgeText)}
+                <div class="absolute inset-x-5 bottom-6 sm:bottom-8 text-center z-10 pointer-events-none">
+                  <div class="font-heading font-extrabold text-2xl sm:text-4xl text-[#FF7A2F] tracking-tight poster-stroke leading-tight">
+                    ${heroArticle.posterTopLine}
+                  </div>
+                  <div class="font-heading font-extrabold text-xl sm:text-3xl text-white tracking-tight poster-stroke mt-1">
+                    ${heroArticle.posterBottomLine}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right 5 Cols: Editorial Content -->
+              <div class="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between bg-white">
+                <div class="space-y-3.5">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-heading font-semibold text-[#D94E0F] bg-orange-50 border border-orange-200 px-2.5 py-0.5 rounded-full">
+                      ${heroArticle.categoryLabel}
+                    </span>
+                    <span class="text-xs text-slate-400">• ${heroArticle.date}</span>
+                  </div>
+                  <h2 class="font-heading text-xl sm:text-2xl font-bold text-slate-900 leading-snug hover:text-[#F26522] transition-colors cursor-pointer hero-open-trigger" data-id="${heroArticle.id}">
+                    ${heroArticle.title}
+                  </h2>
+                  <p class="text-sm text-slate-600 leading-relaxed">
+                    ${heroArticle.summary}
+                  </p>
+                  <div class="pt-1">
+                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">แหล่งอ้างอิง (Reference):</span>
+                    <div class="flex flex-wrap gap-1.5">
+                      ${sourceLinksHtml}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between">
+                  <button type="button" data-id="${heroArticle.id}" class="open-modal-btn read-more-btn inline-flex items-center gap-2.5 font-heading font-semibold text-sm text-slate-900 hover:text-[#F26522] transition-colors">
+                    <span>อ่านต่อ</span>
+                    <span class="read-more-circle w-7 h-7 rounded-full border-2 border-[#F26522] text-[#F26522] inline-flex items-center justify-center">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </span>
+                  </button>
+                  <span class="text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">พิกัดที่มีข่าวมากที่สุด #1</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      } else {
+        heroContainer.innerHTML = "";
+      }
+
+      const selectedCatObj = CATEGORIES.find(c => c.id === currentCategory);
+      gridTitle.innerHTML = `<span class="w-1.5 h-6 rounded-full bg-[#F26522] inline-block"></span><span>${currentCategory === "all" ? "บทความและข่าวสารแยกตามพิกัดสินค้า" : "หมวดหมู่: " + (selectedCatObj ? selectedCatObj.name : "")}</span>`;
+      countBadge.textContent = `แสดง ${gridArticles.length} เรื่อง`;
+
+      // Render 3-Column Cards
+      gridContainer.innerHTML = gridArticles.map(art => {
+        const sourcesHtml = art.sources.map(s =>
+          `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-medium text-[#D94E0F] hover:underline bg-orange-50/80 px-2 py-0.5 rounded border border-orange-200/60">${s.name}</a>`
+        ).join("");
+
+        return `
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden flex flex-col justify-between card-hover">
+            <div>
+              <!-- Card Poster Graphic (Policy Watch Style) -->
+              <div class="relative aspect-16/9 w-full bg-slate-900 overflow-hidden cursor-pointer open-modal-card" data-id="${art.id}">
+                <img src="${art.image}" alt="${art.title}" class="w-full h-full object-cover object-center opacity-90" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-slate-950/25"></div>
+                ${renderPolicyWatchLogoOverlay(art.posterBadgeText)}
+                <div class="absolute inset-x-3.5 bottom-3.5 text-left z-10 pointer-events-none">
+                  <div class="font-heading font-extrabold text-lg sm:text-xl text-[#FF8533] poster-stroke leading-tight">
+                    ${art.posterTopLine}
+                  </div>
+                  <div class="font-heading font-bold text-base sm:text-lg text-white poster-stroke leading-snug">
+                    ${art.posterBottomLine}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Text Content -->
+              <div class="p-5 space-y-2.5">
+                <div class="flex items-center justify-between gap-2 text-xs">
+                  <span class="font-heading font-semibold text-teal-800 bg-teal-50 border border-teal-200/70 px-2.5 py-0.5 rounded-full">
+                    ${art.categoryLabel}
+                  </span>
+                  <span class="text-slate-400">${art.date}</span>
+                </div>
+                <h3 class="font-heading text-base sm:text-lg font-bold text-slate-900 leading-snug hover:text-[#F26522] transition-colors cursor-pointer open-modal-card" data-id="${art.id}">
+                  ${art.title}
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
+                  ${art.summary}
+                </p>
+              </div>
+            </div>
+
+            <div class="px-5 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-1">
+                <span class="text-[10px] text-slate-400 mr-0.5">อ้างอิง:</span>
+                ${sourcesHtml}
+              </div>
+              <button type="button" data-id="${art.id}" class="open-modal-btn read-more-btn inline-flex items-center gap-1.5 font-heading font-semibold text-xs text-slate-800 hover:text-[#F26522] shrink-0">
+                <span>อ่านต่อ</span>
+                <span class="read-more-circle w-6 h-6 rounded-full border border-[#F26522] text-[#F26522] inline-flex items-center justify-center">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      // Attach Modal Listeners
+      document.querySelectorAll(".open-modal-btn, .open-modal-card, .hero-open-trigger").forEach(el => {
+        el.addEventListener("click", () => {
+          const artId = el.getAttribute("data-id");
+          openArticleModal(artId);
+        });
+      });
+    }
+
+    // Open Article Modal
+    function openArticleModal(articleId) {
+      const art = ARTICLES.find(a => a.id === articleId);
+      if (!art) return;
+
+      const modal = document.getElementById("article-modal");
+      const banner = document.getElementById("modal-banner-container");
+      const badge = document.getElementById("modal-category-badge");
+      const dateEl = document.getElementById("modal-date");
+      const titleEl = document.getElementById("modal-title");
+      const summaryEl = document.getElementById("modal-summary");
+      const bulletsEl = document.getElementById("modal-bullets");
+      const sourcesEl = document.getElementById("modal-sources");
+
+      banner.innerHTML = `
+        <img src="${art.image}" alt="${art.title}" class="w-full h-full object-cover object-center opacity-90" />
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
+        ${renderPolicyWatchLogoOverlay(art.posterBadgeText)}
+        <div class="absolute bottom-4 left-6 right-6">
+          <div class="font-heading font-extrabold text-xl sm:text-2xl text-[#FF8533] poster-stroke">${art.posterTopLine}</div>
+          <div class="font-heading font-bold text-lg sm:text-xl text-white poster-stroke">${art.posterBottomLine}</div>
+        </div>
+      `;
+      badge.textContent = art.categoryLabel;
+      dateEl.textContent = "วันที่รายงานข่าว: " + art.date;
+      titleEl.textContent = art.title;
+      summaryEl.textContent = art.summary;
+      bulletsEl.innerHTML = art.bullets.map(b => `<li>${b}</li>`).join("");
+      sourcesEl.innerHTML = art.sources.map(s => `
+        <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-[#F26522] hover:bg-[#D94E0F] text-white text-xs font-heading font-medium px-3 py-1.5 rounded-lg transition-colors">
+          <span>${s.name}</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      `).join("");
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closeArticleModal() {
+      const modal = document.getElementById("article-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    // Set Category Filter
+    function setCategoryFilter(catId) {
+      currentCategory = catId;
+      const selectEl = document.getElementById("category-select");
+      if (selectEl && selectEl.value !== catId) {
+        selectEl.value = catId;
+      }
+      renderCategoryPills();
+      renderArticles();
+    }
+
+    // Switch View Mode ('all' | 'overview' | 'a4')
+    function setViewMode(mode) {
+      currentView = mode;
+      const secArticles = document.getElementById("section-articles");
+      const secOverview = document.getElementById("section-overview");
+      const secA4 = document.getElementById("section-a4");
+      const pillsBar = document.getElementById("category-pills-bar");
+      const heading = document.getElementById("main-section-heading");
+      const pageText = document.getElementById("page-indicator-text");
+
+      document.querySelectorAll(".view-tab-btn").forEach(btn => {
+        const isMatch = btn.getAttribute("data-view") === mode;
+        if (isMatch) {
+          btn.classList.add("bg-[#F26522]", "text-white", "shadow-sm");
+          btn.classList.remove("text-slate-300");
+        } else {
+          btn.classList.remove("bg-[#F26522]", "text-white", "shadow-sm");
+          btn.classList.add("text-slate-300");
+        }
+      });
+
+      if (mode === "all") {
+        secArticles.classList.remove("hidden");
+        secOverview.classList.remove("hidden");
+        secA4.classList.add("hidden");
+        pillsBar.classList.remove("hidden");
+        heading.textContent = "บทความ";
+        pageText.textContent = "มุมมอง 1/3 • บทความ";
+      } else if (mode === "overview") {
+        secArticles.classList.add("hidden");
+        secOverview.classList.remove("hidden");
+        secOverview.classList.remove("mt-10");
+        secA4.classList.add("hidden");
+        pillsBar.classList.remove("hidden");
+        heading.textContent = "ภาพรวมและสถิติ";
+        pageText.textContent = "มุมมอง 2/3 • สถิติ";
+      } else if (mode === "a4") {
+        secArticles.classList.add("hidden");
+        secOverview.classList.add("hidden");
+        secA4.classList.remove("hidden");
+        pillsBar.classList.add("hidden");
+        heading.textContent = "สรุป 1 หน้า A4";
+        pageText.textContent = "มุมมอง 3/3 • A4";
+      }
+    }
+
+    // Initialize Chart.js Bar Chart
+    function initStatsChart() {
+      const canvas = document.getElementById("exciseStatsChart");
+      if (!canvas || typeof Chart === "undefined") return;
+
+      const ctx = canvas.getContext("2d");
+      if (statsChartInstance) {
+        statsChartInstance.destroy();
+      }
+
+      statsChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: [
+            "น้ำมัน (B20/E20)",
+            "ยาสูบ",
+            "สุรา/สถานบริการ",
+            "รถยนต์ (EV)",
+            "รถจักรยานยนต์",
+            "เอทานอล",
+            "เบียร์",
+            "เครื่องดื่ม",
+            "แบตเตอรี่",
+            "น้ำหอม"
+          ],
+          datasets: [
+            {
+              label: "จำนวนข่าว/แหล่งอ้างอิงหลักในรอบสัปดาห์",
+              data: [6, 5, 3, 2, 2, 1, 0, 0, 0, 0],
+              backgroundColor: [
+                "#F26522",
+                "#F59E0B",
+                "#4F46E5",
+                "#0D9488",
+                "#14B8A6",
+                "#10B981",
+                "#CBD5E1",
+                "#CBD5E1",
+                "#CBD5E1",
+                "#CBD5E1"
+              ],
+              borderRadius: 6,
+              barPercentage: 0.68
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const val = context.parsed.y;
+                  return val === 0
+                    ? " ไม่มีข่าวเฉพาะหมวดในสัปดาห์นี้ (0 ข่าว)"
+                    : " ความถี่การรายงาน: " + val + " แหล่งข่าว/ประเด็น";
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+                font: { family: "'Sarabun', sans-serif", size: 11 }
+              },
+              grid: { color: "rgba(148, 163, 184, 0.2)" }
+            },
+            x: {
+              ticks: {
+                font: { family: "'Kanit', sans-serif", size: 11 }
+              },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // Copy Executive Summary to Clipboard
+    function copyExecutiveSummary() {
+      const summaryText = [
+        "Excise Weekly Insight Update (รอบวันที่ 24 – 31 ตุลาคม 2569)",
+        "1. น้ำมันและผลิตภัณฑ์น้ำมัน (ข่าวมากสุด อันดับ 1): ครม. ลดภาษีสรรพสามิตดีเซล B20 (-5.522 บ./ลิตร) และ E20 (-5.642 บ./ลิตร) นาน 3 เดือน (28 ต.ค. 69 – 27 ม.ค. 70) คงราคาคาร์บอน 200 บ./ตัน ดึงราคาขายปลีกเหลือ 33.50 บ./ลิตร [อ้างอิง: ไทยพับลิก้า, ประชาชาติธุรกิจ, แนวหน้า, จส.100]",
+        "2. ยาสูบ (อันดับ 2): ยึดบุหรี่เถื่อนชายแดนสระแก้ว 4.4 ล้านมวน (22 ล้านบาท), สรุปคดีปีงบ 69 พุ่ง 39,305 คดี, เล็งเก็บภาษีบุหรี่ส่งออกล่วงหน้า และเครือข่ายสุขภาพ 491 องค์กรค้านยกเลิกภาษีบาป 4 กองทุน [อ้างอิง: เดลินิวส์, สวพ.FM91, แนวหน้า, Hfocus]",
+        "3. รถยนต์และรถจักรยานยนต์: เปิดรับฟังความเห็นแก้ประกาศ EV 3 ฉบับ กำหนดวันสิ้นสุดยื่นขอเงินอุดหนุน EV3 (5 ธ.ค. 69) และ EV3.5 (30 มิ.ย. 71) พร้อมปรับชื่อชิ้นส่วน Integrated Inverter [อ้างอิง: ประชาชาติธุรกิจ]",
+        "4. สุราและสถานบริการ: บูรณาการนำร่อง Sandbox ถนนข้าวสาร–รามบุตรี ทบทวนโซนนิ่งปี 2545 ขยายเวลาจำหน่ายสุราหลังเที่ยงคืนรับปีใหม่ สรุปผลใน 15 วัน [อ้างอิง: ไทยรัฐออนไลน์, ไทยพีบีเอส]",
+        "5. เอทานอล: ส่งเสริมการใช้เอทานอล 20% ใน E20 พยุงราคาอ้อยและมันสำปะหลังให้เกษตรกรไทย [อ้างอิง: ไทยพับลิก้า]",
+        "• สถิติ: พิกัดที่มีข่าวมากสุดคือ น้ำมัน และ ยาสูบ | พิกัดที่ไม่มีข่าวในสัปดาห์นี้ (0 ข่าว) คือ เบียร์, เครื่องดื่ม, แบตเตอรี่ และน้ำหอม"
+      ].join("\n");
+
+      const showToast = (msg) => {
+        const toast = document.getElementById("toast-notification");
+        const toastMsg = document.getElementById("toast-message");
+        if (!toast || !toastMsg) return;
+        toastMsg.textContent = msg;
+        toast.classList.remove("hidden");
+        toast.classList.add("flex");
+        setTimeout(() => {
+          toast.classList.add("hidden");
+          toast.classList.remove("flex");
+        }, 3000);
+      };
+
+      const fallbackCopy = () => {
+        const ta = document.createElement("textarea");
+        ta.value = summaryText;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand("copy");
+          showToast("คัดลอกสรุปข่าว Excise Weekly Insight เรียบร้อยแล้ว");
+        } catch (err) {
+          showToast("ไม่สามารถคัดลอกอัตโนมัติได้");
+        }
+        document.body.removeChild(ta);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summaryText).then(() => {
+          showToast("คัดลอกสรุปข่าว Excise Weekly Insight เรียบร้อยแล้ว");
+        }).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    // Wire up all controls on DOMContentLoaded
+    window.addEventListener("DOMContentLoaded", () => {
+      renderCategoryPills();
+      renderArticles();
+      initStatsChart();
+
+      // Dropdown filter
+      const selectEl = document.getElementById("category-select");
+      if (selectEl) {
+        selectEl.addEventListener("change", (e) => {
+          setCategoryFilter(e.target.value);
+          if (currentView === "a4") {
+            setViewMode("all");
+          }
+        });
+      }
+
+      // Main View Tabs
+      document.querySelectorAll(".view-tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          setViewMode(btn.getAttribute("data-view"));
+        });
+      });
+
+      // Next/Prev View Pager Buttons
+      const viewsOrder = ["all", "overview", "a4"];
+      document.getElementById("btn-prev-view").addEventListener("click", () => {
+        const idx = viewsOrder.indexOf(currentView);
+        const nextIdx = (idx - 1 + viewsOrder.length) % viewsOrder.length;
+        setViewMode(viewsOrder[nextIdx]);
+      });
+      document.getElementById("btn-next-view").addEventListener("click", () => {
+        const idx = viewsOrder.indexOf(currentView);
+        const nextIdx = (idx + 1) % viewsOrder.length;
+        setViewMode(viewsOrder[nextIdx]);
+      });
+
+      // Jump to A4 & Back
+      document.getElementById("btn-jump-a4").addEventListener("click", () => setViewMode("a4"));
+      document.getElementById("btn-back-articles").addEventListener("click", () => setViewMode("all"));
+
+      // Print A4 Button
+      document.getElementById("btn-print-a4").addEventListener("click", () => {
+        window.print();
+      });
+
+      // Copy Summary Button
+      document.getElementById("btn-copy-summary").addEventListener("click", copyExecutiveSummary);
+
+      // Modal Close Buttons & Backdrop
+      document.getElementById("btn-close-modal").addEventListener("click", closeArticleModal);
+      document.getElementById("article-modal").addEventListener("click", (e) => {
+        if (e.target.id === "article-modal") {
+          closeArticleModal();
+        }
+      });
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeArticleModal();
+      });
+    });
+  </script>
+</body>
+</html>
