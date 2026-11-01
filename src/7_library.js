@@ -2,23 +2,27 @@
 const LIB_DEFAULT = {
   groups: [
     { id: 'l1', name: 'แผนระดับ 1', color: '#1A5BD6', items: [
-      { title: 'ยุทธศาสตร์ชาติ 20 ปี', sub: 'พ.ศ. 2561–2580', url: '', cover: '' }] },
+      { title: 'ยุทธศาสตร์ชาติ 20 ปี', sub: 'พ.ศ. 2561–2580', url: '', cover: 'lib/national-strategy.jpg' }] },
     { id: 'l2', name: 'แผนระดับ 2', color: '#0E9F6E', items: [
-      { title: 'แผนแม่บทภายใต้ยุทธศาสตร์ชาติ (พ.ศ. 2566–2580)', sub: 'ฉบับแก้ไขเพิ่มเติม', url: '', cover: '' },
-      { title: 'แผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 13', sub: 'พ.ศ. 2566–2570', url: '', cover: '' },
-      { title: 'แผนการปฏิรูปประเทศ', sub: '', url: '', cover: '' },
-      { title: 'นโยบายและแผนระดับชาติว่าด้วยความมั่นคงแห่งชาติ', sub: 'พ.ศ. 2566–2570', url: '', cover: '' }] },
+      { title: 'แผนแม่บทภายใต้ยุทธศาสตร์ชาติ (พ.ศ. 2566–2580)', sub: 'ฉบับแก้ไขเพิ่มเติม', url: '', cover: 'lib/master-plan.jpg' },
+      { title: 'แผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 13', sub: 'พ.ศ. 2566–2570', url: '', cover: 'lib/nesdp13.jpg' },
+      { title: 'แผนการปฏิรูปประเทศ', sub: 'ฉบับปรับปรุง', url: '', cover: 'lib/reform.jpg' },
+      { title: 'นโยบายและแผนระดับชาติว่าด้วยความมั่นคงแห่งชาติ', sub: 'พ.ศ. 2566–2570', url: '', cover: 'lib/security.jpg' }] },
     { id: 'l3', name: 'แผนระดับ 3', color: '#7C3AED', items: [
       { title: 'แผนยุทธศาสตร์กรมสรรพสามิต', sub: 'พ.ศ. 2570–2574 (ร่าง)', url: 'plan-2570-2574.pdf', cover: 'plan/p-1.jpg' }] },
-    { id: 'budget', name: 'เอกสารงบประมาณรายจ่ายประจำปี', color: '#D97706', items: [] },
+    { id: 'budget', name: 'เอกสารงบประมาณรายจ่ายประจำปี', color: '#D97706', items: [
+      { title: 'ร่าง พ.ร.บ. งบประมาณรายจ่ายประจำปี พ.ศ. 2570', sub: 'สำนักงบประมาณ', url: '', cover: 'lib/budget-2570.jpg' }] },
     { id: 'action', name: 'แผนปฏิบัติราชการ', color: '#DB2777', items: [] }
   ]
 };
+/* ปกมาตรฐาน: ใช้เมื่อรายการยังไม่ได้ใส่รูปปกเอง (จับคู่จากคำในชื่อ) */
+const LIB_COVERS = [[/ยุทธศาสตร์ชาติ/, 'lib/national-strategy.jpg', /แผนแม่บท/], [/แผนแม่บท/, 'lib/master-plan.jpg'], [/เศรษฐกิจและสังคมแห่งชาติ/, 'lib/nesdp13.jpg'], [/ปฏิรูปประเทศ/, 'lib/reform.jpg'], [/ความมั่นคงแห่งชาติ/, 'lib/security.jpg'], [/งบประมาณรายจ่าย.*2570/, 'lib/budget-2570.jpg'], [/ยุทธศาสตร์กรมสรรพสามิต/, 'plan/p-1.jpg']];
+const libCoverOf = (it) => it.cover || (LIB_COVERS.find(([re, , not]) => re.test(it.title || '') && !(not && not.test(it.title || ''))) || [])[1] || '';
 const libData = () => (cfg().library?.groups ? cfg().library : LIB_DEFAULT);
 const libOk = (u) => !!u && (/^https:\/\/\S+\.\S+/.test(u) || /^[\w./-]+\.(pdf|html?)$/i.test(u));
 
 function libCover(it, g) {
-  if (it.cover) return `<img src="${esc(it.cover)}" alt="" loading="lazy">`;
+  const cv = libCoverOf(it); if (cv) return `<img src="${esc(cv)}" alt="" loading="lazy">`;
   return `<span class="lib-gen" style="--c:${esc(g.color)}">${ic('book')}<b>${esc(it.title)}</b>${it.sub ? `<small>${esc(it.sub)}</small>` : ''}</span>`;
 }
 function libCard(it, g) {
