@@ -2120,7 +2120,7 @@ function renderNav() {
   const item = (n) => `<li><button class="nav-item" data-act="${n.ai ? 'ai-open' : n.act || 'go'}" data-v="${n.id}" ${!n.ai && !n.act && cur === n.id ? 'aria-current="page"' : ''} title="${esc(n.label)}">${ic(n.icon)}<span class="nav-label">${n.label}</span>${n.id === 'new' && drafts ? `<span class="badge" title="แผนที่ยังเป็นร่าง">ร่าง ${drafts}</span>` : ''}${n.id === 'monthly' && due ? `<span class="badge" title="แผนที่ยังไม่ส่งรายงานเดือนนี้">รอส่ง ${due}</span>` : ''}</button></li>`;
   const link = (l) => l.url ? `<li><a class="nav-item" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(l.label)} (เปิดแท็บใหม่)">${ic('book')}<span class="nav-label">${esc(l.label)}</span></a></li>`
     : `<li><button class="nav-item" data-act="link-empty" title="${esc(l.label)}">${ic('book')}<span class="nav-label">${esc(l.label)}</span></button></li>`;
-  $('#nav-list').innerHTML = NAV.filter((n) => (!n.superOnly || S.isSuper) && !(S.publicMode && ['new', 'monthly', 'ai', 'contacts'].includes(n.id))).map((n) => {
+  $('#nav-list').innerHTML = NAV.filter((n) => (!n.superOnly || S.isSuper) && !(S.publicMode && ['new', 'monthly', 'ai'].includes(n.id))).map((n) => {
     if (!n.sec) return item(n) + (n.id === 'dashboard' ? `<li><a class="nav-item" href="${esc(S.publicMode ? 'insight/' : (cfg().insightUrl || INSIGHT_URL))}" target="_blank" rel="noopener noreferrer" title="Excise Insight Update · สรุปข่าวและนโยบายรายสัปดาห์ (เปิดแท็บใหม่)">${ic('spark')}<span class="nav-label">Excise Insight Update</span></a></li>` : '');
     let h = `<li class="nav-sec"><span>${n.sec}</span></li>`;
     if (n.pillars) h += `<li><button class="nav-item" data-act="plan-view" title="ร่างแผนยุทธศาสตร์กรมสรรพสามิต 2570–2574 · เปิดดูหรือดาวน์โหลด PDF">${ic('book')}<span class="nav-label">แผนยุทธศาสตร์ 2570–2574</span></button></li>`;
@@ -3576,7 +3576,7 @@ function odBody() {
       <textarea class="textarea" rows="5" data-od-ev="${evY}" ${dis} placeholder="+ ผลบวก   - ผลลบ   ~ ผสม   * นโยบาย/โครงสร้าง  (ใส่ | ตามด้วยลิงก์ที่มาได้)">${esc(evText)}</textarea>
       <span class="help">1 บรรทัดต่อ 1 เหตุการณ์ ขึ้นต้นด้วย + − ~ หรือ * ตามผลกระทบ เช่น “- ลดภาษีดีเซล 3 บาท/ลิตร | https://…”</span></div>
   </div>
-  ${S.canAdmin ? `<div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between"><span><b>หน้าแสดงผลสาธารณะ (Vercel)</b><br><span class="help">ดาวน์โหลดไฟล์ public-data.json แล้วอัปโหลดทับใน GitHub โฟลเดอร์ dist/ หน้าเว็บบน Vercel จะอัปเดตเองภายในไม่กี่นาที (รวมแผนที่ไม่ใช่ร่าง โดยไม่มีชื่อผู้สร้าง · ไม่มีรายงานผลรายเดือนและข้อมูลผู้ใช้)</span></span><button class="btn" data-act="od-public">${ic('download', 'ic-sm')}ส่งออก public-data.json</button></div>` : ''}
+  ${S.canAdmin ? `<div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between"><span><b>หน้าแสดงผลสาธารณะ (Vercel)</b><br><span class="help">ดาวน์โหลดไฟล์ public-data.json แล้วอัปโหลดทับใน GitHub โฟลเดอร์ dist/ หน้าเว็บบน Vercel จะอัปเดตเองภายในไม่กี่นาที (รวมแผนที่ไม่ใช่ร่าง โดยไม่มีชื่อผู้สร้าง และรายชื่อผู้ติดต่อ · ไม่มีรายงานผลรายเดือนและข้อมูลผู้ใช้)</span></span><button class="btn" data-act="od-public">${ic('download', 'ic-sm')}ส่งออก public-data.json</button></div>` : ''}
   ${S.canAdmin ? `<div class="savebar od-save"><span class="status">${S.opsDirty ? `${ic('alert', 'ic-sm')}มีการแก้ไขข้อมูลแดชบอร์ดที่ยังไม่บันทึก` : 'ข้อมูลแดชบอร์ดเป็นปัจจุบัน'}</span><button class="btn btn-ghost" data-act="od-revert" ${S.opsDirty ? '' : 'disabled'}>ยกเลิกการแก้ไข</button><button class="btn btn-primary" data-act="od-save" ${S.opsDirty ? '' : 'disabled'}>${ic('check', 'ic-sm')}บันทึกข้อมูลแดชบอร์ด</button></div>` : ''}`;
 }
 function odDirty() { if (!S.opsDirty) { S.opsDirty = true; const b = $('.od-save'); if (b) { b.querySelector('.status').innerHTML = `${ic('alert', 'ic-sm')}มีการแก้ไขข้อมูลแดชบอร์ดที่ยังไม่บันทึก`; $$('button', b).forEach((x) => { x.disabled = false; }); } } }
@@ -3665,7 +3665,7 @@ document.addEventListener('click', (e) => {
   else if (a === 'od-revert') { S.opsDraft = null; S.opsDirty = false; S.odPreview = null; draftRerender(); }
   else if (a === 'od-public') {
     const plans = (S.allPlans || []).filter((p) => p.name && p.status !== 'draft').map((p) => { const q = Object.assign({}, p); delete q.ownerId; delete q.ownerName; return q; });
-    const data = JSON.stringify({ exportedAt: Date.now(), org: Object.assign({}, cfg(), { contacts: undefined }), ops: S.ops || null, hr: S.hr || null, plans });
+    const data = JSON.stringify({ exportedAt: Date.now(), org: cfg(), ops: S.ops || null, hr: S.hr || null, plans });
     S.dl.save({ filename: 'public-data.json', data }).catch((e) => { if (e?.code !== 'declined') toast('ดาวน์โหลดไม่สำเร็จ', 'err'); });
   }
   else if (a === 'od-save') {
@@ -4989,21 +4989,21 @@ boot();
 const LIB_DEFAULT = {
   groups: [
     { id: 'l1', name: 'แผนระดับ 1', color: '#1A5BD6', items: [
-      { title: 'ยุทธศาสตร์ชาติ 20 ปี', sub: 'พ.ศ. 2561–2580', url: '', cover: 'lib/national-strategy.jpg' }] },
+      { title: 'ยุทธศาสตร์ชาติ 20 ปี', sub: 'พ.ศ. 2561–2580', url: 'https://www.nesdc.go.th/nscr/ns/', cover: 'lib/national-strategy.jpg' }] },
     { id: 'l2', name: 'แผนระดับ 2', color: '#0E9F6E', items: [
-      { title: 'แผนแม่บทภายใต้ยุทธศาสตร์ชาติ (พ.ศ. 2566–2580)', sub: 'ฉบับแก้ไขเพิ่มเติม', url: '', cover: 'lib/master-plan.jpg' },
-      { title: 'แผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 13', sub: 'พ.ศ. 2566–2570', url: '', cover: 'lib/nesdp13.jpg' },
-      { title: 'แผนการปฏิรูปประเทศ', sub: 'ฉบับปรับปรุง', url: '', cover: 'lib/reform.jpg' },
-      { title: 'นโยบายและแผนระดับชาติว่าด้วยความมั่นคงแห่งชาติ', sub: 'พ.ศ. 2566–2570', url: '', cover: 'lib/security.jpg' }] },
+      { title: 'แผนแม่บทภายใต้ยุทธศาสตร์ชาติ (พ.ศ. 2566–2580)', sub: 'ฉบับแก้ไขเพิ่มเติม', url: 'https://www.nesdc.go.th/nscr/masterplan-plans/', cover: 'lib/master-plan.jpg' },
+      { title: 'แผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 13', sub: 'พ.ศ. 2566–2570', url: 'https://www.nesdc.go.th/the-national-economic-and-social-development-plan/', cover: 'lib/nesdp13.jpg' },
+      { title: 'แผนการปฏิรูปประเทศ', sub: 'ฉบับปรับปรุง', url: 'https://www.nesdc.go.th/nscr/cr/', cover: 'lib/reform.jpg' },
+      { title: 'นโยบายและแผนระดับชาติว่าด้วยความมั่นคงแห่งชาติ', sub: 'พ.ศ. 2566–2570', url: 'https://www.nsc.go.th/%E0%B8%99%E0%B9%82%E0%B8%A2%E0%B8%9A%E0%B8%B2%E0%B8%A2%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%A3%E0%B8%B0%E0%B8%94%E0%B8%B1%E0%B8%9A%E0%B8%8A%E0%B8%B2%E0%B8%95%E0%B8%B4%E0%B8%A7-3/', cover: 'lib/security.jpg' }] },
     { id: 'l3', name: 'แผนระดับ 3', color: '#7C3AED', items: [
       { title: 'แผนยุทธศาสตร์กรมสรรพสามิต', sub: 'พ.ศ. 2570–2574 (ร่าง)', url: 'plan-2570-2574.pdf', cover: 'plan/p-1.jpg' }] },
     { id: 'budget', name: 'เอกสารงบประมาณรายจ่ายประจำปี', color: '#D97706', items: [
-      { title: 'ร่าง พ.ร.บ. งบประมาณรายจ่ายประจำปี พ.ศ. 2570', sub: 'สำนักงบประมาณ', url: '', cover: 'lib/budget-2570.jpg' }] },
+      { title: 'ร่าง พ.ร.บ. งบประมาณรายจ่ายประจำปี พ.ศ. 2570', sub: 'สำนักงบประมาณ', url: 'https://www.bb.go.th/topic3.php?catID=1538&gid=860&mid=544#', cover: 'lib/budget-2570.jpg' }] },
     { id: 'action', name: 'แผนปฏิบัติราชการ', color: '#DB2777', items: [] }
   ]
 };
 /* ปกมาตรฐาน: ใช้เมื่อรายการยังไม่ได้ใส่รูปปกเอง (จับคู่จากคำในชื่อ) */
-const LIB_COVERS = [[/ยุทธศาสตร์ชาติ/, 'lib/national-strategy.jpg', /แผนแม่บท/], [/แผนแม่บท/, 'lib/master-plan.jpg'], [/เศรษฐกิจและสังคมแห่งชาติ/, 'lib/nesdp13.jpg'], [/ปฏิรูปประเทศ/, 'lib/reform.jpg'], [/ความมั่นคงแห่งชาติ/, 'lib/security.jpg'], [/งบประมาณรายจ่าย.*2570/, 'lib/budget-2570.jpg'], [/ยุทธศาสตร์กรมสรรพสามิต/, 'plan/p-1.jpg']];
+const LIB_COVERS = [[/ยุทธศาสตร์ชาติ/, 'lib/national-strategy.jpg', /แผนแม่บท/], [/แผนแม่บท/, 'lib/master-plan.jpg'], [/เศรษฐกิจและสังคมแห่งชาติ/, 'lib/nesdp13.jpg'], [/ปฏิรูปประเทศ/, 'lib/reform.jpg'], [/ความมั่นคงแห่งชาติ/, 'lib/security.jpg'], [/งบประมาณรายจ่าย/, 'lib/budget-2570.jpg'], [/ยุทธศาสตร์กรมสรรพสามิต/, 'plan/p-1.jpg']];
 const libCoverOf = (it) => it.cover || (LIB_COVERS.find(([re, , not]) => re.test(it.title || '') && !(not && not.test(it.title || ''))) || [])[1] || '';
 const libData = () => (cfg().library?.groups ? cfg().library : LIB_DEFAULT);
 const libOk = (u) => !!u && (/^https:\/\/\S+\.\S+/.test(u) || /^[\w./-]+\.(pdf|html?)$/i.test(u));
