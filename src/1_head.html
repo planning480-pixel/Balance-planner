@@ -1604,4 +1604,35 @@ button.bk:hover { border-color: var(--line-strong); }
 body.public .nav-foot { display: none; }
 body.public [data-act="ai-open"], body.public [data-act="go"][data-v="new"], body.public #scope { visibility: hidden; }
 body.public .journey, body.public .miss, body.public .cut-note { display: none !important; }
+
+/* คลังแผน (แผนระดับต่างๆ) */
+.lib-ph { align-items: center; }
+.lib-q { flex: 1 1 320px; max-width: 460px; } .lib-q .input { width: 100%; }
+.lib { display: grid; gap: 6px; }
+.lib-g { min-width: 0; }
+.lib-h { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; }
+.lib .car { margin-bottom: 8px; }
+.lib-chip { display: inline-flex; align-items: center; padding: 5px 12px; border-radius: 8px; background: var(--c); color: #fff; font-weight: 600; font-size: 13px; }
+.car-t > .lib-card { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }
+.lib-card { display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items: stretch; padding: 10px; min-height: 118px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; color: var(--fg); text-decoration: none; text-align: left; font: inherit; cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.lib-card:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(26,91,214,.12); transform: translateY(-1px); }
+.lib-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lib-cov { width: 72px; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); align-self: start; }
+.lib-cov img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.lib-gen { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 8px 7px; background: linear-gradient(160deg, #0E2756, color-mix(in srgb, var(--c) 70%, #0E2756)); color: #fff; position: relative; }
+.lib-gen::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--c); }
+.lib-gen .ic { width: 16px; height: 16px; opacity: .85; }
+.lib-gen b { font-size: 9.5px; line-height: 1.3; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.lib-gen small { font-size: 8.5px; opacity: .75; margin-top: auto; margin-bottom: 6px; }
+.lib-b { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.lib-t { font-size: 14.5px; line-height: 1.4; font-weight: 600; color: var(--fg); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.lib-s { font-size: 12.5px; color: var(--muted); }
+.lib-bar { margin-top: auto; width: 56px; height: 4px; border-radius: 4px; }
+.lib-x { color: var(--muted); } .lib-card:hover .lib-x { color: var(--accent); }
+.lib-nolink .lib-x { opacity: .5; }
+.lib-empty { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border: 1px dashed var(--line-strong); border-radius: 14px; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+.lib-set { display: grid; gap: 10px; padding: 14px; }
+.lib-set-h { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+@media (max-width: 1100px) { .car-t > .lib-card { flex-basis: calc((100% - 24px) / 3); } }
+@media (max-width: 760px) { .car-t > .lib-card { flex-basis: 82%; } }
 </style>

@@ -32,7 +32,7 @@ function viewKpi() {
 }
 
 /* ---------- General settings ---------- */
-const STABS = [['units', 'หน่วยงาน / ผอ.'], ['levels', 'แผนระดับต่างๆ'], ['pillars', 'เสายุทธศาสตร์'], ['strats', 'กลยุทธ์'], ['chals', 'ความท้าทาย'], ['risks', 'ความเสี่ยงระดับกรม'], ['contacts', 'ผู้ติดต่อ'], ['ops', 'ข้อมูลแดชบอร์ด'], ['report', 'ช่วงวันรายงานผล'], ['links', 'ลิงก์เมนูงาน']];
+const STABS = [['units', 'หน่วยงาน / ผอ.'], ['levels', 'แผนระดับต่างๆ'], ['pillars', 'เสายุทธศาสตร์'], ['strats', 'กลยุทธ์'], ['chals', 'ความท้าทาย'], ['risks', 'ความเสี่ยงระดับกรม'], ['contacts', 'ผู้ติดต่อ'], ['ops', 'ข้อมูลแดชบอร์ด'], ['report', 'ช่วงวันรายงานผล'], ['links', 'ลิงก์เมนูงาน'], ['library', 'คลังแผน']];
 function viewSetup() {
   if (!S.cfgLoaded) return `<div class="skel" style="height:200px"></div>`;
   const D = S.draft; const t = S.setupTab;
@@ -87,6 +87,8 @@ function viewSetup() {
       <span class="help">Super admin กรอกหรือแก้ไขรายงานได้ทุกเวลา</span></div>`;
   } else if (t === 'ops') {
     body = odBody();
+  } else if (t === 'library') {
+    body = libSetupBody(D);
   } else if (t === 'links') {
     if (!Array.isArray(D.workLinks)) D.workLinks = workLinks().map((l) => Object.assign({}, l));
     body = `<p class="help">เมนูในหมวด “งาน” ที่เมนูซ้าย กดแล้วเปิดลิงก์ในแท็บใหม่ ลิงก์ต้องขึ้นต้นด้วย https://</p>

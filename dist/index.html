@@ -1604,6 +1604,37 @@ button.bk:hover { border-color: var(--line-strong); }
 body.public .nav-foot { display: none; }
 body.public [data-act="ai-open"], body.public [data-act="go"][data-v="new"], body.public #scope { visibility: hidden; }
 body.public .journey, body.public .miss, body.public .cut-note { display: none !important; }
+
+/* คลังแผน (แผนระดับต่างๆ) */
+.lib-ph { align-items: center; }
+.lib-q { flex: 1 1 320px; max-width: 460px; } .lib-q .input { width: 100%; }
+.lib { display: grid; gap: 6px; }
+.lib-g { min-width: 0; }
+.lib-h { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; }
+.lib .car { margin-bottom: 8px; }
+.lib-chip { display: inline-flex; align-items: center; padding: 5px 12px; border-radius: 8px; background: var(--c); color: #fff; font-weight: 600; font-size: 13px; }
+.car-t > .lib-card { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }
+.lib-card { display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items: stretch; padding: 10px; min-height: 118px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; color: var(--fg); text-decoration: none; text-align: left; font: inherit; cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.lib-card:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(26,91,214,.12); transform: translateY(-1px); }
+.lib-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lib-cov { width: 72px; aspect-ratio: 3 / 4; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); align-self: start; }
+.lib-cov img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.lib-gen { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 8px 7px; background: linear-gradient(160deg, #0E2756, color-mix(in srgb, var(--c) 70%, #0E2756)); color: #fff; position: relative; }
+.lib-gen::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--c); }
+.lib-gen .ic { width: 16px; height: 16px; opacity: .85; }
+.lib-gen b { font-size: 9.5px; line-height: 1.3; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.lib-gen small { font-size: 8.5px; opacity: .75; margin-top: auto; margin-bottom: 6px; }
+.lib-b { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.lib-t { font-size: 14.5px; line-height: 1.4; font-weight: 600; color: var(--fg); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.lib-s { font-size: 12.5px; color: var(--muted); }
+.lib-bar { margin-top: auto; width: 56px; height: 4px; border-radius: 4px; }
+.lib-x { color: var(--muted); } .lib-card:hover .lib-x { color: var(--accent); }
+.lib-nolink .lib-x { opacity: .5; }
+.lib-empty { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border: 1px dashed var(--line-strong); border-radius: 14px; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+.lib-set { display: grid; gap: 10px; padding: 14px; }
+.lib-set-h { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+@media (max-width: 1100px) { .car-t > .lib-card { flex-basis: calc((100% - 24px) / 3); } }
+@media (max-width: 760px) { .car-t > .lib-card { flex-basis: 82%; } }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1832,7 +1863,7 @@ function missing(p) {
 
 /* ---- boot ---- */
 /* โหมดแสดงผลสาธารณะ (เช่น Vercel): ไม่มีระบบ Claude → อ่านข้อมูลจาก public-data.json ดูได้อย่างเดียว */
-const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar', 'report'];
+const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar', 'report', 'library'];
 async function publicBoot() {
   let P = null;
   try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
@@ -2094,7 +2125,7 @@ function renderNav() {
     let h = `<li class="nav-sec"><span>${n.sec}</span></li>`;
     if (n.pillars) h += `<li><button class="nav-item" data-act="plan-view" title="ร่างแผนยุทธศาสตร์กรมสรรพสามิต 2570–2574 · เปิดดูหรือดาวน์โหลด PDF">${ic('book')}<span class="nav-label">แผนยุทธศาสตร์ 2570–2574</span></button></li>`;
     if (n.pillars) h += cfg().pillars.map((pl) => `<li><button class="nav-item nav-p" data-p="${esc(pl.code)}" data-act="go" data-v="p-${esc(pl.code)}" ${cur === 'p-' + pl.code ? 'aria-current="page"' : ''} title="${esc(pl.code)} : ${esc(pillarShort(pl))}"><span class="nav-code">${esc(pl.code)}</span><span class="nav-label">${esc(pillarShort(pl))}</span></button></li>`).join('');
-    if (n.links) { h += workLinks().filter((l) => l.label).map(link).join(''); }
+    if (n.links) { h += `<li><button class="nav-item" data-act="go" data-v="library" ${cur === 'library' ? 'aria-current="page"' : ''} title="แผนระดับต่างๆ · คลังแผนและเอกสาร">${ic('book')}<span class="nav-label">แผนระดับต่างๆ</span></button></li>`; h += workLinks().filter((l) => l.label && l.label.trim() !== 'แผนระดับต่างๆ').map(link).join(''); }
     return h;
   }).join('');
 }
@@ -2105,7 +2136,7 @@ function route() {
   const m = h.match(/^(edit|report)-(.+)$/), pm = h.match(/^p-([A-Za-z]+)$/);
   if (m) { S.route = m[1]; S.param = m[2]; }
   else if (pm) { S.route = 'pillar'; S.param = pm[1]; }
-  else { S.route = ['dashboard', 'new', 'kpi', 'setup', 'monthly', 'hub', 'users', 'kpis', 'risks'].includes(h) ? h : 'dashboard'; S.param = null; }
+  else { S.route = ['dashboard', 'new', 'kpi', 'setup', 'monthly', 'hub', 'users', 'kpis', 'risks', 'library'].includes(h) ? h : 'dashboard'; S.param = null; }
   if (['users', 'kpi', 'setup'].includes(S.route) && !S.isSuper) S.route = 'dashboard';
   if (S.publicMode && !PUBLIC_ROUTES.includes(S.route)) { S.route = 'dashboard'; S.param = null; }
   if (S.route === 'edit') {
@@ -2122,7 +2153,7 @@ const TITLES = { dashboard: 'Dashboard', new: 'สร้างแผนใหม
 function renderView() {
   if (!S.inApp) return;
   const v = $('#view');
-  const fn = { dashboard: viewDashboard, new: viewNew, edit: viewEdit, report: viewReport, kpi: viewKpi, setup: viewSetup, monthly: viewMonthly, hub: viewHub, users: viewUsers, kpis: viewKpis, risks: viewRisks, pillar: viewPillar }[S.route];
+  const fn = { dashboard: viewDashboard, new: viewNew, edit: viewEdit, report: viewReport, kpi: viewKpi, setup: viewSetup, monthly: viewMonthly, hub: viewHub, users: viewUsers, kpis: viewKpis, risks: viewRisks, pillar: viewPillar, library: viewLibrary }[S.route];
   v.innerHTML = `<div class="wrap">${fn()}</div>`;
   if (S.route === 'edit') wireEditor();
   if (typeof initMapZoom === 'function') initMapZoom(); if (typeof initSankey === 'function') initSankey(); if (typeof initCarousels === 'function') initCarousels();
@@ -4210,7 +4241,7 @@ function viewKpi() {
 }
 
 /* ---------- General settings ---------- */
-const STABS = [['units', 'หน่วยงาน / ผอ.'], ['levels', 'แผนระดับต่างๆ'], ['pillars', 'เสายุทธศาสตร์'], ['strats', 'กลยุทธ์'], ['chals', 'ความท้าทาย'], ['risks', 'ความเสี่ยงระดับกรม'], ['contacts', 'ผู้ติดต่อ'], ['ops', 'ข้อมูลแดชบอร์ด'], ['report', 'ช่วงวันรายงานผล'], ['links', 'ลิงก์เมนูงาน']];
+const STABS = [['units', 'หน่วยงาน / ผอ.'], ['levels', 'แผนระดับต่างๆ'], ['pillars', 'เสายุทธศาสตร์'], ['strats', 'กลยุทธ์'], ['chals', 'ความท้าทาย'], ['risks', 'ความเสี่ยงระดับกรม'], ['contacts', 'ผู้ติดต่อ'], ['ops', 'ข้อมูลแดชบอร์ด'], ['report', 'ช่วงวันรายงานผล'], ['links', 'ลิงก์เมนูงาน'], ['library', 'คลังแผน']];
 function viewSetup() {
   if (!S.cfgLoaded) return `<div class="skel" style="height:200px"></div>`;
   const D = S.draft; const t = S.setupTab;
@@ -4265,6 +4296,8 @@ function viewSetup() {
       <span class="help">Super admin กรอกหรือแก้ไขรายงานได้ทุกเวลา</span></div>`;
   } else if (t === 'ops') {
     body = odBody();
+  } else if (t === 'library') {
+    body = libSetupBody(D);
   } else if (t === 'links') {
     if (!Array.isArray(D.workLinks)) D.workLinks = workLinks().map((l) => Object.assign({}, l));
     body = `<p class="help">เมนูในหมวด “งาน” ที่เมนูซ้าย กดแล้วเปิดลิงก์ในแท็บใหม่ ลิงก์ต้องขึ้นต้นด้วย https://</p>
@@ -4952,4 +4985,82 @@ document.addEventListener('change', async (e) => {
 });
 syncThemeBtn();
 boot();
+/* ===================== คลังแผน: เมนู "แผนระดับต่างๆ" ===================== */
+const LIB_DEFAULT = {
+  groups: [
+    { id: 'l1', name: 'แผนระดับ 1', color: '#1A5BD6', items: [
+      { title: 'ยุทธศาสตร์ชาติ 20 ปี', sub: 'พ.ศ. 2561–2580', url: '', cover: '' }] },
+    { id: 'l2', name: 'แผนระดับ 2', color: '#0E9F6E', items: [
+      { title: 'แผนแม่บทภายใต้ยุทธศาสตร์ชาติ (พ.ศ. 2566–2580)', sub: 'ฉบับแก้ไขเพิ่มเติม', url: '', cover: '' },
+      { title: 'แผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 13', sub: 'พ.ศ. 2566–2570', url: '', cover: '' },
+      { title: 'แผนการปฏิรูปประเทศ', sub: '', url: '', cover: '' },
+      { title: 'นโยบายและแผนระดับชาติว่าด้วยความมั่นคงแห่งชาติ', sub: 'พ.ศ. 2566–2570', url: '', cover: '' }] },
+    { id: 'l3', name: 'แผนระดับ 3', color: '#7C3AED', items: [
+      { title: 'แผนยุทธศาสตร์กรมสรรพสามิต', sub: 'พ.ศ. 2570–2574 (ร่าง)', url: 'plan-2570-2574.pdf', cover: 'plan/p-1.jpg' }] },
+    { id: 'budget', name: 'เอกสารงบประมาณรายจ่ายประจำปี', color: '#D97706', items: [] },
+    { id: 'action', name: 'แผนปฏิบัติราชการ', color: '#DB2777', items: [] }
+  ]
+};
+const libData = () => (cfg().library?.groups ? cfg().library : LIB_DEFAULT);
+const libOk = (u) => !!u && (/^https:\/\/\S+\.\S+/.test(u) || /^[\w./-]+\.(pdf|html?)$/i.test(u));
+
+function libCover(it, g) {
+  if (it.cover) return `<img src="${esc(it.cover)}" alt="" loading="lazy">`;
+  return `<span class="lib-gen" style="--c:${esc(g.color)}">${ic('book')}<b>${esc(it.title)}</b>${it.sub ? `<small>${esc(it.sub)}</small>` : ''}</span>`;
+}
+function libCard(it, g) {
+  const inner = `<span class="lib-cov">${libCover(it, g)}</span>
+    <span class="lib-b"><b class="lib-t">${esc(it.title || 'ไม่มีชื่อ')}</b>${it.sub ? `<span class="lib-s">${esc(it.sub)}</span>` : ''}<i class="lib-bar" style="background:${esc(g.color)}"></i></span>
+    <span class="lib-x">${ic(libOk(it.url) ? 'external' : 'lock', 'ic-sm')}</span>`;
+  return libOk(it.url)
+    ? `<a class="lib-card" href="${esc(it.url)}" target="_blank" rel="noopener noreferrer" title="${esc(it.title)} (เปิดแท็บใหม่)">${inner}</a>`
+    : `<button type="button" class="lib-card lib-nolink" data-lib-nolink title="${esc(it.title)}">${inner}</button>`;
+}
+function libBody() {
+  const q = (S.libQ || '').trim().toLowerCase();
+  const gs = libData().groups.map((g) => ({ g, items: (g.items || []).filter((it) => !q || `${it.title} ${it.sub}`.toLowerCase().includes(q)) }))
+    .filter((x) => !q || x.items.length);
+  if (!gs.length) return `<div class="empty">${ic('book')}<b>ไม่พบแผนที่ค้นหา</b><span>ลองใช้คำอื่น</span></div>`;
+  return gs.map(({ g, items }) => `<section class="lib-g">
+    <div class="lib-h"><span class="lib-chip" style="--c:${esc(g.color)}">${esc(g.name)}</span><span class="muted small">${items.length} รายการ</span></div>
+    ${items.length ? carousel(items.map((it) => libCard(it, g)).join(''), 'lib-' + g.id)
+      : `<div class="lib-empty">${ic('file', 'ic-sm')}ยังไม่มีเอกสารในหมวดนี้${S.isSuper ? ' · เพิ่มได้ที่ ตั้งค่าทั่วไป › คลังแผน' : ''}</div>`}
+  </section>`).join('');
+}
+function viewLibrary() {
+  return `<div class="ph lib-ph"><div class="ph-t"><h1>แผนระดับต่างๆ</h1><span class="muted small">คลังแผนและเอกสารที่เกี่ยวข้องกับแผนยุทธศาสตร์กรมสรรพสามิต · กดการ์ดเพื่อเปิดเอกสาร</span></div>
+    <label class="lib-q"><span class="sr">ค้นหาแผน</span><input class="input" id="lib-q" type="search" placeholder="ค้นหาแผนในระบบ" value="${esc(S.libQ || '')}"></label></div>
+  <div id="lib-body" class="lib">${libBody()}</div>`;
+}
+document.addEventListener('input', (e) => {
+  if (e.target.id !== 'lib-q') return;
+  S.libQ = e.target.value; S.carX = {};
+  $('#lib-body').innerHTML = libBody(); initCarousels();
+});
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-lib-nolink]')) toast(S.isSuper ? 'ยังไม่ได้ใส่ลิงก์ ใส่ได้ที่ ตั้งค่าทั่วไป › คลังแผน' : 'ยังไม่มีลิงก์ของเอกสารนี้');
+});
+
+/* ---------- ตั้งค่า: คลังแผน ---------- */
+function libSetupBody(D) {
+  if (!D.library?.groups) D.library = clone(libData());
+  const dis = S.canAdmin ? '' : 'disabled';
+  const inp = (path, val, label, w) => `<input class="input" data-d="${path}" value="${esc(val || '')}" aria-label="${label}" style="min-width:${w}px" ${dis}>`;
+  const gin = (path, val) => `<input class="input" data-d="${path}" value="${esc(val || '')}" aria-label="ชื่อหมวด" style="max-width:320px" ${dis}>`;
+  return `<p class="help">รายการในเมนู “แผนระดับต่างๆ” ลิงก์ต้องขึ้นต้นด้วย https:// (หรือชื่อไฟล์ในแอป เช่น plan-2570-2574.pdf) · รูปปกใส่เป็นลิงก์รูป https:// หรือชื่อไฟล์ ถ้าเว้นว่างระบบสร้างปกให้อัตโนมัติ</p>` +
+    D.library.groups.map((g, gi) => `<div class="card lib-set">
+      <div class="lib-set-h"><span class="lib-chip" style="--c:${esc(g.color)}">${esc(g.name)}</span>${gin(`library.groups.${gi}.name`, g.name)}</div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>ชื่อแผน / เอกสาร</th><th>รายละเอียด (ปี / ฉบับ)</th><th>ลิงก์</th><th>รูปปก</th><th></th></tr></thead><tbody>
+      ${(g.items || []).map((it, i) => `<tr><td>${inp(`library.groups.${gi}.items.${i}.title`, it.title, 'ชื่อแผน', 220)}</td><td>${inp(`library.groups.${gi}.items.${i}.sub`, it.sub, 'รายละเอียด', 150)}</td><td>${inp(`library.groups.${gi}.items.${i}.url`, it.url, 'ลิงก์', 220)}</td><td>${inp(`library.groups.${gi}.items.${i}.cover`, it.cover, 'รูปปก', 160)}</td>
+        <td>${S.canAdmin ? `<button class="icon-btn btn-danger" data-act="d-del" data-v="library.groups.${gi}.items.${i}" aria-label="ลบรายการ">${ic('trash', 'ic-sm')}</button>` : ''}</td></tr>`).join('')}
+      </tbody></table></div>
+      ${S.canAdmin ? `<button class="btn btn-sm btn-ghost" data-lib-add="${gi}" style="justify-self:start">${ic('plus', 'ic-sm')}เพิ่มรายการใน ${esc(g.name)}</button>` : ''}
+    </div>`).join('');
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-lib-add]'); if (!b || !S.draft) return;
+  if (!S.draft.library?.groups) S.draft.library = clone(libData());
+  S.draft.library.groups[Number(b.dataset.libAdd)].items.push({ title: '', sub: '', url: '', cover: '' });
+  markDirty(); draftRerender();
+});
 </script>

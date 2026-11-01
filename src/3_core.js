@@ -104,7 +104,7 @@ function missing(p) {
 
 /* ---- boot ---- */
 /* โหมดแสดงผลสาธารณะ (เช่น Vercel): ไม่มีระบบ Claude → อ่านข้อมูลจาก public-data.json ดูได้อย่างเดียว */
-const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar', 'report'];
+const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar', 'report', 'library'];
 async function publicBoot() {
   let P = null;
   try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
@@ -366,7 +366,7 @@ function renderNav() {
     let h = `<li class="nav-sec"><span>${n.sec}</span></li>`;
     if (n.pillars) h += `<li><button class="nav-item" data-act="plan-view" title="ร่างแผนยุทธศาสตร์กรมสรรพสามิต 2570–2574 · เปิดดูหรือดาวน์โหลด PDF">${ic('book')}<span class="nav-label">แผนยุทธศาสตร์ 2570–2574</span></button></li>`;
     if (n.pillars) h += cfg().pillars.map((pl) => `<li><button class="nav-item nav-p" data-p="${esc(pl.code)}" data-act="go" data-v="p-${esc(pl.code)}" ${cur === 'p-' + pl.code ? 'aria-current="page"' : ''} title="${esc(pl.code)} : ${esc(pillarShort(pl))}"><span class="nav-code">${esc(pl.code)}</span><span class="nav-label">${esc(pillarShort(pl))}</span></button></li>`).join('');
-    if (n.links) { h += workLinks().filter((l) => l.label).map(link).join(''); }
+    if (n.links) { h += `<li><button class="nav-item" data-act="go" data-v="library" ${cur === 'library' ? 'aria-current="page"' : ''} title="แผนระดับต่างๆ · คลังแผนและเอกสาร">${ic('book')}<span class="nav-label">แผนระดับต่างๆ</span></button></li>`; h += workLinks().filter((l) => l.label && l.label.trim() !== 'แผนระดับต่างๆ').map(link).join(''); }
     return h;
   }).join('');
 }
@@ -377,7 +377,7 @@ function route() {
   const m = h.match(/^(edit|report)-(.+)$/), pm = h.match(/^p-([A-Za-z]+)$/);
   if (m) { S.route = m[1]; S.param = m[2]; }
   else if (pm) { S.route = 'pillar'; S.param = pm[1]; }
-  else { S.route = ['dashboard', 'new', 'kpi', 'setup', 'monthly', 'hub', 'users', 'kpis', 'risks'].includes(h) ? h : 'dashboard'; S.param = null; }
+  else { S.route = ['dashboard', 'new', 'kpi', 'setup', 'monthly', 'hub', 'users', 'kpis', 'risks', 'library'].includes(h) ? h : 'dashboard'; S.param = null; }
   if (['users', 'kpi', 'setup'].includes(S.route) && !S.isSuper) S.route = 'dashboard';
   if (S.publicMode && !PUBLIC_ROUTES.includes(S.route)) { S.route = 'dashboard'; S.param = null; }
   if (S.route === 'edit') {
@@ -394,7 +394,7 @@ const TITLES = { dashboard: 'Dashboard', new: 'สร้างแผนใหม
 function renderView() {
   if (!S.inApp) return;
   const v = $('#view');
-  const fn = { dashboard: viewDashboard, new: viewNew, edit: viewEdit, report: viewReport, kpi: viewKpi, setup: viewSetup, monthly: viewMonthly, hub: viewHub, users: viewUsers, kpis: viewKpis, risks: viewRisks, pillar: viewPillar }[S.route];
+  const fn = { dashboard: viewDashboard, new: viewNew, edit: viewEdit, report: viewReport, kpi: viewKpi, setup: viewSetup, monthly: viewMonthly, hub: viewHub, users: viewUsers, kpis: viewKpis, risks: viewRisks, pillar: viewPillar, library: viewLibrary }[S.route];
   v.innerHTML = `<div class="wrap">${fn()}</div>`;
   if (S.route === 'edit') wireEditor();
   if (typeof initMapZoom === 'function') initMapZoom(); if (typeof initSankey === 'function') initSankey(); if (typeof initCarousels === 'function') initCarousels();
