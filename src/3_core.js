@@ -103,10 +103,24 @@ function missing(p) {
 }
 
 /* ---- boot ---- */
+/* โหมดแสดงผลสาธารณะ (เช่น Vercel): ไม่มีระบบ Claude → อ่านข้อมูลจาก public-data.json ดูได้อย่างเดียว */
+const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar'];
+async function publicBoot() {
+  let P = null;
+  try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
+  if (!P || !P.org) return false;
+  Object.assign(S, { publicMode: true, uid: 'public', isSuper: false, canAdmin: false, readOnly: true, cfg: P.org, ops: P.ops || null, hr: P.hr || null,
+    cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: [], plans: [], reports: {}, profiles: {},
+    profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
+  fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
+  document.body.classList.add('public');
+  enterApp();
+  return true;
+}
 async function boot() {
   renderAuth();
   const cl = window.claude;
-  if (!cl || !cl.use) { S.noRuntime = true; renderAuth(); return; }
+  if (!cl || !cl.use) { if (await publicBoot()) return; S.noRuntime = true; renderAuth(); return; }
   const [db, user, sample, dl, assets] = await Promise.all(['db', 'user', 'sample', 'downloads', 'assets'].map((n) => cl.use(n).catch(() => null)));
   Object.assign(S, { db, user, sample, dl, assets });
   if (user) {
@@ -308,7 +322,7 @@ function syncMini() {
 function renderWho() {
   const p = S.profile || S.account; if (!p || !$('#who')) return;
   const initials = (p.name || '?').trim().slice(0, 1);
-  $('#who').innerHTML = `<span class="avatar" aria-hidden="true">${esc(initials)}</span><span class="who-t"><b>${esc(p.name)}</b><span>${S.isSuper ? 'Super admin' : esc(p.username || '')}</span></span>`;
+  $('#who').innerHTML = `<span class="avatar" aria-hidden="true">${esc(initials)}</span><span class="who-t"><b>${esc(p.name)}</b><span>${S.publicMode ? `โหมดแสดงผล${S.publicAsOf ? ' · ข้อมูล ณ ' + new Date(S.publicAsOf).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' }) : ''}` : S.isSuper ? 'Super admin' : esc(p.username || '')}</span></span>`;
   $('#scope').innerHTML = `${ic('building', 'ic-sm')}<span>${esc(unitName(p.unitId))}</span>`;
 }
 /* สิทธิ์: Super admin เห็นและจัดการได้ทุกอย่าง · ผู้ใช้ทั่วไปเห็นทุกหน้า ยกเว้นแผน/รายงานของหน่วยงานอื่น และเมนูตั้งค่าทั้งหมด */
@@ -346,8 +360,8 @@ function renderNav() {
   const item = (n) => `<li><button class="nav-item" data-act="${n.ai ? 'ai-open' : n.act || 'go'}" data-v="${n.id}" ${!n.ai && !n.act && cur === n.id ? 'aria-current="page"' : ''} title="${esc(n.label)}">${ic(n.icon)}<span class="nav-label">${n.label}</span>${n.id === 'new' && drafts ? `<span class="badge" title="แผนที่ยังเป็นร่าง">ร่าง ${drafts}</span>` : ''}${n.id === 'monthly' && due ? `<span class="badge" title="แผนที่ยังไม่ส่งรายงานเดือนนี้">รอส่ง ${due}</span>` : ''}</button></li>`;
   const link = (l) => l.url ? `<li><a class="nav-item" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(l.label)} (เปิดแท็บใหม่)">${ic('book')}<span class="nav-label">${esc(l.label)}</span></a></li>`
     : `<li><button class="nav-item" data-act="link-empty" title="${esc(l.label)}">${ic('book')}<span class="nav-label">${esc(l.label)}</span></button></li>`;
-  $('#nav-list').innerHTML = NAV.filter((n) => !n.superOnly || S.isSuper).map((n) => {
-    if (!n.sec) return item(n) + (n.id === 'dashboard' ? `<li><a class="nav-item" href="${esc(cfg().insightUrl || INSIGHT_URL)}" target="_blank" rel="noopener noreferrer" title="Excise Insight Update · สรุปข่าวและนโยบายรายสัปดาห์ (เปิดแท็บใหม่)">${ic('spark')}<span class="nav-label">Excise Insight Update</span></a></li>` : '');
+  $('#nav-list').innerHTML = NAV.filter((n) => (!n.superOnly || S.isSuper) && !(S.publicMode && ['new', 'monthly', 'ai', 'contacts'].includes(n.id))).map((n) => {
+    if (!n.sec) return item(n) + (n.id === 'dashboard' ? `<li><a class="nav-item" href="${esc(S.publicMode ? 'insight/' : (cfg().insightUrl || INSIGHT_URL))}" target="_blank" rel="noopener noreferrer" title="Excise Insight Update · สรุปข่าวและนโยบายรายสัปดาห์ (เปิดแท็บใหม่)">${ic('spark')}<span class="nav-label">Excise Insight Update</span></a></li>` : '');
     let h = `<li class="nav-sec"><span>${n.sec}</span></li>`;
     if (n.pillars) h += `<li><button class="nav-item" data-act="plan-view" title="ร่างแผนยุทธศาสตร์กรมสรรพสามิต 2570–2574 · เปิดดูหรือดาวน์โหลด PDF">${ic('book')}<span class="nav-label">แผนยุทธศาสตร์ 2570–2574</span></button></li>`;
     if (n.pillars) h += cfg().pillars.map((pl) => `<li><button class="nav-item nav-p" data-p="${esc(pl.code)}" data-act="go" data-v="p-${esc(pl.code)}" ${cur === 'p-' + pl.code ? 'aria-current="page"' : ''} title="${esc(pl.code)} : ${esc(pillarShort(pl))}"><span class="nav-code">${esc(pl.code)}</span><span class="nav-label">${esc(pillarShort(pl))}</span></button></li>`).join('');
@@ -364,6 +378,7 @@ function route() {
   else if (pm) { S.route = 'pillar'; S.param = pm[1]; }
   else { S.route = ['dashboard', 'new', 'kpi', 'setup', 'monthly', 'hub', 'users', 'kpis', 'risks'].includes(h) ? h : 'dashboard'; S.param = null; }
   if (['users', 'kpi', 'setup'].includes(S.route) && !S.isSuper) S.route = 'dashboard';
+  if (S.publicMode && !PUBLIC_ROUTES.includes(S.route)) { S.route = 'dashboard'; S.param = null; }
   if (S.route === 'edit') {
     const p = S.plans.find((x) => x.id === S.param);
     S.plan = p ? Object.assign(newPlan(p.type, p.category), clone(p)) : (S.plan && S.plan.id === S.param ? S.plan : null);
