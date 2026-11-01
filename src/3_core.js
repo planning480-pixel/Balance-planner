@@ -104,14 +104,15 @@ function missing(p) {
 
 /* ---- boot ---- */
 /* โหมดแสดงผลสาธารณะ (เช่น Vercel): ไม่มีระบบ Claude → อ่านข้อมูลจาก public-data.json ดูได้อย่างเดียว */
-const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar'];
+const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar', 'report'];
 async function publicBoot() {
   let P = null;
   try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
   if (!P || !P.org) return false;
   Object.assign(S, { publicMode: true, uid: 'public', isSuper: false, canAdmin: false, readOnly: true, cfg: P.org, ops: P.ops || null, hr: P.hr || null,
-    cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: [], plans: [], reports: {}, profiles: {},
+    cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: Array.isArray(P.plans) ? P.plans : [], plans: [], reports: {}, profiles: {},
     profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
+  scopePlans();
   fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
   document.body.classList.add('public');
   enterApp();
@@ -328,7 +329,7 @@ function renderWho() {
 /* สิทธิ์: Super admin เห็นและจัดการได้ทุกอย่าง · ผู้ใช้ทั่วไปเห็นทุกหน้า ยกเว้นแผน/รายงานของหน่วยงานอื่น และเมนูตั้งค่าทั้งหมด */
 function scopePlans() {
   const all = S.allPlans || [], u = S.profile?.unitId;
-  S.plans = S.isSuper ? all : all.filter((p) => p.ownerId === S.uid || (u && p.unitId === u));
+  S.plans = S.isSuper || S.publicMode ? all : all.filter((p) => p.ownerId === S.uid || (u && p.unitId === u));
 }
 function visUnits() { const us = cfg().units || []; if (S.isSuper) return us; const u = S.profile?.unitId; return us.filter((x) => x.id === u); }
 const NAV = [

@@ -186,7 +186,7 @@ function odBody() {
       <textarea class="textarea" rows="5" data-od-ev="${evY}" ${dis} placeholder="+ ผลบวก   - ผลลบ   ~ ผสม   * นโยบาย/โครงสร้าง  (ใส่ | ตามด้วยลิงก์ที่มาได้)">${esc(evText)}</textarea>
       <span class="help">1 บรรทัดต่อ 1 เหตุการณ์ ขึ้นต้นด้วย + − ~ หรือ * ตามผลกระทบ เช่น “- ลดภาษีดีเซล 3 บาท/ลิตร | https://…”</span></div>
   </div>
-  ${S.canAdmin ? `<div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between"><span><b>หน้าแสดงผลสาธารณะ (Vercel)</b><br><span class="help">ดาวน์โหลดไฟล์ public-data.json แล้วอัปโหลดทับใน GitHub โฟลเดอร์ dist/ หน้าเว็บบน Vercel จะอัปเดตเองภายในไม่กี่นาที (ไม่มีแผน รายงาน และข้อมูลผู้ใช้)</span></span><button class="btn" data-act="od-public">${ic('download', 'ic-sm')}ส่งออก public-data.json</button></div>` : ''}
+  ${S.canAdmin ? `<div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between"><span><b>หน้าแสดงผลสาธารณะ (Vercel)</b><br><span class="help">ดาวน์โหลดไฟล์ public-data.json แล้วอัปโหลดทับใน GitHub โฟลเดอร์ dist/ หน้าเว็บบน Vercel จะอัปเดตเองภายในไม่กี่นาที (รวมแผนที่ไม่ใช่ร่าง โดยไม่มีชื่อผู้สร้าง · ไม่มีรายงานผลรายเดือนและข้อมูลผู้ใช้)</span></span><button class="btn" data-act="od-public">${ic('download', 'ic-sm')}ส่งออก public-data.json</button></div>` : ''}
   ${S.canAdmin ? `<div class="savebar od-save"><span class="status">${S.opsDirty ? `${ic('alert', 'ic-sm')}มีการแก้ไขข้อมูลแดชบอร์ดที่ยังไม่บันทึก` : 'ข้อมูลแดชบอร์ดเป็นปัจจุบัน'}</span><button class="btn btn-ghost" data-act="od-revert" ${S.opsDirty ? '' : 'disabled'}>ยกเลิกการแก้ไข</button><button class="btn btn-primary" data-act="od-save" ${S.opsDirty ? '' : 'disabled'}>${ic('check', 'ic-sm')}บันทึกข้อมูลแดชบอร์ด</button></div>` : ''}`;
 }
 function odDirty() { if (!S.opsDirty) { S.opsDirty = true; const b = $('.od-save'); if (b) { b.querySelector('.status').innerHTML = `${ic('alert', 'ic-sm')}มีการแก้ไขข้อมูลแดชบอร์ดที่ยังไม่บันทึก`; $$('button', b).forEach((x) => { x.disabled = false; }); } } }
@@ -274,7 +274,8 @@ document.addEventListener('click', (e) => {
   else if (a === 'od-yr-del') { delete O.history.years[v]; odDirty(); draftRerender(); }
   else if (a === 'od-revert') { S.opsDraft = null; S.opsDirty = false; S.odPreview = null; draftRerender(); }
   else if (a === 'od-public') {
-    const data = JSON.stringify({ exportedAt: Date.now(), org: Object.assign({}, cfg(), { contacts: undefined }), ops: S.ops || null, hr: S.hr || null });
+    const plans = (S.allPlans || []).filter((p) => p.name && p.status !== 'draft').map((p) => { const q = Object.assign({}, p); delete q.ownerId; delete q.ownerName; return q; });
+    const data = JSON.stringify({ exportedAt: Date.now(), org: Object.assign({}, cfg(), { contacts: undefined }), ops: S.ops || null, hr: S.hr || null, plans });
     S.dl.save({ filename: 'public-data.json', data }).catch((e) => { if (e?.code !== 'declined') toast('ดาวน์โหลดไม่สำเร็จ', 'err'); });
   }
   else if (a === 'od-save') {

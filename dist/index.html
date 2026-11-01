@@ -1603,6 +1603,7 @@ button.bk:hover { border-color: var(--line-strong); }
 .wrap { gap: 12px; }
 body.public .nav-foot { display: none; }
 body.public [data-act="ai-open"], body.public [data-act="go"][data-v="new"], body.public #scope { visibility: hidden; }
+body.public .journey, body.public .miss, body.public .cut-note { display: none !important; }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1831,14 +1832,15 @@ function missing(p) {
 
 /* ---- boot ---- */
 /* โหมดแสดงผลสาธารณะ (เช่น Vercel): ไม่มีระบบ Claude → อ่านข้อมูลจาก public-data.json ดูได้อย่างเดียว */
-const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar'];
+const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar', 'report'];
 async function publicBoot() {
   let P = null;
   try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
   if (!P || !P.org) return false;
   Object.assign(S, { publicMode: true, uid: 'public', isSuper: false, canAdmin: false, readOnly: true, cfg: P.org, ops: P.ops || null, hr: P.hr || null,
-    cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: [], plans: [], reports: {}, profiles: {},
+    cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: Array.isArray(P.plans) ? P.plans : [], plans: [], reports: {}, profiles: {},
     profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
+  scopePlans();
   fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
   document.body.classList.add('public');
   enterApp();
@@ -2055,7 +2057,7 @@ function renderWho() {
 /* สิทธิ์: Super admin เห็นและจัดการได้ทุกอย่าง · ผู้ใช้ทั่วไปเห็นทุกหน้า ยกเว้นแผน/รายงานของหน่วยงานอื่น และเมนูตั้งค่าทั้งหมด */
 function scopePlans() {
   const all = S.allPlans || [], u = S.profile?.unitId;
-  S.plans = S.isSuper ? all : all.filter((p) => p.ownerId === S.uid || (u && p.unitId === u));
+  S.plans = S.isSuper || S.publicMode ? all : all.filter((p) => p.ownerId === S.uid || (u && p.unitId === u));
 }
 function visUnits() { const us = cfg().units || []; if (S.isSuper) return us; const u = S.profile?.unitId; return us.filter((x) => x.id === u); }
 const NAV = [
@@ -2297,7 +2299,7 @@ function viewNew() {
   ${mine.length ? `<section class="plans">${mine.map(planCard).join('')}</section>` : `<div class="empty">${ic('fileplus')}<b>ยังไม่มีแผน</b><span>เลือกประเภทโครงการด้านบนเพื่อเริ่มสร้างแผนแรก</span></div>`}`;
 }
 function planCard(p) {
-  const canEdit = p.ownerId === S.uid || S.canAdmin;
+  const canEdit = !S.publicMode && (p.ownerId === S.uid || S.canAdmin);
   const st = stratOf(p.strategy);
   const miss = missing(Object.assign(newPlan(p.type, p.category), p)).length;
   return `<article class="card plan" ${p.pillar ? `data-p="${esc(p.pillar)}"` : ''}>
@@ -2549,7 +2551,7 @@ function viewReport() {
   if (!raw) return S.plansLoaded ? `<div class="empty">${ic('alert')}<b>ไม่พบแผนนี้</b><button class="btn" data-act="go" data-v="new">กลับ</button></div>` : `<div class="skel" style="height:300px"></div>`;
   const p = Object.assign(newPlan(raw.type, raw.category), raw);
   const miss = missing(p);
-  const canEdit = p.ownerId === S.uid || S.canAdmin;
+  const canEdit = !S.publicMode && (p.ownerId === S.uid || S.canAdmin);
   return `
   ${journey(S.exported === p.id ? 4 : 3)}
   <div class="ph"><div class="ph-t"><span class="eyebrow">${p.status === 'done' ? 'เสร็จสิ้นการสร้างแผน' : 'ตัวอย่างรายงาน (ยังเป็นร่าง)'}</span><h1>${esc(p.name || 'แผนใหม่')}</h1></div>
@@ -3543,7 +3545,7 @@ function odBody() {
       <textarea class="textarea" rows="5" data-od-ev="${evY}" ${dis} placeholder="+ ผลบวก   - ผลลบ   ~ ผสม   * นโยบาย/โครงสร้าง  (ใส่ | ตามด้วยลิงก์ที่มาได้)">${esc(evText)}</textarea>
       <span class="help">1 บรรทัดต่อ 1 เหตุการณ์ ขึ้นต้นด้วย + − ~ หรือ * ตามผลกระทบ เช่น “- ลดภาษีดีเซล 3 บาท/ลิตร | https://…”</span></div>
   </div>
-  ${S.canAdmin ? `<div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between"><span><b>หน้าแสดงผลสาธารณะ (Vercel)</b><br><span class="help">ดาวน์โหลดไฟล์ public-data.json แล้วอัปโหลดทับใน GitHub โฟลเดอร์ dist/ หน้าเว็บบน Vercel จะอัปเดตเองภายในไม่กี่นาที (ไม่มีแผน รายงาน และข้อมูลผู้ใช้)</span></span><button class="btn" data-act="od-public">${ic('download', 'ic-sm')}ส่งออก public-data.json</button></div>` : ''}
+  ${S.canAdmin ? `<div class="card" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between"><span><b>หน้าแสดงผลสาธารณะ (Vercel)</b><br><span class="help">ดาวน์โหลดไฟล์ public-data.json แล้วอัปโหลดทับใน GitHub โฟลเดอร์ dist/ หน้าเว็บบน Vercel จะอัปเดตเองภายในไม่กี่นาที (รวมแผนที่ไม่ใช่ร่าง โดยไม่มีชื่อผู้สร้าง · ไม่มีรายงานผลรายเดือนและข้อมูลผู้ใช้)</span></span><button class="btn" data-act="od-public">${ic('download', 'ic-sm')}ส่งออก public-data.json</button></div>` : ''}
   ${S.canAdmin ? `<div class="savebar od-save"><span class="status">${S.opsDirty ? `${ic('alert', 'ic-sm')}มีการแก้ไขข้อมูลแดชบอร์ดที่ยังไม่บันทึก` : 'ข้อมูลแดชบอร์ดเป็นปัจจุบัน'}</span><button class="btn btn-ghost" data-act="od-revert" ${S.opsDirty ? '' : 'disabled'}>ยกเลิกการแก้ไข</button><button class="btn btn-primary" data-act="od-save" ${S.opsDirty ? '' : 'disabled'}>${ic('check', 'ic-sm')}บันทึกข้อมูลแดชบอร์ด</button></div>` : ''}`;
 }
 function odDirty() { if (!S.opsDirty) { S.opsDirty = true; const b = $('.od-save'); if (b) { b.querySelector('.status').innerHTML = `${ic('alert', 'ic-sm')}มีการแก้ไขข้อมูลแดชบอร์ดที่ยังไม่บันทึก`; $$('button', b).forEach((x) => { x.disabled = false; }); } } }
@@ -3631,7 +3633,8 @@ document.addEventListener('click', (e) => {
   else if (a === 'od-yr-del') { delete O.history.years[v]; odDirty(); draftRerender(); }
   else if (a === 'od-revert') { S.opsDraft = null; S.opsDirty = false; S.odPreview = null; draftRerender(); }
   else if (a === 'od-public') {
-    const data = JSON.stringify({ exportedAt: Date.now(), org: Object.assign({}, cfg(), { contacts: undefined }), ops: S.ops || null, hr: S.hr || null });
+    const plans = (S.allPlans || []).filter((p) => p.name && p.status !== 'draft').map((p) => { const q = Object.assign({}, p); delete q.ownerId; delete q.ownerName; return q; });
+    const data = JSON.stringify({ exportedAt: Date.now(), org: Object.assign({}, cfg(), { contacts: undefined }), ops: S.ops || null, hr: S.hr || null, plans });
     S.dl.save({ filename: 'public-data.json', data }).catch((e) => { if (e?.code !== 'declined') toast('ดาวน์โหลดไม่สำเร็จ', 'err'); });
   }
   else if (a === 'od-save') {

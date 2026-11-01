@@ -163,7 +163,7 @@ function viewNew() {
   ${mine.length ? `<section class="plans">${mine.map(planCard).join('')}</section>` : `<div class="empty">${ic('fileplus')}<b>ยังไม่มีแผน</b><span>เลือกประเภทโครงการด้านบนเพื่อเริ่มสร้างแผนแรก</span></div>`}`;
 }
 function planCard(p) {
-  const canEdit = p.ownerId === S.uid || S.canAdmin;
+  const canEdit = !S.publicMode && (p.ownerId === S.uid || S.canAdmin);
   const st = stratOf(p.strategy);
   const miss = missing(Object.assign(newPlan(p.type, p.category), p)).length;
   return `<article class="card plan" ${p.pillar ? `data-p="${esc(p.pillar)}"` : ''}>
@@ -415,7 +415,7 @@ function viewReport() {
   if (!raw) return S.plansLoaded ? `<div class="empty">${ic('alert')}<b>ไม่พบแผนนี้</b><button class="btn" data-act="go" data-v="new">กลับ</button></div>` : `<div class="skel" style="height:300px"></div>`;
   const p = Object.assign(newPlan(raw.type, raw.category), raw);
   const miss = missing(p);
-  const canEdit = p.ownerId === S.uid || S.canAdmin;
+  const canEdit = !S.publicMode && (p.ownerId === S.uid || S.canAdmin);
   return `
   ${journey(S.exported === p.id ? 4 : 3)}
   <div class="ph"><div class="ph-t"><span class="eyebrow">${p.status === 'done' ? 'เสร็จสิ้นการสร้างแผน' : 'ตัวอย่างรายงาน (ยังเป็นร่าง)'}</span><h1>${esc(p.name || 'แผนใหม่')}</h1></div>
