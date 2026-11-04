@@ -1635,4 +1635,48 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 .lib-set-h { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 @media (max-width: 1100px) { .car-t > .lib-card { flex-basis: calc((100% - 24px) / 3); } }
 @media (max-width: 760px) { .car-t > .lib-card { flex-basis: 82%; } }
+
+/* ภาพรวมยุทธศาสตร์ 18 กลยุทธ์ */
+.so { display: grid; gap: 12px; }
+.so-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.so-y { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); } .so-y .select { width: auto; min-width: 96px; }
+.so-sum { margin-left: auto; }
+.so-view button { display: inline-flex; align-items: center; gap: 6px; }
+.so-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); }
+.so-legend span, .so-lg span { display: inline-flex; align-items: center; gap: 6px; }
+.so-legend i, .so-lg i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.so-legend b { color: var(--fg); font-weight: 600; }
+.so-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.so-rows { display: grid; gap: 12px; }
+.so-card { display: grid; gap: 9px; align-content: start; text-align: left; font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer; position: relative; overflow: hidden; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.so-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--pc); }
+.so-card:hover { border-color: var(--pc); box-shadow: 0 8px 20px color-mix(in srgb, var(--pc) 18%, transparent); transform: translateY(-1px); }
+.so-card:focus-visible { outline: 2px solid var(--pc); outline-offset: 2px; }
+.so-h { display: flex; gap: 10px; align-items: center; min-width: 0; }
+.so-dot { flex: none; display: inline-grid; place-items: center; min-width: 40px; height: 40px; padding: 0 6px; border-radius: 50%; background: var(--pc); color: #fff; font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+.so-tt { display: grid; gap: 2px; min-width: 0; }
+.so-tt b { font-size: 14px; line-height: 1.35; min-height: 2.7em; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.so-tt small { font-size: 12.5px; color: var(--muted); }
+.so-bar { display: flex; height: 10px; border-radius: 6px; overflow: hidden; gap: 2px; background: var(--surface-2); }
+.so-bar i { display: block; min-width: 4px; }
+.so-lg { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.so-bd { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: 12.5px; color: var(--muted); }
+.so-bd b { font-size: 17px; color: var(--fg); font-weight: 700; } .so-bd em { font-style: normal; margin-left: auto; color: var(--pc); font-weight: 600; }
+.so-tw { max-height: 560px; overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
+.so-tbl { width: 100%; min-width: 980px; }
+.so-tbl thead th { position: sticky; top: 0; z-index: 2; background: var(--surface); }
+.so-gr td { background: color-mix(in srgb, var(--pc) 9%, var(--surface)); border-left: 4px solid var(--pc); }
+.so-gr td { display: table-cell; } .so-gr .so-dot { min-width: 36px; height: 26px; border-radius: 13px; font-size: 12px; margin-right: 8px; vertical-align: middle; }
+.so-gr b { margin-right: 10px; }
+.so-pn { min-width: 220px; } .so-pn a { color: var(--fg); font-weight: 600; text-decoration: none; } .so-pn a:hover { color: var(--accent); } .so-pn small, .so-tbl td small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 400; }
+.so-tx { max-width: 220px; font-size: 12.5px; color: var(--fg-2, var(--fg)); }
+.so-none { padding-left: 52px !important; }
+.so-steps { display: inline-flex; gap: 3px; }
+.so-steps i { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-style: normal; font-size: 11px; font-weight: 600; border: 1px dashed var(--line-strong); color: var(--muted); }
+.so-steps i.pl { border-style: solid; border-color: var(--accent); color: var(--accent); }
+.so-steps i.ok { background: #1D9152; border-color: #1D9152; color: #fff; }
+.so-chip { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 12px; white-space: nowrap; background: color-mix(in srgb, var(--sc) 14%, transparent); color: color-mix(in srgb, var(--sc) 80%, var(--fg)); }
+@media (max-width: 1200px) { .so-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .so-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .so-grid { grid-template-columns: 1fr; } .so-sum { margin-left: 0; width: 100%; } }
 </style>

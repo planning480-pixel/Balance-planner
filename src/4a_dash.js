@@ -308,12 +308,12 @@ function viewDashboard() {
   ${zcard('สถิติรายได้ภาษีสรรพสามิต', 'ย้อนหลัง 10 ปีงบประมาณ · เลือกภาพรวมหรือรายสินค้า · กดปีเพื่อดูเหตุการณ์สำคัญที่กระทบรายได้', `<div id="hist-body">${histBody()}</div>`, { fold: 'hist' })}
   <div class="zgrid">
     ${zcard('KPI Scoreboard', `${ks.n} KPI · On target ${ks.ok} · Near ${ks.warn} · Below ${ks.bad} · No data ${ks.none}`, kpiBoard(null, { noHead: true, noSum: true }), { span: 12, go: 'kpis', goLabel: 'ดูเชิงลึก', fold: 'kpi' })}
-    ${zcard('ภาพรวมตามเสายุทธศาสตร์', 'จำนวนโครงการ งบประมาณ และร้อยละความคืบหน้าเฉลี่ย', `<div class="prows">${pillarRows}</div>`, { span: 7, go: 'p-BA', goLabel: 'ดูเชิงลึก', fold: 'pillar' })}
+    ${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ · กดการ์ดเพื่อดูเสา', stratOverview(), { span: 12, fold: 'pillar' })}
     ${zcard('Top 5 Risk', 'ความเสี่ยงระดับกรม' + (C.riskSample ? ' · <span class="chip chip-warn">คะแนนตัวอย่าง</span>' : ''), riskBody, { span: 5, go: 'risks', goLabel: 'ดูเชิงลึก', fold: 'risk' })}
     ${zcard('รายงานผลเดือน ' + MONTHS[ms.m], f.unit ? esc(unitName(f.unit)) : 'ทุกหน่วยงาน', `<div class="zrep">
       <div class="zm-g"><div><b class="num">${ms.sent}/${ms.n}</b><span>ส่งรายงาน</span></div><div><b class="num">${ms.done}</b><span>เสร็จแล้ว</span></div><div><b class="num">${ms.doing}</b><span>กำลังทำ</span></div><div><b class="num ${ms.late ? 'late-t' : ''}">${ms.late}</b><span>ล่าช้า</span></div><div><b class="num">${disbTxt(ms.disb)}</b><span>เบิกจ่าย</span></div></div>
       <span class="zbar"><i style="width:${sentPct}%"></i></span>
-      <div class="zrep-a"><button class="btn btn-primary" data-act="dash-pdf" data-v="${ms.m}" ${S.pdfBusy ? 'disabled' : ''}>${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง PDF…' : 'ดาวน์โหลด PDF สรุปรายงานผล'}</button><button class="btn" data-act="go" data-v="monthly">ไปหน้ารายงานผล</button></div></div>`, { span: 12, fold: 'rep' })}
+      <div class="zrep-a"><button class="btn btn-primary" data-act="dash-pdf" data-v="${ms.m}" ${S.pdfBusy ? 'disabled' : ''}>${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง PDF…' : 'ดาวน์โหลด PDF สรุปรายงานผล'}</button><button class="btn" data-act="go" data-v="monthly">ไปหน้ารายงานผล</button></div></div>`, { span: 7, fold: 'rep' })}
   </div>`;
 }
 
@@ -321,7 +321,7 @@ function viewKpis() {
   const g = needCfg(); if (g) return g;
   const C = cfg(), pf = S.kpiP || '';
   const chips = `<div class="seg seg-sm" role="group" aria-label="เลือกเสา">${[['', 'ทุกเสา'], ...C.pillars.map((p) => [p.code, p.code])].map(([c, l]) => `<button type="button" data-act="kpi-p" data-v="${c}" aria-pressed="${pf === c}" ${c ? `data-p="${c}"` : ''}>${l}</button>`).join('')}</div>`;
-  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">Latest result vs target · กด ${ic('info', 'ic-sm')} ดูคำอธิบายภาษาไทย</span></div>${chips}</div>${kpiBoard(pf, true)}`;
+  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">Latest result vs target · กด ${ic('info', 'ic-sm')} ดูคำอธิบายภาษาไทย</span></div>${chips}</div>${kpiBoard(pf, true)}<div class="zgrid" style="margin-top:16px">${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ', stratOverview(), { span: 12 })}</div>`;
 }
 
 function rankedRisks(pf) {
