@@ -190,7 +190,7 @@ function fld(f, label, inner, opts = {}) {
   </div>`;
 }
 function sugBox(f) { return `<div class="ai-sug"><span class="auto-tag">${ic('spark', 'ic-sm')}ข้อเสนอจาก AI</span><span>${esc(S.sug[f])}</span><span style="display:flex;gap:8px"><button type="button" class="btn btn-sm btn-primary" data-act="ai-use" data-f="${f}">ใช้ข้อความนี้</button><button type="button" class="btn btn-sm" data-act="ai-dismiss" data-f="${f}">ไม่ใช้</button></span></div>`; }
-const ta = (f, ph) => `<textarea id="e-${f.replace(/\./g, '-')}" class="textarea" data-f="${f}" placeholder="${esc(ph || '')}">${esc(getPath(S.plan, f))}</textarea>`;
+const ta = (f, ph) => `<textarea id="e-${f.replace(/\./g, '-')}" class="textarea" data-f="${f}" placeholder="${esc(ph || '')}">${esc(getPath(S.plan, f) ?? '')}</textarea>`;
 
 function viewEdit() {
   const g = needCfg(); if (g) return g;
@@ -269,7 +269,7 @@ function viewEdit() {
     const L = p.erm1.l, I = p.erm1.i, sc = riskScore(L, I), lv = riskLevel(sc);
     const sE1 = sec('w-erm', 'การบริหารความเสี่ยงโครงการ (ERM)', 'shield', 'ERM1 ระบุความเสี่ยง 1 เรื่องและประเมิน · ERM2 แผนรองรับ', `
       <h4 class="sub-h">ERM1 ความเสี่ยงโครงการ</h4>
-      <div class="grid2">${fld('erm1.risk', 'ความเสี่ยงโครงการ (1 เรื่อง)', ta('erm1.risk', 'เหตุการณ์ที่อาจทำให้โครงการไม่บรรลุเป้า'), { max: 180, req: true, ai: true })}${fld('erm1.current', 'การจัดการในปัจจุบัน', ta('erm1.current', 'มาตรการหรือการควบคุมที่มีอยู่แล้ว'), { max: 180, req: true })}</div>
+      <div class="grid2">${fld('erm1.risk', 'ความเสี่ยง (1 เหตุการณ์)', ta('erm1.risk', 'เหตุการณ์ที่อาจทำให้โครงการไม่บรรลุเป้า และผลกระทบ'), { max: 180, req: true, ai: true })}${fld('erm1.cause', 'สาเหตุ', ta('erm1.cause', 'ปัจจัยที่ทำให้เหตุการณ์นี้เกิดขึ้น 2–3 ข้อ เช่น (1) … (2) …'), { max: 180, req: true, ai: true })}${fld('erm1.current', 'การจัดการในปัจจุบัน', ta('erm1.current', 'มาตรการหรือการควบคุมที่มีอยู่แล้ว'), { max: 180, req: true })}</div>
       <div class="field ${S.showMiss && S.missSet.has('erm1.map') ? 'invalid' : ''}"><span class="lbl req">ประเมินด้วย risk map</span>
         <div class="erm-eval">
           ${riskMapHTML({ pick: true, sel: { l: L, i: I } })}
@@ -421,6 +421,7 @@ function viewReport() {
   <div class="ph"><div class="ph-t"><span class="eyebrow">${p.status === 'done' ? 'เสร็จสิ้นการสร้างแผน' : 'ตัวอย่างรายงาน (ยังเป็นร่าง)'}</span><h1>${esc(p.name || 'แผนใหม่')}</h1></div>
     <div class="report-tools">
       ${canEdit ? `<button class="btn" data-act="go" data-v="edit-${esc(p.id)}">${ic('edit', 'ic-sm')}แก้ไข</button>` : ''}
+      <button class="btn" data-act="print-sheet" title="พิมพ์ A4 แนวนอน 1 หน้า">${ic('file', 'ic-sm')}พิมพ์ (A4 แนวนอน)</button>
       <button class="btn btn-primary" data-act="pdf" ${S.pdfBusy ? 'disabled' : ''}>${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง PDF…' : 'ดาวน์โหลด PDF'}</button>
       ${S.exported === p.id ? `<button class="btn" data-act="go" data-v="new">${ic('check', 'ic-sm')}กลับไปรายการแผน</button>` : ''}
     </div></div>
@@ -468,7 +469,7 @@ function sheetHTML(p, cut) {
         <div class="sx-mapwrap"><span class="sx-yl">โอกาสเกิด</span><div class="big-map">${mm}</div><span class="sx-xl">ผลกระทบ</span></div>
         <div class="sx-score">${lv ? `<span>คะแนนความเสี่ยง</span><b>${sc}</b><span class="rs-l rs-${lv.c}">ระดับ${lv.t}</span><span class="sh-m">โอกาส ${L} × ผลกระทบ ${I}</span>` : '<span class="sh-m">ยังไม่ประเมิน</span>'}</div>
       </div>
-      <dl class="sh-kv sx-erm"><dt>ERM1 ความเสี่ยง</dt><dd>${nl(p.erm1.risk)}</dd><dt>การจัดการปัจจุบัน</dt><dd>${nl(p.erm1.current)}</dd><dt>ERM2 Plan B</dt><dd>${nl(p.erm2.planB)}</dd><dt>KRI</dt><dd>${nl(p.erm2.kri)}</dd><dt>ติดตาม KRI</dt><dd>${p.erm2.months.length ? [...p.erm2.months].sort((a, b) => a - b).map((m) => MONTHS[m]).join(', ') : '—'}</dd><dt>ความเสี่ยงระดับกรม</dt><dd>${drisks.length ? drisks.map((r) => `${esc(r.id)} ${esc(r.name)}`).join('<br>') : '—'}</dd></dl>`;
+      <dl class="sh-kv sx-erm"><dt>ERM1 ความเสี่ยง</dt><dd>${nl(p.erm1.risk)}</dd><dt>สาเหตุ</dt><dd>${nl(p.erm1.cause)}</dd><dt>การจัดการปัจจุบัน</dt><dd>${nl(p.erm1.current)}</dd><dt>ERM2 Plan B</dt><dd>${nl(p.erm2.planB)}</dd><dt>KRI</dt><dd>${nl(p.erm2.kri)}</dd><dt>ติดตาม KRI</dt><dd>${p.erm2.months.length ? [...p.erm2.months].sort((a, b) => a - b).map((m) => MONTHS[m]).join(', ') : '—'}</dd><dt>ความเสี่ยงระดับกรม</dt><dd>${drisks.length ? drisks.map((r) => `${esc(r.id)} ${esc(r.name)}`).join('<br>') : '—'}</dd></dl>`;
   } else {
     left = `<div class="sx-blk sx-grow"><div class="sh-h">ขอบเขตโครงการ</div><p class="sh-p sh-m">โครงการประเภทไม่ผูกตัวชี้วัด ไม่ต้องระบุ Milestone ผลผลิต และ ERM ระดับโครงการ</p></div>`;
     right = `<div class="sh-h">ความเสี่ยงระดับกรมที่เกี่ยวข้อง</div>${drisks.length ? `<ul class="sh-ul sx-rl">${drisks.map((r) => { const sc = riskScore(Number(r.l) || 0, Number(r.i) || 0), lv = riskLevel(sc); return `<li><b>${esc(r.id)}</b> ${esc(r.name)}${lv ? ` <span class="rs-l rs-${lv.c}">${sc} · ${lv.t}</span>` : ''}</li>`; }).join('')}</ul>` : '<p class="sh-m">—</p>'}`;

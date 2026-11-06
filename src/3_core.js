@@ -73,7 +73,7 @@ function newPlan(type, category) {
     type, category, name: '', objective: '', startYear: 2570, duration: 1, pillar: '', strategy: '', kpis: [], risks: [], budget: null,
     steps: Array.from({ length: 5 }, () => ({ name: '', from: -1, to: -1 })),
     output6: '', output12: '', outcome12: '',
-    erm1: { risk: '', current: '', l: 0, i: 0 }, erm2: { planB: '', kri: '', months: [] },
+    erm1: { risk: '', cause: '', current: '', l: 0, i: 0 }, erm2: { planB: '', kri: '', months: [] },
     status: 'draft', createdAt: Date.now(), updatedAt: Date.now()
   };
 }
@@ -93,6 +93,7 @@ function missing(p) {
     if (!p.output12.trim()) add('w-out', 'output12', 'Output 12 เดือน');
     if (!p.outcome12.trim()) add('w-out', 'outcome12', 'Outcome 12 เดือน');
     if (!p.erm1.risk.trim()) add('w-erm', 'erm1.risk', 'ERM1 ความเสี่ยงโครงการ');
+    if (!String(p.erm1.cause || '').trim()) add('w-erm', 'erm1.cause', 'ERM1 สาเหตุของความเสี่ยง');
     if (!p.erm1.current.trim()) add('w-erm', 'erm1.current', 'ERM1 การจัดการในปัจจุบัน');
     if (!p.erm1.l || !p.erm1.i) add('w-erm', 'erm1.map', 'ERM1 ประเมินบน risk map');
     if (!p.erm2.planB.trim()) add('w-erm', 'erm2.planB', 'ERM2 Plan B');

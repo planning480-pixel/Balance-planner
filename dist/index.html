@@ -371,7 +371,7 @@ button { cursor: pointer; }
 .ai-sug { border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); background: var(--accent-soft); border-radius: var(--r-sm); padding: 10px 12px; display: grid; gap: 8px; font-size: 14px; white-space: pre-wrap; }
 .ai-btn { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; min-height: 32px; padding: 0 10px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line)); background: var(--surface); color: var(--accent); font-weight: 500; }
 .ai-btn:hover { background: var(--accent-soft); }
-.lbl-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.lbl-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 36px; }
 .savebar { position: sticky; bottom: 0; z-index: 15; margin-top: 8px; padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; box-shadow: var(--shadow); }
 .savebar .status { flex: 1; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; min-width: 160px; }
 .miss { background: var(--bad-soft); color: var(--bad); border-radius: var(--r-sm); padding: 12px 14px; font-size: 14px; display: grid; gap: 4px; }
@@ -1679,6 +1679,15 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 @media (max-width: 1200px) { .so-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 900px) { .so-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .so-grid { grid-template-columns: 1fr; } .so-sum { margin-left: 0; width: 100%; } }
+
+/* พิมพ์รายงานแผน 1 หน้า: A4 แนวนอนเสมอ */
+@media print {
+  @page { size: A4 landscape; margin: 0; }
+  html, body { background: #fff !important; height: auto !important; }
+  body * { visibility: hidden !important; }
+  .sheet, .sheet * { visibility: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sheet { position: fixed !important; left: 0; top: 0; width: 297mm !important; height: 210mm !important; min-height: 0 !important; margin: 0 !important; box-shadow: none !important; overflow: hidden; }
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1876,7 +1885,7 @@ function newPlan(type, category) {
     type, category, name: '', objective: '', startYear: 2570, duration: 1, pillar: '', strategy: '', kpis: [], risks: [], budget: null,
     steps: Array.from({ length: 5 }, () => ({ name: '', from: -1, to: -1 })),
     output6: '', output12: '', outcome12: '',
-    erm1: { risk: '', current: '', l: 0, i: 0 }, erm2: { planB: '', kri: '', months: [] },
+    erm1: { risk: '', cause: '', current: '', l: 0, i: 0 }, erm2: { planB: '', kri: '', months: [] },
     status: 'draft', createdAt: Date.now(), updatedAt: Date.now()
   };
 }
@@ -1896,6 +1905,7 @@ function missing(p) {
     if (!p.output12.trim()) add('w-out', 'output12', 'Output 12 เดือน');
     if (!p.outcome12.trim()) add('w-out', 'outcome12', 'Outcome 12 เดือน');
     if (!p.erm1.risk.trim()) add('w-erm', 'erm1.risk', 'ERM1 ความเสี่ยงโครงการ');
+    if (!String(p.erm1.cause || '').trim()) add('w-erm', 'erm1.cause', 'ERM1 สาเหตุของความเสี่ยง');
     if (!p.erm1.current.trim()) add('w-erm', 'erm1.current', 'ERM1 การจัดการในปัจจุบัน');
     if (!p.erm1.l || !p.erm1.i) add('w-erm', 'erm1.map', 'ERM1 ประเมินบน risk map');
     if (!p.erm2.planB.trim()) add('w-erm', 'erm2.planB', 'ERM2 Plan B');
@@ -2401,7 +2411,7 @@ function fld(f, label, inner, opts = {}) {
   </div>`;
 }
 function sugBox(f) { return `<div class="ai-sug"><span class="auto-tag">${ic('spark', 'ic-sm')}ข้อเสนอจาก AI</span><span>${esc(S.sug[f])}</span><span style="display:flex;gap:8px"><button type="button" class="btn btn-sm btn-primary" data-act="ai-use" data-f="${f}">ใช้ข้อความนี้</button><button type="button" class="btn btn-sm" data-act="ai-dismiss" data-f="${f}">ไม่ใช้</button></span></div>`; }
-const ta = (f, ph) => `<textarea id="e-${f.replace(/\./g, '-')}" class="textarea" data-f="${f}" placeholder="${esc(ph || '')}">${esc(getPath(S.plan, f))}</textarea>`;
+const ta = (f, ph) => `<textarea id="e-${f.replace(/\./g, '-')}" class="textarea" data-f="${f}" placeholder="${esc(ph || '')}">${esc(getPath(S.plan, f) ?? '')}</textarea>`;
 
 function viewEdit() {
   const g = needCfg(); if (g) return g;
@@ -2480,7 +2490,7 @@ function viewEdit() {
     const L = p.erm1.l, I = p.erm1.i, sc = riskScore(L, I), lv = riskLevel(sc);
     const sE1 = sec('w-erm', 'การบริหารความเสี่ยงโครงการ (ERM)', 'shield', 'ERM1 ระบุความเสี่ยง 1 เรื่องและประเมิน · ERM2 แผนรองรับ', `
       <h4 class="sub-h">ERM1 ความเสี่ยงโครงการ</h4>
-      <div class="grid2">${fld('erm1.risk', 'ความเสี่ยงโครงการ (1 เรื่อง)', ta('erm1.risk', 'เหตุการณ์ที่อาจทำให้โครงการไม่บรรลุเป้า'), { max: 180, req: true, ai: true })}${fld('erm1.current', 'การจัดการในปัจจุบัน', ta('erm1.current', 'มาตรการหรือการควบคุมที่มีอยู่แล้ว'), { max: 180, req: true })}</div>
+      <div class="grid2">${fld('erm1.risk', 'ความเสี่ยง (1 เหตุการณ์)', ta('erm1.risk', 'เหตุการณ์ที่อาจทำให้โครงการไม่บรรลุเป้า และผลกระทบ'), { max: 180, req: true, ai: true })}${fld('erm1.cause', 'สาเหตุ', ta('erm1.cause', 'ปัจจัยที่ทำให้เหตุการณ์นี้เกิดขึ้น 2–3 ข้อ เช่น (1) … (2) …'), { max: 180, req: true, ai: true })}${fld('erm1.current', 'การจัดการในปัจจุบัน', ta('erm1.current', 'มาตรการหรือการควบคุมที่มีอยู่แล้ว'), { max: 180, req: true })}</div>
       <div class="field ${S.showMiss && S.missSet.has('erm1.map') ? 'invalid' : ''}"><span class="lbl req">ประเมินด้วย risk map</span>
         <div class="erm-eval">
           ${riskMapHTML({ pick: true, sel: { l: L, i: I } })}
@@ -2632,6 +2642,7 @@ function viewReport() {
   <div class="ph"><div class="ph-t"><span class="eyebrow">${p.status === 'done' ? 'เสร็จสิ้นการสร้างแผน' : 'ตัวอย่างรายงาน (ยังเป็นร่าง)'}</span><h1>${esc(p.name || 'แผนใหม่')}</h1></div>
     <div class="report-tools">
       ${canEdit ? `<button class="btn" data-act="go" data-v="edit-${esc(p.id)}">${ic('edit', 'ic-sm')}แก้ไข</button>` : ''}
+      <button class="btn" data-act="print-sheet" title="พิมพ์ A4 แนวนอน 1 หน้า">${ic('file', 'ic-sm')}พิมพ์ (A4 แนวนอน)</button>
       <button class="btn btn-primary" data-act="pdf" ${S.pdfBusy ? 'disabled' : ''}>${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง PDF…' : 'ดาวน์โหลด PDF'}</button>
       ${S.exported === p.id ? `<button class="btn" data-act="go" data-v="new">${ic('check', 'ic-sm')}กลับไปรายการแผน</button>` : ''}
     </div></div>
@@ -2679,7 +2690,7 @@ function sheetHTML(p, cut) {
         <div class="sx-mapwrap"><span class="sx-yl">โอกาสเกิด</span><div class="big-map">${mm}</div><span class="sx-xl">ผลกระทบ</span></div>
         <div class="sx-score">${lv ? `<span>คะแนนความเสี่ยง</span><b>${sc}</b><span class="rs-l rs-${lv.c}">ระดับ${lv.t}</span><span class="sh-m">โอกาส ${L} × ผลกระทบ ${I}</span>` : '<span class="sh-m">ยังไม่ประเมิน</span>'}</div>
       </div>
-      <dl class="sh-kv sx-erm"><dt>ERM1 ความเสี่ยง</dt><dd>${nl(p.erm1.risk)}</dd><dt>การจัดการปัจจุบัน</dt><dd>${nl(p.erm1.current)}</dd><dt>ERM2 Plan B</dt><dd>${nl(p.erm2.planB)}</dd><dt>KRI</dt><dd>${nl(p.erm2.kri)}</dd><dt>ติดตาม KRI</dt><dd>${p.erm2.months.length ? [...p.erm2.months].sort((a, b) => a - b).map((m) => MONTHS[m]).join(', ') : '—'}</dd><dt>ความเสี่ยงระดับกรม</dt><dd>${drisks.length ? drisks.map((r) => `${esc(r.id)} ${esc(r.name)}`).join('<br>') : '—'}</dd></dl>`;
+      <dl class="sh-kv sx-erm"><dt>ERM1 ความเสี่ยง</dt><dd>${nl(p.erm1.risk)}</dd><dt>สาเหตุ</dt><dd>${nl(p.erm1.cause)}</dd><dt>การจัดการปัจจุบัน</dt><dd>${nl(p.erm1.current)}</dd><dt>ERM2 Plan B</dt><dd>${nl(p.erm2.planB)}</dd><dt>KRI</dt><dd>${nl(p.erm2.kri)}</dd><dt>ติดตาม KRI</dt><dd>${p.erm2.months.length ? [...p.erm2.months].sort((a, b) => a - b).map((m) => MONTHS[m]).join(', ') : '—'}</dd><dt>ความเสี่ยงระดับกรม</dt><dd>${drisks.length ? drisks.map((r) => `${esc(r.id)} ${esc(r.name)}`).join('<br>') : '—'}</dd></dl>`;
   } else {
     left = `<div class="sx-blk sx-grow"><div class="sh-h">ขอบเขตโครงการ</div><p class="sh-p sh-m">โครงการประเภทไม่ผูกตัวชี้วัด ไม่ต้องระบุ Milestone ผลผลิต และ ERM ระดับโครงการ</p></div>`;
     right = `<div class="sh-h">ความเสี่ยงระดับกรมที่เกี่ยวข้อง</div>${drisks.length ? `<ul class="sh-ul sx-rl">${drisks.map((r) => { const sc = riskScore(Number(r.l) || 0, Number(r.i) || 0), lv = riskLevel(sc); return `<li><b>${esc(r.id)}</b> ${esc(r.name)}${lv ? ` <span class="rs-l rs-${lv.c}">${sc} · ${lv.t}</span>` : ''}</li>`; }).join('')}</ul>` : '<p class="sh-m">—</p>'}`;
@@ -4496,7 +4507,8 @@ const DRAFT_HINT = {
   output6: 'Output 6 เดือน (ผลผลิตที่ส่งมอบได้ภายใน มี.ค. 70) เป็นข้อ 2–3 ข้อ วัดได้',
   output12: 'Output 12 เดือน (ผลผลิตที่ส่งมอบได้ภายใน ก.ย. 70) เป็นข้อ 2–3 ข้อ วัดได้',
   outcome12: 'Outcome 12 เดือน (ผลลัพธ์ที่เกิดต่อ KPI หรือผู้รับบริการ) 1–2 ข้อ',
-  'erm1.risk': 'ความเสี่ยงสำคัญของโครงการ 1 เรื่อง เขียนแบบ เหตุการณ์ + สาเหตุ + ผลกระทบ',
+  'erm1.risk': 'ความเสี่ยงสำคัญของโครงการ 1 เรื่อง เขียนแบบ เหตุการณ์ + ผลกระทบ (ไม่ต้องเขียนสาเหตุ เพราะมีช่องแยก)',
+  'erm1.cause': 'สาเหตุของความเสี่ยงที่ระบุในช่องความเสี่ยงโครงการ 2–3 ข้อ สั้น กระชับ เขียนเป็น (1) (2) (3)',
   'erm2.planB': 'Plan B ถ้าความเสี่ยงเกิดขึ้น 2–3 ข้อ',
   'erm2.kri': 'KRI 1–2 ตัว พร้อมเกณฑ์เตือน (ตัวเลข)'
 };
@@ -4587,6 +4599,7 @@ document.addEventListener('click', (e) => {
       P.status = 'done'; P.completedAt = Date.now(); flushSave().then(() => { toast('บันทึกแผนเรียบร้อย'); go('report-' + P.id); }); break;
     }
     case 'pdf': exportPdf(); break;
+    case 'print-sheet': try { window.print(); } catch (e) { toast('พิมพ์จากหน้านี้ไม่ได้ ใช้ปุ่ม ดาวน์โหลด PDF (A4 แนวนอน) แทน', 'err'); } break;
     case 'stab': S.setupTab = v; renderView(); break;
     case 'cfg-revert': S.draft = clone(cfg()); S.dirty = false; draftRerender(); break;
     case 'cfg-save': {

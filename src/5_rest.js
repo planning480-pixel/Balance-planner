@@ -243,7 +243,8 @@ const DRAFT_HINT = {
   output6: 'Output 6 เดือน (ผลผลิตที่ส่งมอบได้ภายใน มี.ค. 70) เป็นข้อ 2–3 ข้อ วัดได้',
   output12: 'Output 12 เดือน (ผลผลิตที่ส่งมอบได้ภายใน ก.ย. 70) เป็นข้อ 2–3 ข้อ วัดได้',
   outcome12: 'Outcome 12 เดือน (ผลลัพธ์ที่เกิดต่อ KPI หรือผู้รับบริการ) 1–2 ข้อ',
-  'erm1.risk': 'ความเสี่ยงสำคัญของโครงการ 1 เรื่อง เขียนแบบ เหตุการณ์ + สาเหตุ + ผลกระทบ',
+  'erm1.risk': 'ความเสี่ยงสำคัญของโครงการ 1 เรื่อง เขียนแบบ เหตุการณ์ + ผลกระทบ (ไม่ต้องเขียนสาเหตุ เพราะมีช่องแยก)',
+  'erm1.cause': 'สาเหตุของความเสี่ยงที่ระบุในช่องความเสี่ยงโครงการ 2–3 ข้อ สั้น กระชับ เขียนเป็น (1) (2) (3)',
   'erm2.planB': 'Plan B ถ้าความเสี่ยงเกิดขึ้น 2–3 ข้อ',
   'erm2.kri': 'KRI 1–2 ตัว พร้อมเกณฑ์เตือน (ตัวเลข)'
 };
@@ -334,6 +335,7 @@ document.addEventListener('click', (e) => {
       P.status = 'done'; P.completedAt = Date.now(); flushSave().then(() => { toast('บันทึกแผนเรียบร้อย'); go('report-' + P.id); }); break;
     }
     case 'pdf': exportPdf(); break;
+    case 'print-sheet': try { window.print(); } catch (e) { toast('พิมพ์จากหน้านี้ไม่ได้ ใช้ปุ่ม ดาวน์โหลด PDF (A4 แนวนอน) แทน', 'err'); } break;
     case 'stab': S.setupTab = v; renderView(); break;
     case 'cfg-revert': S.draft = clone(cfg()); S.dirty = false; draftRerender(); break;
     case 'cfg-save': {
