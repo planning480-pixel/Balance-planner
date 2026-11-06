@@ -454,22 +454,22 @@ function sheetHTML(p, cut) {
     </div></section>`;
 
   /* bottom-left: milestones + outputs */
-  let left, right;
+  let left, right, outs = '';
   if (isK) {
     left = `<div class="sx-blk"><div class="sh-h">Milestone ขั้นตอนดำเนินงาน ปีงบประมาณ 2570</div><table class="gantt"><colgroup><col class="c-nm"><col class="c-w">${MONTHS.map(() => '<col>').join('')}</colgroup>
       <thead><tr><th style="text-align:left">ขั้นตอน</th><th>%</th>${MONTHS.map((m) => `<th>${m.split(' ')[0]}</th>`).join('')}</tr></thead>
-      <tbody>${p.steps.map((s, i) => `<tr><td class="nm">${i + 1}. ${nl(s.name)}</td><td>${(i + 1) * 20}</td>${MONTHS.map((_, j) => `<td class="${s.from >= 0 && j >= s.from && j <= s.to ? 'on' : ''}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>
-      <div class="sx-blk sx-grow"><div class="sh-h">ผลผลิตและผลลัพธ์</div><div class="sh-out"><div class="sh-box"><small>OUTPUT 6 เดือน (มี.ค. 70)</small><p>${nl(p.output6)}</p></div><div class="sh-box"><small>OUTPUT 12 เดือน (ก.ย. 70)</small><p>${nl(p.output12)}</p></div><div class="sh-box"><small>OUTCOME 12 เดือน</small><p>${nl(p.outcome12)}</p></div></div></div>`;
+      <tbody>${p.steps.map((s, i) => `<tr><td class="nm">${i + 1}. ${nl(s.name)}</td><td>${(i + 1) * 20}</td>${MONTHS.map((_, j) => `<td class="${s.from >= 0 && j >= s.from && j <= s.to ? 'on' : ''}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    outs = `<div class="sx-blk sx-grow sx-outs"><div class="sh-h">ผลผลิตและผลลัพธ์</div><div class="sh-out"><div class="sh-box"><small>OUTPUT 6 เดือน (มี.ค. 70)</small><p>${nl(p.output6)}</p></div><div class="sh-box"><small>OUTPUT 12 เดือน (ก.ย. 70)</small><p>${nl(p.output12)}</p></div><div class="sh-box"><small>OUTCOME 12 เดือน</small><p>${nl(p.outcome12)}</p></div></div></div>`;
     const L = p.erm1.l, I = p.erm1.i, sc = riskScore(L, I), lv = riskLevel(sc);
     let mm = '';
     for (let l = 5; l >= 1; l--) { mm += `<span class="ax">${l}</span>`; for (let i = 1; i <= 5; i++) { const s = l * i; const sel = L === l && I === i; mm += `<i class="${riskLevel(s).c.replace('l', 'm')} ${sel ? 'sel' : ''}">${sel ? `<b>${s}</b>` : s}</i>`; } }
     mm += '<span></span>' + [1, 2, 3, 4, 5].map((i) => `<span class="ax">${i}</span>`).join('');
     right = `<div class="sh-h">การบริหารความเสี่ยงโครงการ (ERM)</div>
-      <div class="sx-risk">
+      <div class="sx-ermgrid"><div class="sx-risk">
         <div class="sx-mapwrap"><span class="sx-yl">โอกาสเกิด</span><div class="big-map">${mm}</div><span class="sx-xl">ผลกระทบ</span></div>
         <div class="sx-score">${lv ? `<span>คะแนนความเสี่ยง</span><b>${sc}</b><span class="rs-l rs-${lv.c}">ระดับ${lv.t}</span><span class="sh-m">โอกาส ${L} × ผลกระทบ ${I}</span>` : '<span class="sh-m">ยังไม่ประเมิน</span>'}</div>
       </div>
-      <dl class="sh-kv sx-erm"><dt>ERM1 ความเสี่ยง</dt><dd>${nl(p.erm1.risk)}</dd><dt>สาเหตุ</dt><dd>${nl(p.erm1.cause)}</dd><dt>การจัดการปัจจุบัน</dt><dd>${nl(p.erm1.current)}</dd><dt>ERM2 Plan B</dt><dd>${nl(p.erm2.planB)}</dd><dt>KRI</dt><dd>${nl(p.erm2.kri)}</dd><dt>ติดตาม KRI</dt><dd>${p.erm2.months.length ? [...p.erm2.months].sort((a, b) => a - b).map((m) => MONTHS[m]).join(', ') : '—'}</dd><dt>ความเสี่ยงระดับกรม</dt><dd>${drisks.length ? drisks.map((r) => `${esc(r.id)} ${esc(r.name)}`).join('<br>') : '—'}</dd></dl>`;
+      <dl class="sh-kv sx-erm"><dt>ERM1 ความเสี่ยง</dt><dd>${nl(p.erm1.risk)}</dd><dt>สาเหตุ</dt><dd>${nl(p.erm1.cause)}</dd><dt>การจัดการปัจจุบัน</dt><dd>${nl(p.erm1.current)}</dd><dt>ERM2 Plan B</dt><dd>${nl(p.erm2.planB)}</dd><dt>KRI</dt><dd>${nl(p.erm2.kri)}</dd><dt>ติดตาม KRI</dt><dd>${p.erm2.months.length ? [...p.erm2.months].sort((a, b) => a - b).map((m) => MONTHS[m]).join(', ') : '—'}</dd><dt>ความเสี่ยงระดับกรม</dt><dd>${drisks.length ? drisks.map((r) => `${esc(r.id)} ${esc(r.name)}`).join('<br>') : '—'}</dd></dl></div>`;
   } else {
     left = `<div class="sx-blk sx-grow"><div class="sh-h">ขอบเขตโครงการ</div><p class="sh-p sh-m">โครงการประเภทไม่ผูกตัวชี้วัด ไม่ต้องระบุ Milestone ผลผลิต และ ERM ระดับโครงการ</p></div>`;
     right = `<div class="sh-h">ความเสี่ยงระดับกรมที่เกี่ยวข้อง</div>${drisks.length ? `<ul class="sh-ul sx-rl">${drisks.map((r) => { const sc = riskScore(Number(r.l) || 0, Number(r.i) || 0), lv = riskLevel(sc); return `<li><b>${esc(r.id)}</b> ${esc(r.name)}${lv ? ` <span class="rs-l rs-${lv.c}">${sc} · ${lv.t}</span>` : ''}</li>`; }).join('')}</ul>` : '<p class="sh-m">—</p>'}`;
@@ -479,7 +479,7 @@ function sheetHTML(p, cut) {
       <div class="sh-tags"><span>${TYPE_LABEL[p.type]}</span><span>${esc(CAT[p.type][p.category])}</span>${pil ? `<span>ยุทธศาสตร์ที่ ${pil.num} ${esc(pil.name_en)}</span>` : ''}</div></div>
     <div class="sx-body">
       ${top}
-      <section class="sx-bottom"><div class="sx-left">${left}</div><div class="sx-right">${right}</div></section>
+      ${isK ? `<section class="sx-mid"><div class="sx-left">${left}</div>${outs}</section><section class="sx-right sx-ermrow">${right}</section>` : `<section class="sx-bottom"><div class="sx-left">${left}</div><div class="sx-right">${right}</div></section>`}
     </div>
     <div class="sh-foot sx-foot">
       <div class="sign"><span class="ln"></span><b>${esc(ownerName(p))}</b><span>ผู้จัดทำแผน · วันที่ ……/……/……</span></div>

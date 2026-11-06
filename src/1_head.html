@@ -1680,6 +1680,16 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 @media (max-width: 900px) { .so-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .so-grid { grid-template-columns: 1fr; } .so-sum { margin-left: 0; width: 100%; } }
 
+
+/* รายงาน 1 หน้า (KPI): Milestone | Output ระนาบเดียวกัน แล้ว ERM เต็มความกว้างด้านล่าง */
+.sx-mid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; align-items: stretch; }
+.sx-mid .sx-left { justify-content: flex-start; }
+.sx-outs .sh-out { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; flex: 1; }
+.sx-outs .sh-box { height: 100%; }
+.sx-ermrow { flex: 1; }
+.sx-ermgrid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: start; }
+.sx-ermgrid .sx-risk { grid-template-columns: auto auto; gap: 12px; }
+.sx-ermgrid .sx-erm { grid-template-columns: 84px minmax(0, 1fr) 84px minmax(0, 1fr); gap: 4px 10px; align-content: start; }
 /* พิมพ์รายงานแผน 1 หน้า: A4 แนวนอนเสมอ */
 @media print {
   @page { size: A4 landscape; margin: 0; }
