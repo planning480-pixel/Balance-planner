@@ -1682,11 +1682,13 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 
 
 /* รายงาน 1 หน้า (KPI): Milestone | Output ระนาบเดียวกัน แล้ว ERM เต็มความกว้างด้านล่าง */
-.sx-mid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; align-items: stretch; }
+.sx-mid { flex: 1 1 auto; display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; align-items: stretch; }
+.sx-mid .sx-left, .sx-mid .sx-left > .sx-blk { display: flex; flex-direction: column; flex: 1; }
+.sx-mid .gantt { flex: 1; height: 100%; }
 .sx-mid .sx-left { justify-content: flex-start; }
 .sx-outs .sh-out { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; flex: 1; }
 .sx-outs .sh-box { height: 100%; }
-.sx-ermrow { flex: 1; }
+.sx-ermrow { flex: 0 0 auto; }
 .sx-ermgrid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: start; }
 .sx-ermgrid .sx-risk { grid-template-columns: auto auto; gap: 12px; }
 .sx-ermgrid .sx-erm { grid-template-columns: 84px minmax(0, 1fr) 84px minmax(0, 1fr); gap: 4px 10px; align-content: start; }
