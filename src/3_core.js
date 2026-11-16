@@ -358,6 +358,7 @@ function workLinks() {
   return DEFAULT_LINKS.map((l, i) => (i === 0 ? Object.assign({}, l, { url: C.hubUrl || '' }) : l));
 }
 function renderNav() {
+  { const bk = document.getElementById('back-kpi'); if (bk) bk.hidden = S.route === 'kpis'; }
   const cur = S.route === 'edit' || S.route === 'report' ? 'new' : S.route === 'pillar' ? 'p-' + S.param : S.route;
   const drafts = S.plans.filter((p) => p.ownerId === S.uid && p.status !== 'done').length;
   const due = typeof pendingReports === 'function' ? pendingReports() : 0;
