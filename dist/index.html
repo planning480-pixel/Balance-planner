@@ -847,12 +847,16 @@ a.nav-item { text-decoration: none; }
 .kt-info .ic, .kt-go .ic { width: 15px; height: 15px; }
 .kt-go::after { content: ""; position: absolute; inset: -1000px; z-index: -1; }
 .kt { overflow: hidden; }
+.kt-click { cursor: pointer; }
+.kt-click:hover { border-color: var(--accent); box-shadow: 0 2px 10px rgba(35,96,224,.10); }
+.kt-chev { transform: rotate(-90deg); }
+.kt-base { margin: 7px 0 6px; white-space: nowrap; font-size: 11px; font-weight: 600; color: var(--muted); background: var(--surface-2); border-radius: 6px; padding: 1px 6px; margin-left: 4px; }
 .kt-name { font-family: var(--font-body); font-size: 13.5px; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kt-val { display: flex; align-items: baseline; gap: 4px; }
 .kt-val b { font-family: var(--font-display); font-size: 30px; font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
 .kt[data-st="ok"] .kt-val b { color: var(--ok); } .kt[data-st="warn"] .kt-val b { color: var(--warn); } .kt[data-st="bad"] .kt-val b { color: var(--bad); } .kt[data-st="none"] .kt-val b { color: var(--line-strong); }
 .kt-val small { font-size: 13px; color: var(--muted); }
-.kt-tgt { margin-left: auto; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kt-tgt { margin-left: auto; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .kt-bar { height: 5px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .kt-bar i { display: block; height: 100%; border-radius: 999px; background: var(--muted); }
 .kt[data-st="ok"] .kt-bar i { background: var(--ok); } .kt[data-st="warn"] .kt-bar i { background: var(--warn); } .kt[data-st="bad"] .kt-bar i { background: var(--bad); }
@@ -2342,7 +2346,13 @@ function riskMapHTML({ pick = false, sel = {}, markers = [], size = 'lg' } = {})
 }
 
 /* ---------- KPI scoreboard ---------- */
+/* live value: Engagement (2.3) uses the latest survey round */
+function kpiEff(k) {
+  if (k.id === '2.3' && S.eng?.rounds?.length) { const r = S.eng.rounds[S.eng.rounds.length - 1]; return Object.assign({}, k, { latest: r.v[0], latestAt: r.r + '/' + r.fy }); }
+  return k;
+}
 function kpiState(k) {
+  k = kpiEff(k);
   const v = k.latest === '' || k.latest == null ? null : Number(k.latest), t = k.tval === '' || k.tval == null ? null : Number(k.tval);
   if (v == null || isNaN(v)) return { key: 'none', t: 'ยังไม่มีผล', ratio: 0, v: null, tv: t };
   if (t == null || isNaN(t) || !t) return { key: 'none', t: 'ยังไม่ตั้งค่าเป้า', ratio: 0, v, tv: null };
@@ -2356,19 +2366,18 @@ const fmtNum = (v) => Number(v).toLocaleString('th-TH', { maximumFractionDigits:
 function kpiBoard(pf, opt = {}) {
   const noHead = opt === true || opt.noHead;
   const ks = cfg().kpis.filter((k) => !pf || k.pillar === pf);
-  const st = ks.map((k) => ({ k, s: kpiState(k) }));
+  const st = ks.map((k) => ({ k: kpiEff(k), s: kpiState(k) }));
   const n = (key) => st.filter((x) => x.s.key === key).length;
   const EN = { ok: 'On target', warn: 'Near target', bad: 'Below target', none: 'No data' };
   const fy = (t) => String(t || '').replace(/ปีงบ(ประมาณ)?\s*/, 'FY').replace(/ไตรมาส\s*/, 'Q');
   const tile = ({ k, s }) => {
     const unit = k.unit === 'คะแนน' ? 'pts' : (k.unit || '');
-    const go = k.detailUrl ? `<a class="kt-go" href="${esc(k.detailUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${esc(k.id)} details" title="ดูรายละเอียด">${ic('external', 'ic-sm')}</a>`
-      : `<button type="button" class="kt-go" data-act="kpi-nolink" data-v="${esc(k.id)}" aria-label="${esc(k.id)} details">${ic('external', 'ic-sm')}</button>`;
-    return `<article class="kt" data-p="${esc(k.pillar)}" data-st="${s.key}">
+    const go = `<button type="button" class="kt-go" data-act="kpi-drill" data-v="${esc(k.id)}" aria-label="ลงลึก ${esc(k.id)} ${esc(k.name_en || '')}" title="ดูรายละเอียดเชิงลึก">${ic('chevron', 'ic-sm kt-chev')}</button>`;
+    return `<article class="kt kt-click" data-p="${esc(k.pillar)}" data-st="${s.key}">
       <div class="kt-top"><span class="kt-id">${esc(k.id)}</span><span class="kt-dot" aria-hidden="true"></span><span class="kt-st">${EN[s.key]}</span>
         <button type="button" class="kt-info" data-act="kpi-info" aria-expanded="false" aria-label="รายละเอียดภาษาไทยของ ${esc(k.id)}">${ic('info', 'ic-sm')}</button>${go}</div>
       <h3 class="kt-name" title="${esc(k.name_en || '')}">${esc(k.name_en || k.id)}</h3>
-      <div class="kt-val"><b>${s.v == null ? '—' : fmtNum(s.v)}</b>${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
+      <div class="kt-val">${s.v == null && k.basePhase ? `<small class="kt-base">${esc(k.basePhase.replace('เก็บค่าฐานปี', 'ค่าฐานปี'))}</small>` : `<b>${s.v == null ? '—' : fmtNum(s.v)}</b>`}${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
       <div class="kt-bar" aria-hidden="true"><i style="width:${Math.round(s.ratio * 100)}%"></i></div>
       <div class="kc-pop" role="tooltip"><b>${esc(k.name)}</b><span>เป้าหมาย: ${esc(k.target || '—')}</span>${k.baseline ? `<span>ค่าฐาน: ${esc(k.baseline)}</span>` : ''}<span>${s.v == null ? 'ยังไม่มีผลการดำเนินงาน' : `ผลล่าสุด ${fmtNum(s.v)} ${esc(k.unit || '')}${k.latestAt ? ' (' + esc(k.latestAt) + ')' : ''}`}</span><span class="pop-calc"><b>วิธีคำนวณ</b> ${k.calc ? esc(k.calc) : 'รอระบุ'}</span></div>
     </article>`;
@@ -2866,7 +2875,7 @@ const zcard = (title, desc, body, opts = {}) => { const shut = opts.fold && COLL
 const statCard = (label, icon, value, sub) => `<div class="zs"><div class="zs-h"><span>${label}</span>${ic(icon, 'ic-sm')}</div><div class="zs-v">${value}</div><div class="zs-d">${sub}</div></div>`;
 
 function kpiStats(pf) {
-  const st = cfg().kpis.filter((k) => !pf || k.pillar === pf).map((k) => ({ k, s: kpiState(k) }));
+  const st = cfg().kpis.filter((k) => !pf || k.pillar === pf).map((k) => ({ k: kpiEff(k), s: kpiState(k) }));
   const c = (key) => st.filter((x) => x.s.key === key).length;
   return { st, ok: c('ok'), warn: c('warn'), bad: c('bad'), none: c('none'), n: st.length };
 }
@@ -4158,15 +4167,23 @@ function gsTone(id, r) {
 }
 const gsFmt = (id, v) => (v == null ? '—' : GEO[id].kind === 'sum' ? fmtM(v) : v.toFixed(1) + '%');
 function gsAreaRec(id, area, prod) { const gs = GEO[id]; if (area === BKK) return gsAgg(gs, BKK5.map((a) => gs.rec(a, prod))); return gs.rec(area, prod); }
-const gsRegionRec = (id, u, prod) => gsAgg(GEO[id], regionAreas(u).map((a) => GEO[id].rec(a, prod)));
-function gsCentral(id) { const gs = GEO[id]; if (!gs.central) return null; return Object.entries(hrData().central || {}).map(([k, u]) => Object.assign({ id: k, name: u.name, kind: 'unit' }, gs.central(u))); }
+const gsRegionRec = (id, u, prod) => (GEO[id].regionRec ? GEO[id].regionRec(u, prod) : gsAgg(GEO[id], regionAreas(u).map((a) => GEO[id].rec(a, prod))));
+function gsCentral(id) { const gs = GEO[id]; if (gs.centralList) return gs.centralList(); if (!gs.central) return null; return Object.entries(hrData().central || {}).map(([k, u]) => Object.assign({ id: k, name: u.name, kind: 'unit' }, gs.central(u))); }
 function gsScope(code, id) {
   const st = pst(code), gs = GEO[id], prod = gs.products ? st.prod : '';
   if (st.central && gs.central) return { level: 'central', name: 'ส่วนกลาง', items: gsCentral(id) };
-  if (st.region) return { level: 'region', name: st.region, items: regionAreas(st.region).map((a) => Object.assign({ id: a, name: a, area: a, kind: 'area' }, gs.rec(a, prod) || {})).filter((x) => x.a != null) };
+  if (st.region) return { level: 'region', name: st.region, items: regionAreas(st.region).map((a) => Object.assign({ id: a, name: a, area: a, kind: 'area' }, gs.rec(a, prod) || {})).concat(gs.regionExtra ? gs.regionExtra(st.region) : []).filter((x) => x.a != null) };
   const items = REGIONS.map((u) => Object.assign({ id: u, name: u, region: u, kind: 'region' }, gsRegionRec(id, u, prod) || {})).filter((x) => x.a != null);
-  if (gs.central) { const c = gsAgg(gs, gsCentral(id)); if (c) items.push(Object.assign({ id: 'central', name: 'ส่วนกลาง', kind: 'central' }, c)); }
+  if (gs.central || gs.centralList) { const c = gs.centralAgg ? gs.centralAgg() : gsAgg(gs, gsCentral(id)); if (c) items.push(Object.assign({ id: 'central', name: 'ส่วนกลาง', kind: 'central' }, c)); }
   return { level: 'nation', name: 'ทั้งประเทศ', items };
+}
+/* headline for the current scope: official region / central figure when the spec provides one */
+function gsScopeAgg(code, id, sc) {
+  const gs = GEO[id], st = pst(code);
+  if (sc.level === 'nation' && gs.nationAgg) return gs.nationAgg();
+  if (sc.level === 'central' && gs.centralAgg) return gs.centralAgg();
+  if (sc.level === 'region' && gs.regionRec && !st.prov) return gs.regionRec(st.region) || gsAgg(gs, sc.items);
+  return gsAgg(gs, sc.items);
 }
 function geoMap(code, id) {
   const st = pst(code), gs = GEO[id], prod = gs.products ? st.prod : '', reg = st.region;
@@ -4179,7 +4196,7 @@ function geoMap(code, id) {
     return `<path d="${x.d}" class="mp mp-${t} mp-click ${sel ? 'mp-sel' : ''} ${dim ? 'mp-dim' : ''}" data-act="${reg ? 'g-prov' : 'g-region'}" data-v="${esc(code + '|' + (reg ? x.n : x.u))}"><title>${esc(reg ? x.n : x.u)} · ${esc(gs.label)} ${gsFmt(id, gsVal(gs, r))}</title></path>`;
   }).join('');
   const labels = reg ? shapes.map((x) => `<text class="pl ${st.prov === x.n || areaProv(st.prov) === x.n ? 'pl-sel' : ''}" x="${x.x}" y="${x.y}" style="font-size:${(9 * scale).toFixed(2)}px">${esc(x.n === BKK ? 'กทม. 1–5' : x.n)}</text>`).join('')
-    : shapes.map((x) => { const r = gsRegionRec(id, x.u, prod); const o = ML_OFF[x.u] || [0, 0]; const v = gsVal(gs, r); return `<g class="ml" transform="translate(${x.x + o[0]},${x.y + o[1]})"><rect x="-26" y="-17" width="52" height="34" rx="8"/><text class="ml-n" y="-3">${esc(x.u)}</text><text class="ml-p" y="12">${v == null ? '—' : gs.kind === 'sum' ? (r.t ? Math.round((r.a / r.t) * 100) + '%' : '—') : Math.round(v) + '%'}</text></g>`; }).join('');
+    : shapes.map((x) => { const r = gsRegionRec(id, x.u, prod); const o = ML_OFF[x.u] || [0, 0]; const v = gsVal(gs, r); return `<g class="ml" transform="translate(${x.x + o[0]},${x.y + o[1]})"><rect x="-26" y="-17" width="52" height="34" rx="8"/><text class="ml-n" y="-3">${esc(x.u)}</text><text class="ml-p" y="12">${v == null ? '—' : gs.kind === 'sum' ? (r.t ? Math.round((r.a / r.t) * 100) + '%' : '—') : gs.mapFmt ? gs.mapFmt(v) : Math.round(v) + '%'}</text></g>`; }).join('');
   return `<div class="mapz"><svg class="thmap" viewBox="${vb}" data-vb="${vb}" data-key="g-${esc(code + id + (reg || 'TH'))}" role="img" aria-label="แผนที่${esc(gs.label)}" style="--sw:${(0.8 * scale).toFixed(2)}">${paths}${labels}</svg>
     <div class="mapz-c"><button type="button" data-zoom="in" aria-label="ซูมเข้า">${ic('plus', 'ic-sm')}</button><button type="button" data-zoom="out" aria-label="ซูมออก">${ic('minus', 'ic-sm')}</button><button type="button" data-zoom="reset" aria-label="รีเซ็ตมุมมอง">${ic('expand-all', 'ic-sm')}</button></div></div>`;
 }
@@ -4203,7 +4220,7 @@ function geoInsight(code, id, sc) {
   const gs = GEO[id], st = pst(code);
   const items = st.prov && sc.level === 'region' ? sc.items.filter((x) => x.area === st.prov || (st.prov === BKK && BKK5.includes(x.area))) : sc.items;
   const name = st.prov && sc.level === 'region' ? (st.prov === BKK ? 'กรุงเทพฯ (5 พื้นที่)' : st.prov) : sc.name;
-  const agg = gsAgg(gs, items), v = gsVal(gs, agg), tgt = gs.kind === 'sum' ? null : gs.tline || gsTarget(id);
+  const agg = items === sc.items ? gsScopeAgg(code, id, sc) : gsAgg(gs, items), v = gsVal(gs, agg), tgt = gs.kind === 'sum' ? null : gs.tline || gsTarget(id);
   const key = (x) => (gs.kind === 'sum' ? (x.t ? x.a / x.t : null) : gsVal(gs, x));
   const sorted = items.filter((x) => key(x) != null).sort((a, b) => key(a) - key(b));
   const low = sorted.slice(0, 3), top = sorted[sorted.length - 1];
@@ -4232,7 +4249,7 @@ function geoInsight(code, id, sc) {
 function geoPanel(code, id) {
   const st = pst(code), gs = GEO[id], sc = gsScope(code, id);
   const crumb = `<nav class="crumb" aria-label="ระดับพื้นที่"><button data-act="g-region" data-v="${esc(code + '|')}">ทั้งประเทศ</button>${st.central ? '<span>›</span><b>ส่วนกลาง</b>' : ''}${st.region ? `<span>›</span><button data-act="g-prov" data-v="${esc(code + '|')}">${esc(st.region)}</button>` : ''}${st.prov ? `<span>›</span><b>${esc(st.prov === BKK ? 'กรุงเทพฯ' : st.prov)}</b>` : ''}</nav>`;
-  const agg = gsAgg(gs, sc.items), v = gsVal(gs, agg);
+  const agg = gsScopeAgg(code, id, sc), v = gsVal(gs, agg);
   const prods = gs.products ? `<div class="hx-chips g-prods"><button type="button" class="hx-chip ${st.prod ? '' : 'on'}" data-act="g-prod" data-v="${esc(code + '|')}">${ic('layers', 'ic-sm')}ทุกสินค้า</button>${opsProducts().map((k, i) => `<button type="button" class="hx-chip ${st.prod === k ? 'on' : ''}" data-act="g-prod" data-v="${esc(code + '|' + k)}" style="--pc:${PCOLS[i % PCOLS.length]}">${pIcon(k)}${esc(k)}</button>`).join('')}</div>` : '';
   const head = `<div class="mstat"><span><small>${esc(gs.label)}</small><b class="num">${gs.kind === 'sum' ? fmtM(v) : gsFmt(id, v)}</b></span>${gs.kind === 'sum' ? `<span><small>เป้า</small><b class="num">${fmtM(agg?.t)}</b></span><span class="mstat-p mstat-${gsTone(id, agg || {})}"><b class="num">${agg?.t ? Math.round((agg.a / agg.t) * 100) + '%' : '—'}</b><small>ของเป้า</small></span>` : `<span><small>เกณฑ์</small><b class="num">${gs.tline || gsTarget(id)}%</b></span>`}${gs.sample() ? '<em>ข้อมูลตัวอย่าง</em>' : ''}</div>`;
   return `${prods}<div class="la3">
@@ -4323,6 +4340,11 @@ const PSPEC = {
   E: { kpis: ['5.1', '5.2', '5.3'], panel: (id, code) => ePanels(id, code) }
 };
 function kpiCardVal(id) {
+  const c = kpiCardVal0(id), k = kpiAny(id);
+  if (k?.basePhase && k.latest == null && c.v != null) c.sub = `ข้อมูลตัวอย่าง · ${k.basePhase}`;
+  return c;
+}
+function kpiCardVal0(id) {
   if (id === '2.3' && S.eng?.rounds?.length) { const r = S.eng.rounds[S.eng.rounds.length - 1]; return { v: r.v[0], sub: 'Engagement ' + r.label }; }
   const k = kpiAny(id); if (k?.latest != null) return { v: k.latest, sub: k.latestAt || '' };
   if (GEO[id]) { const gs = GEO[id]; const items = allAreas().map((a) => gs.rec(a, '')); const ag = gsAgg(gs, [...items, ...(gs.central ? gsCentral(id) : [])]); if (!ag) return { v: null, sub: '' }; if (gs.kind === 'sum') return { v: ag.t ? (ag.a / ag.t) * 100 : null, sub: `${fmtM(ag.a)} / ${fmtM(ag.t)} ล้านบาท` }; if (id === '2.2') { const all = allAreas().map((a) => gs.rec(a)).concat(gsCentral(id) || []).filter(Boolean); return { v: (all.filter((r) => fillTone(gsVal(gs, r)) === 'ok').length / all.length) * 100, sub: `กำลังคนจริง ${gsVal(gs, ag).toFixed(1)}% ของอัตรา` }; } return { v: gsVal(gs, ag), sub: 'จากข้อมูลรายพื้นที่' }; }
@@ -4358,6 +4380,14 @@ document.addEventListener('click', (e) => {
   keep();
 });
 document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.lal li[data-act]')) { e.preventDefault(); e.target.click(); } });
+/* KPI Scoreboard → pillar deep-dive with that KPI selected */
+function kpiDrill(id) {
+  const k = kpiAny(id); if (!k) return;
+  const code = k.pillar;
+  if (PSPEC[code]) { const st = pst(code); st.k = id; st.region = ''; st.prov = ''; st.central = false; }
+  go('p-' + code);
+  setTimeout(() => { const el = document.querySelector('#view .bk.on'); const sc = el?.closest('.car-t'); if (!el || !sc) return; const a = el.getBoundingClientRect(), b = sc.getBoundingClientRect(); if (a.right > b.right || a.left < b.left) sc.scrollLeft += a.left - b.left - 8; }, 120);
+}
 /* ---------- KPI Setting ---------- */
 function roNote() { return S.canAdmin ? '' : `<div class="ro-note">${ic('lock', 'ic-sm')}ดูได้อย่างเดียว เฉพาะ Super admin แก้ไขได้</div>`; }
 function dirtyBar() { return S.canAdmin ? `<div class="savebar"><span class="status">${S.dirty ? `${ic('alert', 'ic-sm')}มีการแก้ไขที่ยังไม่บันทึก` : 'ยังไม่มีการแก้ไข'}</span><button class="btn" data-act="cfg-revert" ${S.dirty ? '' : 'disabled'}>ยกเลิกการแก้ไข</button><button class="btn btn-primary" data-act="cfg-save" ${S.dirty ? '' : 'disabled'}>${ic('check', 'ic-sm')}บันทึกการเปลี่ยนแปลง</button></div>` : ''; }
@@ -4662,6 +4692,7 @@ document.addEventListener('click', (e) => {
     case 'ai-send': { const i = $('#ai-input'); const tx = i.value; i.value = ''; aiSend(tx); break; }
     case 'ai-q': aiSend(v); break;
     case 'risk-p': S.riskP = v; renderView(); break;
+    case 'kpi-drill': kpiDrill(v); break;
     case 'kpi-nolink': toast(S.isSuper ? 'ยังไม่ได้ใส่ลิงก์หน้ารายละเอียด ใส่ได้ที่ KPI Setting' : 'ยังไม่มีหน้ารายละเอียดของตัวชี้วัดนี้'); break;
     case 'filt-reset': S.filt = { year: '', unit: '', pillar: '' }; renderView(); break;
     case 'scope': S.scope = v; renderView(); break;
@@ -5407,7 +5438,7 @@ const ED_COL = ['#0E2756', '#2360E0', '#1D9152', '#D97706'];
 const ETYPES = [['', 'ทุกระดับ'], ['ส่วนกลาง', 'ส่วนกลาง'], ['ภาค', 'สำนักงานภาค'], ['พื้นที่', 'พื้นที่'], ['คบส.', 'คบส.']];
 function loadEng() {
   fetch('engagement.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => {
-    if (!j?.rounds) return; S.eng = j; if (S.inApp && S.route === 'pillar' && S.param === 'LA') renderView();
+    if (!j?.rounds) return; S.eng = j; if (S.inApp && ['pillar', 'kpis', 'dashboard'].includes(S.route)) renderView();
   }).catch(() => {});
 }
 const eR = () => S.eng?.rounds || [];
@@ -5479,10 +5510,41 @@ function eTrend(o) {
   return `<svg viewBox="0 0 ${W} ${H}" class="et" role="img" aria-label="แนวโน้มคะแนนความผูกพันทุกครั้ง">${grid}${band}${lines}${xl}<text x="${W - Rr}" y="${H - 1}" class="et-ax" text-anchor="end">ครั้งที่/ปีงบ</text></svg>`;
 }
 
+
+/* ---------- map: ภาค → จังหวัด, ส่วนกลาง → รายหน่วยงาน ---------- */
+const GEO23_HR = GEO['2.3'];
+const eUnitRound = (R) => (R?.units?.length ? R : [...eR()].reverse().find((r) => r.units?.length) || null);
+const eRegRound = (R) => (R && Object.keys(R.regions || {}).length ? R : [...eR()].reverse().find((r) => Object.keys(r.regions || {}).length) || null);
+function eAreaUnits(U, area) {
+  const name = BKK5.includes(area) ? 'สสพ.' + BKK + ' ' + area.split(' ')[1] : 'สสพ.' + area;
+  return U.filter((u) => u.n === name || (!BKK5.includes(area) && u.n.startsWith(name + ' ') && /^\d+$/.test(u.n.slice(name.length + 1))));
+}
+function engGeo() {
+  const o = eSt(), R = eFind(o.r), UR = eUnitRound(R), RR = eRegRound(R), dim = o.dim, U = UR?.units || [];
+  const val = (u) => u.v[dim];
+  const avg = (us) => { const xs = us.filter((u) => val(u) != null); return xs.length ? { a: xs.reduce((s, u) => s + val(u), 0) / xs.length, w: xs.length, n: xs.map((u) => u.n) } : null; };
+  return Object.assign({}, GEO23_HR, {
+    label: dim ? 'ด้าน' + ED[dim] : 'ความผูกพันองค์กร',
+    desc: `คะแนน${dim ? 'ด้าน' + ED[dim] : 'ความผูกพัน'} · ภาคใช้${RR?.label || '—'} · จังหวัด/หน่วยงานใช้${UR?.label || '—'}`,
+    rec: (a) => avg(eAreaUnits(U, a)),
+    regionRec: (g) => { const v = RR?.regions?.[g]?.[dim]; if (v != null) return { a: v, w: U.filter((u) => u.g === g).length || 1 }; return avg(U.filter((u) => u.g === g)); },
+    regionExtra: (g) => U.filter((u) => u.t === 'ภาค' && u.g === g).map((u) => ({ id: u.n, name: u.n + ' (สำนักงานภาค)', kind: 'unit', a: val(u), w: 1 })),
+    central: () => ({}),
+    centralList: () => U.filter((u) => u.t === 'ส่วนกลาง' || u.t === 'คบส.').map((u) => ({ id: u.n, name: u.n, kind: 'unit', a: val(u), w: 1 })),
+    centralAgg: () => { const v = RR?.regions?.['ส่วนกลาง']?.[dim]; return v != null ? { a: v, w: U.filter((u) => u.t === 'ส่วนกลาง').length || 1 } : avg(U.filter((u) => u.t === 'ส่วนกลาง')); },
+    sub: (r) => (r.kind === 'unit' ? '' : r.n ? r.n.join(' · ') : `${r.w} หน่วยงาน`),
+    sample: () => false,
+    mapFmt: (v) => v.toFixed(1),
+    nationAgg: () => (R?.v?.[dim] != null ? { a: R.v[dim], w: 1 } : null),
+    note: UR && UR !== R ? `${R.label} ไม่มีตารางรายหน่วยงาน จังหวัดและหน่วยงานส่วนกลางจึงแสดงผล${UR.label}` : ''
+  });
+}
+
 /* ---------- panel ---------- */
 function engPanel() {
   if (!S.eng) return `<div class="empty">${ic('spark')}<b>กำลังโหลดผลสำรวจความผูกพัน…</b></div>`;
   const o = eSt(), R = eFind(o.r), C = o.cmp ? eFind(o.cmp) : null, dim = o.dim;
+  const geo = (GEO['2.3'] = engGeo());
   const chips = `<div class="ed-rounds" role="group" aria-label="เลือกครั้งที่สำรวจ">${eR().map((r) => `<button type="button" data-es-r="${r.id}" aria-pressed="${r.id === o.r}"><b>${r.v[0].toFixed(2)}</b><small>${r.label}</small></button>`).join('')}</div>`;
   const tools = `<div class="ed-tools">
     <label class="ed-sel"><span>เทียบกับ</span><select class="select" data-es="cmp"><option value="">— ไม่เทียบ —</option>${eR().filter((r) => r.id !== o.r).map((r) => `<option value="${r.id}" ${r.id === o.cmp ? 'selected' : ''}>${r.label}</option>`).join('')}</select></label>
@@ -5495,29 +5557,25 @@ function engPanel() {
     <div class="tbl-wrap"><table class="tbl ed-dt"><thead><tr><th></th>${eR().filter((r) => !o.fy || String(r.fy) === o.fy).map((r) => `<th class="num ${r.id === o.r ? 'on' : ''}">${r.r}/${String(r.fy).slice(2)}</th>`).join('')}</tr></thead><tbody>
     ${ED.map((t, i) => { const rs = eR().filter((r) => !o.fy || String(r.fy) === o.fy); return `<tr><td>${t}</td>${rs.map((r) => { const p = eR()[eR().indexOf(r) - 1]; const d = p ? r.v[i] - p.v[i] : null; return `<td class="num ${r.id === o.r ? 'on' : ''}">${eNum(r.v[i])}${d != null ? `<small class="${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : ''}${d.toFixed(2)}</small>` : ''}</td>`; }).join('')}</tr>`; }).join('')}</tbody></table></div>`;
 
-  /* regions */
-  const regs = Object.entries(R.regions || {}).filter(([, v]) => v?.[dim] != null).sort((a, b) => b[1][dim] - a[1][dim]);
-  const rmin = Math.floor(Math.min(...regs.map(([, v]) => v[dim])) - 1), rmax = Math.ceil(Math.max(...regs.map(([, v]) => v[dim])));
-  const regBody = regs.length ? `<ol class="ed-rk">${regs.map(([g, v], i) => { const d = C ? eDel(v[dim], C.regions?.[g]?.[dim]) : null; const rr = R.rrReg?.[g];
-    return `<li><button type="button" data-es-g="${esc(g)}" aria-pressed="${o.g === g}" title="กรองรายหน่วยงานใน ${esc(g)}"><span class="ed-n">${i + 1}</span><span class="ed-gn">${esc(g)}${rr ? `<small>ตอบ ${rr[2].toFixed(0)}%</small>` : ''}</span><span class="ed-bar"><i class="b-${eBand(v[dim])}" style="width:${((v[dim] - rmin) / (rmax - rmin)) * 100}%"></i></span><b class="num">${eNum(v[dim])}</b>${eDelTxt(d)}</button></li>`; }).join('')}</ol>` : `<div class="empty small">ครั้งนี้ไม่มีข้อมูลรายภาค</div>`;
-
   /* units */
-  const cm = C?.units?.length ? Object.fromEntries(C.units.map((u) => [u.n, u])) : null;
-  const crk = cm ? Object.fromEntries([...C.units].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => [u.n, i + 1])) : null;
-  const all = [...(R.units || [])].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => Object.assign({ rk: i + 1 }, u));
+  const UR = eUnitRound(R), gst = pst('LA'), gEff = o.g || gst.region || '';
+  const CU = C && C !== UR ? eUnitRound(C) : null; const cm0 = CU && CU !== UR ? CU : null;
+  const cm = cm0?.units?.length ? Object.fromEntries(cm0.units.map((u) => [u.n, u])) : null;
+  const crk = cm ? Object.fromEntries([...cm0.units].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => [u.n, i + 1])) : null;
+  const all = [...(UR?.units || [])].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => Object.assign({ rk: i + 1 }, u));
   const q = (o.q || '').trim();
-  let U = all.filter((u) => (!o.typ || u.t === o.typ) && (!o.g || u.g === o.g) && (!q || u.n.includes(q)));
+  let U = all.filter((u) => (!o.typ || u.t === o.typ) && (!gEff || u.g === gEff) && (!q || u.n.includes(q)));
   if (o.asc) U = [...U].reverse();
   const N = all.length;
   const unitBody = !N ? `<div class="empty small">${ic('flag', 'ic-sm')}<span>${esc((R.notes || []).find((t) => /รายหน่วยงาน/.test(t)) || 'ครั้งนี้ไม่มีตารางรายหน่วยงาน')}</span></div>` : `
     <div class="ed-uf"><div class="seg seg-sm" role="group" aria-label="ระดับหน่วยงาน">${ETYPES.map(([v, t]) => `<button type="button" data-es-typ="${v}" aria-pressed="${o.typ === v}">${t}</button>`).join('')}</div>
-      ${o.g ? `<button type="button" class="chip chip-accent" data-es-g="">${esc(o.g)} ✕</button>` : ''}
+      ${gEff ? `<button type="button" class="chip chip-accent" data-es-g="" data-act="g-region" data-v="LA|">${esc(gEff)} ✕</button>` : ''}
       <input class="input ed-q" id="es-q" type="search" placeholder="ค้นหาหน่วยงาน" value="${esc(o.q || '')}">
       <button type="button" class="btn btn-sm btn-ghost" data-es-asc="1">${o.asc ? 'ต่ำ → สูง' : 'สูง → ต่ำ'}</button></div>
-    <div class="ed-tw"><table class="tbl ed-ut"><thead><tr><th class="num">อันดับ</th><th>หน่วยงาน</th><th>สังกัด</th><th class="num">${ED[dim]}</th>${[1, 2, 3].filter((i) => i !== dim).map((i) => `<th class="num">${ED[i]}</th>`).join('')}${cm ? `<th class="num">เทียบ ${C.r}/${String(C.fy).slice(2)}</th>` : ''}</tr></thead><tbody>
+    <div class="ed-tw"><table class="tbl ed-ut"><thead><tr><th class="num">อันดับ</th><th>หน่วยงาน</th><th>สังกัด</th><th class="num">${ED[dim]}</th>${[1, 2, 3].filter((i) => i !== dim).map((i) => `<th class="num">${ED[i]}</th>`).join('')}${cm ? `<th class="num">เทียบ ${cm0.r}/${String(cm0.fy).slice(2)}</th>` : ''}</tr></thead><tbody>
     ${U.map((u) => { const pu = cm?.[u.n]; const d = pu ? u.v[dim] - pu.v[dim] : null; const rc = crk?.[u.n] ? crk[u.n] - u.rk : null;
       return `<tr class="${u.rk <= 10 ? 'u-top' : u.rk > N - 10 ? 'u-bot' : ''}"><td class="num">${u.rk}${rc ? `<small class="${rc > 0 ? 'up' : 'dn'}">${rc > 0 ? '▲' : '▼'}${Math.abs(rc)}</small>` : ''}</td><td><b>${esc(u.n)}</b></td><td class="muted small">${esc(u.g)}</td><td class="num"><span class="ed-sc b-${eBand(u.v[dim])}">${eNum(u.v[dim])}</span></td>${[1, 2, 3].filter((i) => i !== dim).map((i) => `<td class="num">${eNum(u.v[i])}</td>`).join('')}${cm ? `<td class="num">${d == null ? '<span class="muted">ใหม่</span>' : eDelTxt(d)}</td>` : ''}</tr>`; }).join('') || `<tr><td colspan="7" class="muted">ไม่พบหน่วยงาน</td></tr>`}
-    </tbody></table></div><p class="muted small">แสดง ${U.length} จาก ${N} หน่วย · แถบเขียว = 10 อันดับแรก · แถบแดง = 10 อันดับสุดท้าย · เรียงตาม${ED[dim]}</p>`;
+    </tbody></table></div><p class="muted small">${UR !== R ? `ใช้ตารางของ${esc(UR.label)} · ` : ''}แสดง ${U.length} จาก ${N} หน่วย · แถบเขียว = 10 อันดับแรก · แถบแดง = 10 อันดับสุดท้าย · เรียงตาม${ED[dim]}</p>`;
 
   /* suggestions + demographics */
   const sg = R.sugg;
@@ -5529,11 +5587,12 @@ function engPanel() {
 
   return `<div class="engp" id="ed">
     <div class="ed-head">${chips}${tools}</div>
+    ${geo.note ? `<div class="ed-note">${ic('flag', 'ic-sm')}<span>${esc(geo.note)}</span></div>` : ''}
+    ${geoPanel('LA', '2.3')}
     <div class="zgrid">
       ${zcard(`ผลสำรวจ${R.label}`, `ด้าน${ED[dim]} · ${C ? 'เทียบ' + C.label : 'ไม่เทียบ'}`, tiles + ins, { span: 5 })}
       ${zcard('แนวโน้มทุกครั้งที่สำรวจ', 'กดปีงบหรือเส้นเพื่อกรอง · แถบสีอ่อนคือครั้งที่เลือก', trend, { span: 7 })}
-      ${zcard('อันดับรายภาค', `เรียงตามด้าน${ED[dim]} · กดภาคเพื่อดูหน่วยงานในภาค`, regBody, { span: 5 })}
-      ${zcard('อันดับรายหน่วยงาน', 'ส่วนกลาง · สำนักงานภาค · สำนักงานพื้นที่', unitBody, { span: 7 })}
+      ${zcard('อันดับรายหน่วยงาน', `ส่วนกลาง · สำนักงานภาค · สำนักงานพื้นที่ · ${UR ? UR.label : ''}${gEff ? ' · กรองตาม ' + esc(gEff) : ''}`, unitBody, { span: 12 })}
       ${zcard('ข้อเสนอแนะจากบุคลากร', 'สิ่งที่อยากให้กรมส่งเสริม เรียงตามจำนวนผู้เสนอ', sgBody + drv, { span: 7 })}
       ${zcard('ตามอายุราชการและอายุตัว', C ? 'ตัวเลขเล็ก = เปลี่ยนจาก' + C.label : 'คะแนนรายด้าน', demo, { span: 5 })}
       ${zcard('ข้อเสนอเพื่อพัฒนาการสำรวจครั้งถัดไป', 'จากการรวบรวมรายงาน 7 ครั้ง', eRecs(), { span: 12, fold: 'eng-rec' })}
@@ -5552,7 +5611,7 @@ function eRecs() {
     ['จัดหมวดข้อเสนอแนะแบบข้อความรายหน่วยงาน', 'ปัจจุบันอยู่ใน QR Code จัดหมวดและนับความถี่รายหน่วยงาน จะช่วยให้หน่วยงานเห็นประเด็นของตัวเอง']];
   return `<ol class="ed-rec">${L.map(([t, d]) => `<li><b>${t}</b><span>${d}</span></li>`).join('')}</ol>`;
 }
-function eRerender() { const el = $('#ed'); if (!el) return; const vw = $('#view'), y = vw?.scrollTop; el.outerHTML = engPanel(); if (vw) vw.scrollTop = y; }
+function eRerender() { const el = $('#ed'); if (!el) return; const vw = $('#view'), y = vw?.scrollTop; el.outerHTML = engPanel(); if (vw) vw.scrollTop = y; if (typeof initMapZoom === 'function') initMapZoom(); }
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-es-r],[data-es-dim],[data-es-g],[data-es-typ],[data-es-asc],[data-es-fy],[data-es-line]'); if (!b) return;
   const o = eSt(), d = b.dataset;

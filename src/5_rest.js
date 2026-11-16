@@ -302,6 +302,7 @@ document.addEventListener('click', (e) => {
     case 'ai-send': { const i = $('#ai-input'); const tx = i.value; i.value = ''; aiSend(tx); break; }
     case 'ai-q': aiSend(v); break;
     case 'risk-p': S.riskP = v; renderView(); break;
+    case 'kpi-drill': kpiDrill(v); break;
     case 'kpi-nolink': toast(S.isSuper ? 'ยังไม่ได้ใส่ลิงก์หน้ารายละเอียด ใส่ได้ที่ KPI Setting' : 'ยังไม่มีหน้ารายละเอียดของตัวชี้วัดนี้'); break;
     case 'filt-reset': S.filt = { year: '', unit: '', pillar: '' }; renderView(); break;
     case 'scope': S.scope = v; renderView(); break;

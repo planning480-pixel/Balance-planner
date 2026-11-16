@@ -4,7 +4,7 @@ const ED_COL = ['#0E2756', '#2360E0', '#1D9152', '#D97706'];
 const ETYPES = [['', 'ทุกระดับ'], ['ส่วนกลาง', 'ส่วนกลาง'], ['ภาค', 'สำนักงานภาค'], ['พื้นที่', 'พื้นที่'], ['คบส.', 'คบส.']];
 function loadEng() {
   fetch('engagement.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => {
-    if (!j?.rounds) return; S.eng = j; if (S.inApp && S.route === 'pillar' && S.param === 'LA') renderView();
+    if (!j?.rounds) return; S.eng = j; if (S.inApp && ['pillar', 'kpis', 'dashboard'].includes(S.route)) renderView();
   }).catch(() => {});
 }
 const eR = () => S.eng?.rounds || [];
@@ -76,10 +76,41 @@ function eTrend(o) {
   return `<svg viewBox="0 0 ${W} ${H}" class="et" role="img" aria-label="แนวโน้มคะแนนความผูกพันทุกครั้ง">${grid}${band}${lines}${xl}<text x="${W - Rr}" y="${H - 1}" class="et-ax" text-anchor="end">ครั้งที่/ปีงบ</text></svg>`;
 }
 
+
+/* ---------- map: ภาค → จังหวัด, ส่วนกลาง → รายหน่วยงาน ---------- */
+const GEO23_HR = GEO['2.3'];
+const eUnitRound = (R) => (R?.units?.length ? R : [...eR()].reverse().find((r) => r.units?.length) || null);
+const eRegRound = (R) => (R && Object.keys(R.regions || {}).length ? R : [...eR()].reverse().find((r) => Object.keys(r.regions || {}).length) || null);
+function eAreaUnits(U, area) {
+  const name = BKK5.includes(area) ? 'สสพ.' + BKK + ' ' + area.split(' ')[1] : 'สสพ.' + area;
+  return U.filter((u) => u.n === name || (!BKK5.includes(area) && u.n.startsWith(name + ' ') && /^\d+$/.test(u.n.slice(name.length + 1))));
+}
+function engGeo() {
+  const o = eSt(), R = eFind(o.r), UR = eUnitRound(R), RR = eRegRound(R), dim = o.dim, U = UR?.units || [];
+  const val = (u) => u.v[dim];
+  const avg = (us) => { const xs = us.filter((u) => val(u) != null); return xs.length ? { a: xs.reduce((s, u) => s + val(u), 0) / xs.length, w: xs.length, n: xs.map((u) => u.n) } : null; };
+  return Object.assign({}, GEO23_HR, {
+    label: dim ? 'ด้าน' + ED[dim] : 'ความผูกพันองค์กร',
+    desc: `คะแนน${dim ? 'ด้าน' + ED[dim] : 'ความผูกพัน'} · ภาคใช้${RR?.label || '—'} · จังหวัด/หน่วยงานใช้${UR?.label || '—'}`,
+    rec: (a) => avg(eAreaUnits(U, a)),
+    regionRec: (g) => { const v = RR?.regions?.[g]?.[dim]; if (v != null) return { a: v, w: U.filter((u) => u.g === g).length || 1 }; return avg(U.filter((u) => u.g === g)); },
+    regionExtra: (g) => U.filter((u) => u.t === 'ภาค' && u.g === g).map((u) => ({ id: u.n, name: u.n + ' (สำนักงานภาค)', kind: 'unit', a: val(u), w: 1 })),
+    central: () => ({}),
+    centralList: () => U.filter((u) => u.t === 'ส่วนกลาง' || u.t === 'คบส.').map((u) => ({ id: u.n, name: u.n, kind: 'unit', a: val(u), w: 1 })),
+    centralAgg: () => { const v = RR?.regions?.['ส่วนกลาง']?.[dim]; return v != null ? { a: v, w: U.filter((u) => u.t === 'ส่วนกลาง').length || 1 } : avg(U.filter((u) => u.t === 'ส่วนกลาง')); },
+    sub: (r) => (r.kind === 'unit' ? '' : r.n ? r.n.join(' · ') : `${r.w} หน่วยงาน`),
+    sample: () => false,
+    mapFmt: (v) => v.toFixed(1),
+    nationAgg: () => (R?.v?.[dim] != null ? { a: R.v[dim], w: 1 } : null),
+    note: UR && UR !== R ? `${R.label} ไม่มีตารางรายหน่วยงาน จังหวัดและหน่วยงานส่วนกลางจึงแสดงผล${UR.label}` : ''
+  });
+}
+
 /* ---------- panel ---------- */
 function engPanel() {
   if (!S.eng) return `<div class="empty">${ic('spark')}<b>กำลังโหลดผลสำรวจความผูกพัน…</b></div>`;
   const o = eSt(), R = eFind(o.r), C = o.cmp ? eFind(o.cmp) : null, dim = o.dim;
+  const geo = (GEO['2.3'] = engGeo());
   const chips = `<div class="ed-rounds" role="group" aria-label="เลือกครั้งที่สำรวจ">${eR().map((r) => `<button type="button" data-es-r="${r.id}" aria-pressed="${r.id === o.r}"><b>${r.v[0].toFixed(2)}</b><small>${r.label}</small></button>`).join('')}</div>`;
   const tools = `<div class="ed-tools">
     <label class="ed-sel"><span>เทียบกับ</span><select class="select" data-es="cmp"><option value="">— ไม่เทียบ —</option>${eR().filter((r) => r.id !== o.r).map((r) => `<option value="${r.id}" ${r.id === o.cmp ? 'selected' : ''}>${r.label}</option>`).join('')}</select></label>
@@ -92,29 +123,25 @@ function engPanel() {
     <div class="tbl-wrap"><table class="tbl ed-dt"><thead><tr><th></th>${eR().filter((r) => !o.fy || String(r.fy) === o.fy).map((r) => `<th class="num ${r.id === o.r ? 'on' : ''}">${r.r}/${String(r.fy).slice(2)}</th>`).join('')}</tr></thead><tbody>
     ${ED.map((t, i) => { const rs = eR().filter((r) => !o.fy || String(r.fy) === o.fy); return `<tr><td>${t}</td>${rs.map((r) => { const p = eR()[eR().indexOf(r) - 1]; const d = p ? r.v[i] - p.v[i] : null; return `<td class="num ${r.id === o.r ? 'on' : ''}">${eNum(r.v[i])}${d != null ? `<small class="${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : ''}${d.toFixed(2)}</small>` : ''}</td>`; }).join('')}</tr>`; }).join('')}</tbody></table></div>`;
 
-  /* regions */
-  const regs = Object.entries(R.regions || {}).filter(([, v]) => v?.[dim] != null).sort((a, b) => b[1][dim] - a[1][dim]);
-  const rmin = Math.floor(Math.min(...regs.map(([, v]) => v[dim])) - 1), rmax = Math.ceil(Math.max(...regs.map(([, v]) => v[dim])));
-  const regBody = regs.length ? `<ol class="ed-rk">${regs.map(([g, v], i) => { const d = C ? eDel(v[dim], C.regions?.[g]?.[dim]) : null; const rr = R.rrReg?.[g];
-    return `<li><button type="button" data-es-g="${esc(g)}" aria-pressed="${o.g === g}" title="กรองรายหน่วยงานใน ${esc(g)}"><span class="ed-n">${i + 1}</span><span class="ed-gn">${esc(g)}${rr ? `<small>ตอบ ${rr[2].toFixed(0)}%</small>` : ''}</span><span class="ed-bar"><i class="b-${eBand(v[dim])}" style="width:${((v[dim] - rmin) / (rmax - rmin)) * 100}%"></i></span><b class="num">${eNum(v[dim])}</b>${eDelTxt(d)}</button></li>`; }).join('')}</ol>` : `<div class="empty small">ครั้งนี้ไม่มีข้อมูลรายภาค</div>`;
-
   /* units */
-  const cm = C?.units?.length ? Object.fromEntries(C.units.map((u) => [u.n, u])) : null;
-  const crk = cm ? Object.fromEntries([...C.units].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => [u.n, i + 1])) : null;
-  const all = [...(R.units || [])].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => Object.assign({ rk: i + 1 }, u));
+  const UR = eUnitRound(R), gst = pst('LA'), gEff = o.g || gst.region || '';
+  const CU = C && C !== UR ? eUnitRound(C) : null; const cm0 = CU && CU !== UR ? CU : null;
+  const cm = cm0?.units?.length ? Object.fromEntries(cm0.units.map((u) => [u.n, u])) : null;
+  const crk = cm ? Object.fromEntries([...cm0.units].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => [u.n, i + 1])) : null;
+  const all = [...(UR?.units || [])].sort((a, b) => b.v[dim] - a.v[dim]).map((u, i) => Object.assign({ rk: i + 1 }, u));
   const q = (o.q || '').trim();
-  let U = all.filter((u) => (!o.typ || u.t === o.typ) && (!o.g || u.g === o.g) && (!q || u.n.includes(q)));
+  let U = all.filter((u) => (!o.typ || u.t === o.typ) && (!gEff || u.g === gEff) && (!q || u.n.includes(q)));
   if (o.asc) U = [...U].reverse();
   const N = all.length;
   const unitBody = !N ? `<div class="empty small">${ic('flag', 'ic-sm')}<span>${esc((R.notes || []).find((t) => /รายหน่วยงาน/.test(t)) || 'ครั้งนี้ไม่มีตารางรายหน่วยงาน')}</span></div>` : `
     <div class="ed-uf"><div class="seg seg-sm" role="group" aria-label="ระดับหน่วยงาน">${ETYPES.map(([v, t]) => `<button type="button" data-es-typ="${v}" aria-pressed="${o.typ === v}">${t}</button>`).join('')}</div>
-      ${o.g ? `<button type="button" class="chip chip-accent" data-es-g="">${esc(o.g)} ✕</button>` : ''}
+      ${gEff ? `<button type="button" class="chip chip-accent" data-es-g="" data-act="g-region" data-v="LA|">${esc(gEff)} ✕</button>` : ''}
       <input class="input ed-q" id="es-q" type="search" placeholder="ค้นหาหน่วยงาน" value="${esc(o.q || '')}">
       <button type="button" class="btn btn-sm btn-ghost" data-es-asc="1">${o.asc ? 'ต่ำ → สูง' : 'สูง → ต่ำ'}</button></div>
-    <div class="ed-tw"><table class="tbl ed-ut"><thead><tr><th class="num">อันดับ</th><th>หน่วยงาน</th><th>สังกัด</th><th class="num">${ED[dim]}</th>${[1, 2, 3].filter((i) => i !== dim).map((i) => `<th class="num">${ED[i]}</th>`).join('')}${cm ? `<th class="num">เทียบ ${C.r}/${String(C.fy).slice(2)}</th>` : ''}</tr></thead><tbody>
+    <div class="ed-tw"><table class="tbl ed-ut"><thead><tr><th class="num">อันดับ</th><th>หน่วยงาน</th><th>สังกัด</th><th class="num">${ED[dim]}</th>${[1, 2, 3].filter((i) => i !== dim).map((i) => `<th class="num">${ED[i]}</th>`).join('')}${cm ? `<th class="num">เทียบ ${cm0.r}/${String(cm0.fy).slice(2)}</th>` : ''}</tr></thead><tbody>
     ${U.map((u) => { const pu = cm?.[u.n]; const d = pu ? u.v[dim] - pu.v[dim] : null; const rc = crk?.[u.n] ? crk[u.n] - u.rk : null;
       return `<tr class="${u.rk <= 10 ? 'u-top' : u.rk > N - 10 ? 'u-bot' : ''}"><td class="num">${u.rk}${rc ? `<small class="${rc > 0 ? 'up' : 'dn'}">${rc > 0 ? '▲' : '▼'}${Math.abs(rc)}</small>` : ''}</td><td><b>${esc(u.n)}</b></td><td class="muted small">${esc(u.g)}</td><td class="num"><span class="ed-sc b-${eBand(u.v[dim])}">${eNum(u.v[dim])}</span></td>${[1, 2, 3].filter((i) => i !== dim).map((i) => `<td class="num">${eNum(u.v[i])}</td>`).join('')}${cm ? `<td class="num">${d == null ? '<span class="muted">ใหม่</span>' : eDelTxt(d)}</td>` : ''}</tr>`; }).join('') || `<tr><td colspan="7" class="muted">ไม่พบหน่วยงาน</td></tr>`}
-    </tbody></table></div><p class="muted small">แสดง ${U.length} จาก ${N} หน่วย · แถบเขียว = 10 อันดับแรก · แถบแดง = 10 อันดับสุดท้าย · เรียงตาม${ED[dim]}</p>`;
+    </tbody></table></div><p class="muted small">${UR !== R ? `ใช้ตารางของ${esc(UR.label)} · ` : ''}แสดง ${U.length} จาก ${N} หน่วย · แถบเขียว = 10 อันดับแรก · แถบแดง = 10 อันดับสุดท้าย · เรียงตาม${ED[dim]}</p>`;
 
   /* suggestions + demographics */
   const sg = R.sugg;
@@ -126,11 +153,12 @@ function engPanel() {
 
   return `<div class="engp" id="ed">
     <div class="ed-head">${chips}${tools}</div>
+    ${geo.note ? `<div class="ed-note">${ic('flag', 'ic-sm')}<span>${esc(geo.note)}</span></div>` : ''}
+    ${geoPanel('LA', '2.3')}
     <div class="zgrid">
       ${zcard(`ผลสำรวจ${R.label}`, `ด้าน${ED[dim]} · ${C ? 'เทียบ' + C.label : 'ไม่เทียบ'}`, tiles + ins, { span: 5 })}
       ${zcard('แนวโน้มทุกครั้งที่สำรวจ', 'กดปีงบหรือเส้นเพื่อกรอง · แถบสีอ่อนคือครั้งที่เลือก', trend, { span: 7 })}
-      ${zcard('อันดับรายภาค', `เรียงตามด้าน${ED[dim]} · กดภาคเพื่อดูหน่วยงานในภาค`, regBody, { span: 5 })}
-      ${zcard('อันดับรายหน่วยงาน', 'ส่วนกลาง · สำนักงานภาค · สำนักงานพื้นที่', unitBody, { span: 7 })}
+      ${zcard('อันดับรายหน่วยงาน', `ส่วนกลาง · สำนักงานภาค · สำนักงานพื้นที่ · ${UR ? UR.label : ''}${gEff ? ' · กรองตาม ' + esc(gEff) : ''}`, unitBody, { span: 12 })}
       ${zcard('ข้อเสนอแนะจากบุคลากร', 'สิ่งที่อยากให้กรมส่งเสริม เรียงตามจำนวนผู้เสนอ', sgBody + drv, { span: 7 })}
       ${zcard('ตามอายุราชการและอายุตัว', C ? 'ตัวเลขเล็ก = เปลี่ยนจาก' + C.label : 'คะแนนรายด้าน', demo, { span: 5 })}
       ${zcard('ข้อเสนอเพื่อพัฒนาการสำรวจครั้งถัดไป', 'จากการรวบรวมรายงาน 7 ครั้ง', eRecs(), { span: 12, fold: 'eng-rec' })}
@@ -149,7 +177,7 @@ function eRecs() {
     ['จัดหมวดข้อเสนอแนะแบบข้อความรายหน่วยงาน', 'ปัจจุบันอยู่ใน QR Code จัดหมวดและนับความถี่รายหน่วยงาน จะช่วยให้หน่วยงานเห็นประเด็นของตัวเอง']];
   return `<ol class="ed-rec">${L.map(([t, d]) => `<li><b>${t}</b><span>${d}</span></li>`).join('')}</ol>`;
 }
-function eRerender() { const el = $('#ed'); if (!el) return; const vw = $('#view'), y = vw?.scrollTop; el.outerHTML = engPanel(); if (vw) vw.scrollTop = y; }
+function eRerender() { const el = $('#ed'); if (!el) return; const vw = $('#view'), y = vw?.scrollTop; el.outerHTML = engPanel(); if (vw) vw.scrollTop = y; if (typeof initMapZoom === 'function') initMapZoom(); }
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-es-r],[data-es-dim],[data-es-g],[data-es-typ],[data-es-asc],[data-es-fy],[data-es-line]'); if (!b) return;
   const o = eSt(), d = b.dataset;

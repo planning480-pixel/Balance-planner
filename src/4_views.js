@@ -37,7 +37,13 @@ function riskMapHTML({ pick = false, sel = {}, markers = [], size = 'lg' } = {})
 }
 
 /* ---------- KPI scoreboard ---------- */
+/* live value: Engagement (2.3) uses the latest survey round */
+function kpiEff(k) {
+  if (k.id === '2.3' && S.eng?.rounds?.length) { const r = S.eng.rounds[S.eng.rounds.length - 1]; return Object.assign({}, k, { latest: r.v[0], latestAt: r.r + '/' + r.fy }); }
+  return k;
+}
 function kpiState(k) {
+  k = kpiEff(k);
   const v = k.latest === '' || k.latest == null ? null : Number(k.latest), t = k.tval === '' || k.tval == null ? null : Number(k.tval);
   if (v == null || isNaN(v)) return { key: 'none', t: 'ยังไม่มีผล', ratio: 0, v: null, tv: t };
   if (t == null || isNaN(t) || !t) return { key: 'none', t: 'ยังไม่ตั้งค่าเป้า', ratio: 0, v, tv: null };
@@ -51,19 +57,18 @@ const fmtNum = (v) => Number(v).toLocaleString('th-TH', { maximumFractionDigits:
 function kpiBoard(pf, opt = {}) {
   const noHead = opt === true || opt.noHead;
   const ks = cfg().kpis.filter((k) => !pf || k.pillar === pf);
-  const st = ks.map((k) => ({ k, s: kpiState(k) }));
+  const st = ks.map((k) => ({ k: kpiEff(k), s: kpiState(k) }));
   const n = (key) => st.filter((x) => x.s.key === key).length;
   const EN = { ok: 'On target', warn: 'Near target', bad: 'Below target', none: 'No data' };
   const fy = (t) => String(t || '').replace(/ปีงบ(ประมาณ)?\s*/, 'FY').replace(/ไตรมาส\s*/, 'Q');
   const tile = ({ k, s }) => {
     const unit = k.unit === 'คะแนน' ? 'pts' : (k.unit || '');
-    const go = k.detailUrl ? `<a class="kt-go" href="${esc(k.detailUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${esc(k.id)} details" title="ดูรายละเอียด">${ic('external', 'ic-sm')}</a>`
-      : `<button type="button" class="kt-go" data-act="kpi-nolink" data-v="${esc(k.id)}" aria-label="${esc(k.id)} details">${ic('external', 'ic-sm')}</button>`;
-    return `<article class="kt" data-p="${esc(k.pillar)}" data-st="${s.key}">
+    const go = `<button type="button" class="kt-go" data-act="kpi-drill" data-v="${esc(k.id)}" aria-label="ลงลึก ${esc(k.id)} ${esc(k.name_en || '')}" title="ดูรายละเอียดเชิงลึก">${ic('chevron', 'ic-sm kt-chev')}</button>`;
+    return `<article class="kt kt-click" data-p="${esc(k.pillar)}" data-st="${s.key}">
       <div class="kt-top"><span class="kt-id">${esc(k.id)}</span><span class="kt-dot" aria-hidden="true"></span><span class="kt-st">${EN[s.key]}</span>
         <button type="button" class="kt-info" data-act="kpi-info" aria-expanded="false" aria-label="รายละเอียดภาษาไทยของ ${esc(k.id)}">${ic('info', 'ic-sm')}</button>${go}</div>
       <h3 class="kt-name" title="${esc(k.name_en || '')}">${esc(k.name_en || k.id)}</h3>
-      <div class="kt-val"><b>${s.v == null ? '—' : fmtNum(s.v)}</b>${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
+      <div class="kt-val">${s.v == null && k.basePhase ? `<small class="kt-base">${esc(k.basePhase.replace('เก็บค่าฐานปี', 'ค่าฐานปี'))}</small>` : `<b>${s.v == null ? '—' : fmtNum(s.v)}</b>`}${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
       <div class="kt-bar" aria-hidden="true"><i style="width:${Math.round(s.ratio * 100)}%"></i></div>
       <div class="kc-pop" role="tooltip"><b>${esc(k.name)}</b><span>เป้าหมาย: ${esc(k.target || '—')}</span>${k.baseline ? `<span>ค่าฐาน: ${esc(k.baseline)}</span>` : ''}<span>${s.v == null ? 'ยังไม่มีผลการดำเนินงาน' : `ผลล่าสุด ${fmtNum(s.v)} ${esc(k.unit || '')}${k.latestAt ? ' (' + esc(k.latestAt) + ')' : ''}`}</span><span class="pop-calc"><b>วิธีคำนวณ</b> ${k.calc ? esc(k.calc) : 'รอระบุ'}</span></div>
     </article>`;

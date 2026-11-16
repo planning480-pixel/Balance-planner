@@ -37,15 +37,23 @@ function gsTone(id, r) {
 }
 const gsFmt = (id, v) => (v == null ? '—' : GEO[id].kind === 'sum' ? fmtM(v) : v.toFixed(1) + '%');
 function gsAreaRec(id, area, prod) { const gs = GEO[id]; if (area === BKK) return gsAgg(gs, BKK5.map((a) => gs.rec(a, prod))); return gs.rec(area, prod); }
-const gsRegionRec = (id, u, prod) => gsAgg(GEO[id], regionAreas(u).map((a) => GEO[id].rec(a, prod)));
-function gsCentral(id) { const gs = GEO[id]; if (!gs.central) return null; return Object.entries(hrData().central || {}).map(([k, u]) => Object.assign({ id: k, name: u.name, kind: 'unit' }, gs.central(u))); }
+const gsRegionRec = (id, u, prod) => (GEO[id].regionRec ? GEO[id].regionRec(u, prod) : gsAgg(GEO[id], regionAreas(u).map((a) => GEO[id].rec(a, prod))));
+function gsCentral(id) { const gs = GEO[id]; if (gs.centralList) return gs.centralList(); if (!gs.central) return null; return Object.entries(hrData().central || {}).map(([k, u]) => Object.assign({ id: k, name: u.name, kind: 'unit' }, gs.central(u))); }
 function gsScope(code, id) {
   const st = pst(code), gs = GEO[id], prod = gs.products ? st.prod : '';
   if (st.central && gs.central) return { level: 'central', name: 'ส่วนกลาง', items: gsCentral(id) };
-  if (st.region) return { level: 'region', name: st.region, items: regionAreas(st.region).map((a) => Object.assign({ id: a, name: a, area: a, kind: 'area' }, gs.rec(a, prod) || {})).filter((x) => x.a != null) };
+  if (st.region) return { level: 'region', name: st.region, items: regionAreas(st.region).map((a) => Object.assign({ id: a, name: a, area: a, kind: 'area' }, gs.rec(a, prod) || {})).concat(gs.regionExtra ? gs.regionExtra(st.region) : []).filter((x) => x.a != null) };
   const items = REGIONS.map((u) => Object.assign({ id: u, name: u, region: u, kind: 'region' }, gsRegionRec(id, u, prod) || {})).filter((x) => x.a != null);
-  if (gs.central) { const c = gsAgg(gs, gsCentral(id)); if (c) items.push(Object.assign({ id: 'central', name: 'ส่วนกลาง', kind: 'central' }, c)); }
+  if (gs.central || gs.centralList) { const c = gs.centralAgg ? gs.centralAgg() : gsAgg(gs, gsCentral(id)); if (c) items.push(Object.assign({ id: 'central', name: 'ส่วนกลาง', kind: 'central' }, c)); }
   return { level: 'nation', name: 'ทั้งประเทศ', items };
+}
+/* headline for the current scope: official region / central figure when the spec provides one */
+function gsScopeAgg(code, id, sc) {
+  const gs = GEO[id], st = pst(code);
+  if (sc.level === 'nation' && gs.nationAgg) return gs.nationAgg();
+  if (sc.level === 'central' && gs.centralAgg) return gs.centralAgg();
+  if (sc.level === 'region' && gs.regionRec && !st.prov) return gs.regionRec(st.region) || gsAgg(gs, sc.items);
+  return gsAgg(gs, sc.items);
 }
 function geoMap(code, id) {
   const st = pst(code), gs = GEO[id], prod = gs.products ? st.prod : '', reg = st.region;
@@ -58,7 +66,7 @@ function geoMap(code, id) {
     return `<path d="${x.d}" class="mp mp-${t} mp-click ${sel ? 'mp-sel' : ''} ${dim ? 'mp-dim' : ''}" data-act="${reg ? 'g-prov' : 'g-region'}" data-v="${esc(code + '|' + (reg ? x.n : x.u))}"><title>${esc(reg ? x.n : x.u)} · ${esc(gs.label)} ${gsFmt(id, gsVal(gs, r))}</title></path>`;
   }).join('');
   const labels = reg ? shapes.map((x) => `<text class="pl ${st.prov === x.n || areaProv(st.prov) === x.n ? 'pl-sel' : ''}" x="${x.x}" y="${x.y}" style="font-size:${(9 * scale).toFixed(2)}px">${esc(x.n === BKK ? 'กทม. 1–5' : x.n)}</text>`).join('')
-    : shapes.map((x) => { const r = gsRegionRec(id, x.u, prod); const o = ML_OFF[x.u] || [0, 0]; const v = gsVal(gs, r); return `<g class="ml" transform="translate(${x.x + o[0]},${x.y + o[1]})"><rect x="-26" y="-17" width="52" height="34" rx="8"/><text class="ml-n" y="-3">${esc(x.u)}</text><text class="ml-p" y="12">${v == null ? '—' : gs.kind === 'sum' ? (r.t ? Math.round((r.a / r.t) * 100) + '%' : '—') : Math.round(v) + '%'}</text></g>`; }).join('');
+    : shapes.map((x) => { const r = gsRegionRec(id, x.u, prod); const o = ML_OFF[x.u] || [0, 0]; const v = gsVal(gs, r); return `<g class="ml" transform="translate(${x.x + o[0]},${x.y + o[1]})"><rect x="-26" y="-17" width="52" height="34" rx="8"/><text class="ml-n" y="-3">${esc(x.u)}</text><text class="ml-p" y="12">${v == null ? '—' : gs.kind === 'sum' ? (r.t ? Math.round((r.a / r.t) * 100) + '%' : '—') : gs.mapFmt ? gs.mapFmt(v) : Math.round(v) + '%'}</text></g>`; }).join('');
   return `<div class="mapz"><svg class="thmap" viewBox="${vb}" data-vb="${vb}" data-key="g-${esc(code + id + (reg || 'TH'))}" role="img" aria-label="แผนที่${esc(gs.label)}" style="--sw:${(0.8 * scale).toFixed(2)}">${paths}${labels}</svg>
     <div class="mapz-c"><button type="button" data-zoom="in" aria-label="ซูมเข้า">${ic('plus', 'ic-sm')}</button><button type="button" data-zoom="out" aria-label="ซูมออก">${ic('minus', 'ic-sm')}</button><button type="button" data-zoom="reset" aria-label="รีเซ็ตมุมมอง">${ic('expand-all', 'ic-sm')}</button></div></div>`;
 }
@@ -82,7 +90,7 @@ function geoInsight(code, id, sc) {
   const gs = GEO[id], st = pst(code);
   const items = st.prov && sc.level === 'region' ? sc.items.filter((x) => x.area === st.prov || (st.prov === BKK && BKK5.includes(x.area))) : sc.items;
   const name = st.prov && sc.level === 'region' ? (st.prov === BKK ? 'กรุงเทพฯ (5 พื้นที่)' : st.prov) : sc.name;
-  const agg = gsAgg(gs, items), v = gsVal(gs, agg), tgt = gs.kind === 'sum' ? null : gs.tline || gsTarget(id);
+  const agg = items === sc.items ? gsScopeAgg(code, id, sc) : gsAgg(gs, items), v = gsVal(gs, agg), tgt = gs.kind === 'sum' ? null : gs.tline || gsTarget(id);
   const key = (x) => (gs.kind === 'sum' ? (x.t ? x.a / x.t : null) : gsVal(gs, x));
   const sorted = items.filter((x) => key(x) != null).sort((a, b) => key(a) - key(b));
   const low = sorted.slice(0, 3), top = sorted[sorted.length - 1];
@@ -111,7 +119,7 @@ function geoInsight(code, id, sc) {
 function geoPanel(code, id) {
   const st = pst(code), gs = GEO[id], sc = gsScope(code, id);
   const crumb = `<nav class="crumb" aria-label="ระดับพื้นที่"><button data-act="g-region" data-v="${esc(code + '|')}">ทั้งประเทศ</button>${st.central ? '<span>›</span><b>ส่วนกลาง</b>' : ''}${st.region ? `<span>›</span><button data-act="g-prov" data-v="${esc(code + '|')}">${esc(st.region)}</button>` : ''}${st.prov ? `<span>›</span><b>${esc(st.prov === BKK ? 'กรุงเทพฯ' : st.prov)}</b>` : ''}</nav>`;
-  const agg = gsAgg(gs, sc.items), v = gsVal(gs, agg);
+  const agg = gsScopeAgg(code, id, sc), v = gsVal(gs, agg);
   const prods = gs.products ? `<div class="hx-chips g-prods"><button type="button" class="hx-chip ${st.prod ? '' : 'on'}" data-act="g-prod" data-v="${esc(code + '|')}">${ic('layers', 'ic-sm')}ทุกสินค้า</button>${opsProducts().map((k, i) => `<button type="button" class="hx-chip ${st.prod === k ? 'on' : ''}" data-act="g-prod" data-v="${esc(code + '|' + k)}" style="--pc:${PCOLS[i % PCOLS.length]}">${pIcon(k)}${esc(k)}</button>`).join('')}</div>` : '';
   const head = `<div class="mstat"><span><small>${esc(gs.label)}</small><b class="num">${gs.kind === 'sum' ? fmtM(v) : gsFmt(id, v)}</b></span>${gs.kind === 'sum' ? `<span><small>เป้า</small><b class="num">${fmtM(agg?.t)}</b></span><span class="mstat-p mstat-${gsTone(id, agg || {})}"><b class="num">${agg?.t ? Math.round((agg.a / agg.t) * 100) + '%' : '—'}</b><small>ของเป้า</small></span>` : `<span><small>เกณฑ์</small><b class="num">${gs.tline || gsTarget(id)}%</b></span>`}${gs.sample() ? '<em>ข้อมูลตัวอย่าง</em>' : ''}</div>`;
   return `${prods}<div class="la3">
@@ -202,6 +210,11 @@ const PSPEC = {
   E: { kpis: ['5.1', '5.2', '5.3'], panel: (id, code) => ePanels(id, code) }
 };
 function kpiCardVal(id) {
+  const c = kpiCardVal0(id), k = kpiAny(id);
+  if (k?.basePhase && k.latest == null && c.v != null) c.sub = `ข้อมูลตัวอย่าง · ${k.basePhase}`;
+  return c;
+}
+function kpiCardVal0(id) {
   if (id === '2.3' && S.eng?.rounds?.length) { const r = S.eng.rounds[S.eng.rounds.length - 1]; return { v: r.v[0], sub: 'Engagement ' + r.label }; }
   const k = kpiAny(id); if (k?.latest != null) return { v: k.latest, sub: k.latestAt || '' };
   if (GEO[id]) { const gs = GEO[id]; const items = allAreas().map((a) => gs.rec(a, '')); const ag = gsAgg(gs, [...items, ...(gs.central ? gsCentral(id) : [])]); if (!ag) return { v: null, sub: '' }; if (gs.kind === 'sum') return { v: ag.t ? (ag.a / ag.t) * 100 : null, sub: `${fmtM(ag.a)} / ${fmtM(ag.t)} ล้านบาท` }; if (id === '2.2') { const all = allAreas().map((a) => gs.rec(a)).concat(gsCentral(id) || []).filter(Boolean); return { v: (all.filter((r) => fillTone(gsVal(gs, r)) === 'ok').length / all.length) * 100, sub: `กำลังคนจริง ${gsVal(gs, ag).toFixed(1)}% ของอัตรา` }; } return { v: gsVal(gs, ag), sub: 'จากข้อมูลรายพื้นที่' }; }
@@ -237,3 +250,11 @@ document.addEventListener('click', (e) => {
   keep();
 });
 document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.lal li[data-act]')) { e.preventDefault(); e.target.click(); } });
+/* KPI Scoreboard → pillar deep-dive with that KPI selected */
+function kpiDrill(id) {
+  const k = kpiAny(id); if (!k) return;
+  const code = k.pillar;
+  if (PSPEC[code]) { const st = pst(code); st.k = id; st.region = ''; st.prov = ''; st.central = false; }
+  go('p-' + code);
+  setTimeout(() => { const el = document.querySelector('#view .bk.on'); const sc = el?.closest('.car-t'); if (!el || !sc) return; const a = el.getBoundingClientRect(), b = sc.getBoundingClientRect(); if (a.right > b.right || a.left < b.left) sc.scrollLeft += a.left - b.left - 8; }, 120);
+}

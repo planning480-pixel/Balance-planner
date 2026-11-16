@@ -18,7 +18,7 @@ const zcard = (title, desc, body, opts = {}) => { const shut = opts.fold && COLL
 const statCard = (label, icon, value, sub) => `<div class="zs"><div class="zs-h"><span>${label}</span>${ic(icon, 'ic-sm')}</div><div class="zs-v">${value}</div><div class="zs-d">${sub}</div></div>`;
 
 function kpiStats(pf) {
-  const st = cfg().kpis.filter((k) => !pf || k.pillar === pf).map((k) => ({ k, s: kpiState(k) }));
+  const st = cfg().kpis.filter((k) => !pf || k.pillar === pf).map((k) => ({ k: kpiEff(k), s: kpiState(k) }));
   const c = (key) => st.filter((x) => x.s.key === key).length;
   return { st, ok: c('ok'), warn: c('warn'), bad: c('bad'), none: c('none'), n: st.length };
 }
