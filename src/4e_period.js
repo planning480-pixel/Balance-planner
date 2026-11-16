@@ -262,7 +262,7 @@ function hotBar() {
     <div class="hot-win" aria-live="polite"><a class="hot-it" href="${esc(it.url || N.url)}" target="_blank" rel="noopener noreferrer" data-hot-i="${i}">
       <span class="hot-ic">${ic(NEWS_IC[it.icon] || 'box', 'ic-sm')}</span><b class="hot-cat">${esc(it.cat)}</b><span class="hot-t">${esc(it.title)}</span><span class="hot-d">${esc(it.date || '')}</span></a></div>
     <div class="hot-nav"><button type="button" data-act="hot-go" data-v="-1" aria-label="ข่าวก่อนหน้า">${ic('chevron', 'ic-sm')}</button><span class="hot-dots">${items.map((_, k) => `<i class="${k === i ? 'on' : ''}"></i>`).join('')}</span><button type="button" data-act="hot-go" data-v="1" aria-label="ข่าวถัดไป">${ic('chevron', 'ic-sm')}</button>
-    <a class="hot-all" href="${esc(N.url)}" target="_blank" rel="noopener noreferrer" title="Excise Insight Update ${esc(N.range || '')}">ทั้งหมด</a></div></section>`;
+    <a class="hot-all" href="${esc(S.publicMode ? 'insight/' : N.url)}" target="_blank" rel="noopener noreferrer" title="Excise Insight Update ${esc(N.range || '')}">ทั้งหมด</a></div></section>`;
 }
 function hotShow(i) {
   const bar = document.querySelector('[data-hot]'); const items = (S.news?.items || []).slice(0, 4); if (!bar || !items.length) return;

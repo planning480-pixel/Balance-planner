@@ -119,6 +119,9 @@
         <button id="tab-a4" type="button" data-view="a4" class="view-tab-btn px-4 py-1.5 rounded-full text-xs font-heading font-medium transition-all text-slate-300 hover:text-white">
           สรุป 1 หน้า A4
         </button>
+        <button id="tab-archive" type="button" data-view="archive" class="view-tab-btn px-4 py-1.5 rounded-full text-xs font-heading font-medium transition-all text-slate-300 hover:text-white">
+          ข่าวย้อนหลัง
+        </button>
       </nav>
 
       <!-- Schedule & Action Status -->
@@ -147,6 +150,9 @@
       <button type="button" data-view="a4" class="view-tab-btn flex-1 py-1.5 px-3 rounded-full text-xs font-heading font-medium text-center text-slate-300">
         สรุป 1 หน้า A4
       </button>
+      <button type="button" data-view="archive" class="view-tab-btn flex-1 py-1.5 px-3 rounded-full text-xs font-heading font-medium text-center text-slate-300">
+        ข่าวย้อนหลัง
+      </button>
     </div>
   </header>
 
@@ -157,7 +163,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 no-print">
       <div class="flex items-baseline gap-3">
         <h1 id="main-section-heading" class="font-heading text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">บทความ</h1>
-        <span class="text-sm text-slate-500 font-medium">รอบสัปดาห์ที่ 24 – 31 ตุลาคม 2569</span>
+        <span class="text-sm text-slate-500 font-medium">รอบสัปดาห์ที่ 9 – 15 พฤศจิกายน 2569</span>
       </div>
 
       <!-- Filter & Pager Controls (Matching Policy Watch Screenshot) -->
@@ -167,12 +173,12 @@
           <div class="pw-select-pill relative flex items-center min-w-[220px] sm:min-w-[250px]">
             <select id="category-select" class="w-full appearance-none bg-transparent py-1.5 pl-4 pr-9 text-sm font-medium text-slate-800 focus:outline-none cursor-pointer">
               <option value="all">ทั้งหมด (ทุกพิกัดที่มีข่าว)</option>
-              <option value="oil">น้ำมันและผลิตภัณฑ์น้ำมัน (เด่นสุด)</option>
-              <option value="tobacco">ยาสูบ (อันดับ 2)</option>
-              <option value="liquor">สุรา และสถานบริการ</option>
-              <option value="auto">รถยนต์ (มาตรการ EV)</option>
-              <option value="motorcycle">รถจักรยานยนต์ (EV)</option>
-              <option value="ethanol">เอทานอล (เชื้อเพลิงชีวภาพ)</option>
+              <option value="tobacco">ยาสูบ (เด่นสุด)</option>
+              <option value="enforcement">การปราบปราม / จับกุม (อันดับ 2)</option>
+              <option value="liquor">สุรา / สถานบริการ (อันดับ 2)</option>
+              <option value="auto">รถยนต์ / EV</option>
+              <option value="motorcycle">รถจักรยานยนต์</option>
+              <option value="oil">น้ำมัน</option>
               <option value="zero">หมวดที่ไม่มีข่าวในสัปดาห์นี้ (0 ข่าว)</option>
             </select>
             <svg class="w-4 h-4 text-[#F26522] absolute right-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
@@ -188,7 +194,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <span id="page-indicator-text" class="font-medium text-xs sm:text-sm px-1">สัปดาห์ 44/2569</span>
+          <span id="page-indicator-text" class="font-medium text-xs sm:text-sm px-1">สัปดาห์ 46/2569</span>
           <button id="btn-next-view" type="button" title="สลับมุมมองถัดไป" class="pw-arrow-btn border border-[#F26522] text-[#F26522] hover:bg-[#F26522] hover:text-white">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
@@ -221,34 +227,31 @@
         <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
           <div>
             <p class="text-xs font-medium text-slate-500">พิกัดที่มีข่าวมากที่สุด (อันดับ 1)</p>
-            <p class="font-heading text-lg font-bold text-slate-900 mt-0.5">น้ำมันและผลิตภัณฑ์น้ำมัน</p>
-            <p class="text-xs text-emerald-700 font-medium mt-1">ลดภาษี B20–E20 นาน 3 เดือน (4 สื่อหลัก)</p>
+            <p class="font-heading text-lg font-bold text-slate-900 mt-0.5">ยาสูบ</p>
+            <p class="text-xs text-emerald-700 font-medium mt-1">ผลปราบ ต.ค. 69 • สมาคมยาสูบ • ภาษีอัตราเดียว (3 ข่าว)</p>
           </div>
-          <span class="w-9 h-9 rounded-lg bg-orange-50 text-[#F26522] flex items-center justify-center font-heading font-bold text-sm border border-orange-200">#1</span>
+          <span class="w-9 h-9 rounded-lg bg-orange-50 text-[#F26522] border-orange-200 flex items-center justify-center font-heading font-bold text-sm border">#1</span>
         </div>
-
         <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
           <div>
             <p class="text-xs font-medium text-slate-500">พิกัดที่มีข่าวมาก (อันดับ 2)</p>
-            <p class="font-heading text-lg font-bold text-slate-900 mt-0.5">ยาสูบ</p>
-            <p class="text-xs text-amber-700 font-medium mt-1">ยึดบุหรี่เถื่อน 4.4 ล้านมวน &amp; ภาษีบาป</p>
+            <p class="font-heading text-lg font-bold text-slate-900 mt-0.5">ปราบปราม • สุรา</p>
+            <p class="text-xs text-amber-700 font-medium mt-1">จับ 3,693 คดี • Sandbox ข้าวสาร (อย่างละ 2 ข่าว)</p>
           </div>
-          <span class="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center font-heading font-bold text-sm border border-amber-200">#2</span>
+          <span class="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 border-amber-200 flex items-center justify-center font-heading font-bold text-sm border">#2</span>
         </div>
-
         <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
           <div>
             <p class="text-xs font-medium text-slate-500">พิกัดที่มีความเคลื่อนไหวรองลงมา</p>
-            <p class="font-heading text-base font-bold text-slate-900 mt-0.5">สุรา • รถยนต์ • จักรยานยนต์ • เอทานอล</p>
-            <p class="text-xs text-sky-700 font-medium mt-1">Sandbox ข้าวสาร &amp; แก้ประกาศ EV3/EV3.5</p>
+            <p class="font-heading text-base font-bold text-slate-900 mt-0.5">รถยนต์ • จักรยานยนต์ • น้ำมัน</p>
+            <p class="text-xs text-sky-700 font-medium mt-1">EV นำเข้า 35% • ยึดจักรยานยนต์ 60 คัน • ภาษี B20 0.431 บ. (อย่างละ 1 ข่าว)</p>
           </div>
-          <span class="w-9 h-9 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center font-heading font-bold text-xs border border-sky-200">4 หมวด</span>
+          <span class="w-9 h-9 rounded-lg bg-sky-50 text-sky-700 border-sky-200 flex items-center justify-center font-heading font-bold text-sm border">#3</span>
         </div>
-
         <div class="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-start justify-between">
           <div>
             <p class="text-xs font-medium text-slate-500">พิกัดที่มีข่าวน้อยที่สุด (0 ข่าว)</p>
-            <p class="font-heading text-base font-bold text-slate-700 mt-0.5">เบียร์ • เครื่องดื่ม • แบตเตอรี่ • น้ำหอม</p>
+            <p class="font-heading text-sm font-bold text-slate-700 mt-0.5">เบียร์ • เครื่องดื่ม • แบตเตอรี่ • เอทานอล • น้ำหอม • ผลการจัดเก็บรายได้</p>
             <p class="text-xs text-slate-400 mt-1">ไม่มีข่าวเฉพาะหมวดในรอบสัปดาห์นี้</p>
           </div>
           <span class="w-9 h-9 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center font-heading font-bold text-xs border border-slate-200">0 ข่าว</span>
@@ -267,7 +270,7 @@
             <span class="w-1.5 h-6 rounded-full bg-[#F26522] inline-block"></span>
             <span>เจาะลึกข่าวสารตามพิกัดกรมสรรพสามิต</span>
           </h2>
-          <span id="articles-count-badge" class="text-xs font-medium text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200">แสดง 6 เรื่องเด่น</span>
+          <span id="articles-count-badge" class="text-xs font-medium text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200">แสดง 5 เรื่อง</span>
         </div>
         <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Rendered by JS -->
@@ -285,7 +288,7 @@
               Statistical Overview • ภาพรวมรายสัปดาห์
             </span>
             <h2 class="font-heading text-2xl sm:text-3xl font-bold text-slate-900 mt-2">
-              สรุปสถิติความถี่ข่าวแยกตามพิกัดสินค้าสรรพสามิต (24 – 31 ต.ค. 2569)
+              สรุปสถิติความถี่ข่าวแยกตามพิกัดสินค้าสรรพสามิต (9 – 15 พ.ย. 2569)
             </h2>
             <p class="text-sm text-slate-600 mt-1">
               วิเคราะห์สัดส่วนการรายงานข่าวจากสำนักข่าวชั้นนำในประเทศไทย ครอบคลุม 11 พิกัดสินค้าหลักของกรมสรรพสามิต
@@ -319,10 +322,10 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
-                <span>พิกัดที่มีข่าวมากที่สุด: น้ำมันและผลิตภัณฑ์น้ำมัน</span>
+                <span>พิกัดที่มีข่าวมากที่สุด: ยาสูบ</span>
               </div>
               <p class="text-xs sm:text-sm text-slate-700 mt-1.5 leading-relaxed">
-                ครองสัดส่วนข่าวสูงสุดจากมติ ครม. วันที่ 27 ต.ค. 2569 ออกกฎกระทรวงกำหนดพิกัดอัตราภาษีสรรพสามิต (ฉบับที่ 47) พ.ศ. 2569 ลดภาษีดีเซล B20 และแก๊สโซฮอล์ E20 นาน 3 เดือน โดยคงกลไกราคาคาร์บอน 200 บาท/ตัน CO₂e ตามมาด้วย <strong>พิกัดยาสูบ</strong> (อันดับ 2) จากปฏิบัติการยึดบุหรี่เถื่อน 4.4 ล้านมวน และข้อพิพาทภาษีบาป
+                ครองสัดส่วนข่าวสูงสุดจากผลปราบปรามเดือน ต.ค. 2569 (เดือนแรกปีงบ 2570) ที่ยาสูบเป็นอันดับ 1 ด้วย 2,395 คดี ตรวจยึด 333,246 ซอง, สมาคมการค้ายาสูบไทยชื่นชมการปราบบุหรี่เถื่อน และคอลัมน์จี้เดินหน้าภาษีบุหรี่อัตราเดียว ตามมาด้วย <strong>การปราบปราม</strong> และ <strong>สุรา/สถานบริการ</strong> (Sandbox ข้าวสาร–รามบุตรี) ส่วน <strong>รถยนต์ EV</strong>, <strong>รถจักรยานยนต์</strong> และ <strong>น้ำมัน</strong> มีอย่างละ 1 ข่าว
               </p>
             </div>
 
@@ -334,7 +337,7 @@
                 <span>พิกัดที่มีข่าวน้อยที่สุด (0 ข่าวในรอบสัปดาห์)</span>
               </div>
               <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                ได้แก่ <strong>เบียร์, เครื่องดื่ม (ไม่มีแอลกอฮอล์), แบตเตอรี่ และน้ำหอม</strong> ซึ่งไม่พบการรายงานข่าวเฉพาะหมวดในรอบวันที่ 24 – 31 ต.ค. 2569 จึงคัดกรองออกจากส่วนสรุปเนื้อหาหลักตามเกณฑ์กระชับ
+                ได้แก่ <strong>เบียร์, เครื่องดื่ม/ภาษีความหวาน, แบตเตอรี่, เอทานอล และน้ำหอม</strong> รวมถึงผลการจัดเก็บรายได้ ซึ่งไม่พบรายงานข่าวเฉพาะหมวดที่เกี่ยวกับกรมสรรพสามิตเผยแพร่ในรอบวันที่ 9 – 15 พ.ย. 2569
               </p>
             </div>
 
@@ -362,69 +365,76 @@
             <tbody class="divide-y divide-slate-200 bg-white">
               <tr class="hover:bg-orange-50/40 transition-colors">
                 <td class="py-3 px-4 font-heading font-semibold text-slate-900">
-                  <span class="inline-block w-2 h-2 rounded-full bg-[#F26522] mr-1.5"></span>1. น้ำมันและผลิตภัณฑ์น้ำมัน
+                  <span class="inline-block w-2 h-2 rounded-full bg-[#F26522] mr-1.5"></span>1. ยาสูบ
                 </td>
                 <td class="py-3 px-4"><span class="bg-orange-100 text-[#D94E0F] font-semibold px-2.5 py-0.5 rounded-full text-xs">มากที่สุด (อันดับ 1)</span></td>
-                <td class="py-3 px-4 text-slate-700">ครม. ลดภาษีดีเซล B20 (-5.52 บ./ลิตร) และ E20 (-5.64 บ./ลิตร) นาน 3 เดือน (28 ต.ค. 69 – 27 ม.ค. 70) คงราคาคาร์บอน 200 บ./ตัน ดึงขายปลีกเหลือ 33.50 บ./ลิตร</td>
+                <td class="py-3 px-4 text-slate-700">ต.ค. 69 คดียาสูบ 2,395 คดี ยึด 333,246 ซอง, สมาคมการค้ายาสูบไทยชื่นชมการปราบ (ปีงบ 69 สองหน่วยงานสกัดได้กว่า 228 ล้านมวน) และคอลัมน์จี้ภาษีบุหรี่อัตราเดียว (รายได้หายปีละ 1–2 หมื่นล้านบาท)</td>
                 <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
-                  <a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยพับลิก้า</a> •
-                  <a href="https://www.prachachat.net/finance/news-2086735" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ประชาชาติธุรกิจ</a> •
-                  <a href="https://www.naewna.com/n/business-world/134510/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">แนวหน้า</a> •
-                  <a href="https://www.js100.com/en/site/news/view/165429" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">จส.100</a>
+                  <a href="https://www.bangkokbiznews.com/economics/1260069" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">กรุงเทพธุรกิจ</a> •
+                  <a href="https://www.thansettakij.com/economy/673316" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ฐานเศรษฐกิจ</a> •
+                  <a href="https://www.naewna.com/n/todays-columns/business-columns/162229/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">แนวหน้า</a>
                 </td>
               </tr>
               <tr class="hover:bg-orange-50/40 transition-colors">
                 <td class="py-3 px-4 font-heading font-semibold text-slate-900">
-                  <span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>2. ยาสูบ
+                  <span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>2. การปราบปราม / จับกุม
                 </td>
                 <td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">มาก (อันดับ 2)</span></td>
-                <td class="py-3 px-4 text-slate-700">ยึดบุหรี่เถื่อนชายแดนสระแก้ว 4.4 ล้านมวน (22 ล้านบาท), สรุปคดีปีงบ 69 พุ่ง 39,305 คดี, เล็งเก็บภาษีบุหรี่ส่งออกล่วงหน้า และข้อพิพาทภาษีบาป 4 กองทุน</td>
+                <td class="py-3 px-4 text-slate-700">ผลปราบเดือนแรกปีงบ 2570 รวม 3,693 คดี ค่าปรับ 87.61 ล้านบาท ประมาณการค่าปรับ 176.29 ล้านบาท ปรับมาตรการตามพื้นที่และระดับความเสี่ยง</td>
                 <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
-                  <a href="https://www.dailynews.co.th/news/6312687/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">เดลินิวส์</a> •
-                  <a href="https://www.fm91bkk.com/newsarticle/81165" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">สวพ.FM91</a> •
-                  <a href="https://www.naewna.com/n/todays-columns/business-columns/134452/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">แนวหน้า (1)</a> •
-                  <a href="https://www.naewna.com/n/breaking/140976/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">แนวหน้า (2)</a> •
-                  <a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">Hfocus</a>
+                  <a href="https://www.bangkokbiznews.com/economics/1260069" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">กรุงเทพธุรกิจ</a> •
+                  <a href="https://www.thaipost.net/economy-news/1105422/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยโพสต์</a> •
+                  <a href="https://www.komchadluek.net/news/general-news/625567" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">คมชัดลึก</a> •
+                  <a href="https://www.thebangkokinsight.com/news/politics-general/general/1719476/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">The Bangkok Insight</a>
                 </td>
               </tr>
               <tr class="hover:bg-orange-50/40 transition-colors">
                 <td class="py-3 px-4 font-heading font-semibold text-slate-900">
-                  <span class="inline-block w-2 h-2 rounded-full bg-indigo-500 mr-1.5"></span>3. สุรา และอื่นๆ (สถานบริการ)
+                  <span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>2. สุรา / สถานบริการ
                 </td>
-                <td class="py-3 px-4"><span class="bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">ปานกลาง (อันดับ 3)</span></td>
-                <td class="py-3 px-4 text-slate-700">บูรณาการนำร่อง Sandbox ถนนข้าวสาร–รามบุตรี ทบทวนโซนนิ่งปี 2545 ขยายเวลาจำหน่ายสุราหลังเที่ยงคืนรับปีใหม่ และค้านยกเลิก Earmarked Tax 2%</td>
+                <td class="py-3 px-4"><span class="bg-amber-100 text-amber-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">มาก (อันดับ 2)</span></td>
+                <td class="py-3 px-4 text-slate-700">สุรา 1,071 คดี ยึด 11,149.452 ลิตร (ต.ค. 69) และ ป.ป.ท.–กทม.–สรรพสามิต ประชุม Sandbox ข้าวสาร–รามบุตรี 12 พ.ย. 69 ถกข้อมูลใบอนุญาตจำหน่ายสุรา</td>
                 <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
-                  <a href="https://www.thairath.co.th/news/politic/2969392" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยรัฐออนไลน์</a> •
-                  <a href="https://www.thaipbs.or.th/news/content/571900" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยพีบีเอส</a> •
-                  <a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">Hfocus</a>
+                  <a href="https://www.bangkokbiznews.com/economics/1260069" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">กรุงเทพธุรกิจ</a> •
+                  <a href="https://www.siamnews.com/news/politics/57251" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">สยามนิวส์</a>
                 </td>
               </tr>
               <tr class="hover:bg-orange-50/40 transition-colors">
                 <td class="py-3 px-4 font-heading font-semibold text-slate-900">
-                  <span class="inline-block w-2 h-2 rounded-full bg-teal-500 mr-1.5"></span>4. รถยนต์ และรถจักรยานยนต์
+                  <span class="inline-block w-2 h-2 rounded-full bg-sky-500 mr-1.5"></span>3. รถยนต์ (EV)
                 </td>
-                <td class="py-3 px-4"><span class="bg-teal-100 text-teal-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">ปานกลาง (อันดับ 4)</span></td>
-                <td class="py-3 px-4 text-slate-700">เปิดรับฟังความเห็นแก้ประกาศ EV 3 ฉบับ กำหนดวันสิ้นสุดยื่นขอเงินอุดหนุน EV3 (5 ธ.ค. 69) และ EV3.5 (30 มิ.ย. 71) พร้อมปรับชื่อชิ้นส่วน Integrated Inverter</td>
-                <td class="py-3 px-4 whitespace-nowrap">
-                  <a href="https://www.prachachat.net/finance/news-2085812" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ประชาชาติธุรกิจ</a>
+                <td class="py-3 px-4"><span class="bg-sky-100 text-sky-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">น้อย (อันดับ 3)</span></td>
+                <td class="py-3 px-4 text-slate-700">บทวิเคราะห์ภาษี EV นำเข้า 35% (มีผล 1 ม.ค. 70) เทียบ EV ผลิตในประเทศ 2% คาดเร่งซื้อก่อนเส้นตาย ม.ค.–ต.ค. 69 BEV จดทะเบียน 182,283 คัน</td>
+                <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
+                  <a href="https://marketeeronline.co/archives/498608" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">Marketeer Online</a>
                 </td>
               </tr>
               <tr class="hover:bg-orange-50/40 transition-colors">
                 <td class="py-3 px-4 font-heading font-semibold text-slate-900">
-                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>5. เอทานอล
+                  <span class="inline-block w-2 h-2 rounded-full bg-sky-500 mr-1.5"></span>3. รถจักรยานยนต์
                 </td>
-                <td class="py-3 px-4"><span class="bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">น้อย (อันดับ 5)</span></td>
-                <td class="py-3 px-4 text-slate-700">ส่งเสริมการใช้เอทานอล (ผสม 20% ในแก๊สโซฮอล์ E20) เพื่อดูดซับผลผลิตอ้อยและมันสำปะหลัง ช่วยพยุงราคาพืชผลเกษตรกรไทย</td>
-                <td class="py-3 px-4 whitespace-nowrap">
-                  <a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ไทยพับลิก้า</a>
+                <td class="py-3 px-4"><span class="bg-sky-100 text-sky-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">น้อย (อันดับ 3)</span></td>
+                <td class="py-3 px-4 text-slate-700">คดีรถจักรยานยนต์ เดือน ต.ค. 69 จำนวน 53 คดี ค่าปรับ 1.39 ล้านบาท ตรวจยึด 60 คัน</td>
+                <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
+                  <a href="https://www.bangkokbiznews.com/economics/1260069" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">กรุงเทพธุรกิจ</a>
+                </td>
+              </tr>
+              <tr class="hover:bg-orange-50/40 transition-colors">
+                <td class="py-3 px-4 font-heading font-semibold text-slate-900">
+                  <span class="inline-block w-2 h-2 rounded-full bg-sky-500 mr-1.5"></span>3. น้ำมัน
+                </td>
+                <td class="py-3 px-4"><span class="bg-sky-100 text-sky-800 font-semibold px-2.5 py-0.5 rounded-full text-xs">น้อย (อันดับ 3)</span></td>
+                <td class="py-3 px-4 text-slate-700">โครงสร้างราคา 10 พ.ย. 69: ภาษีสรรพสามิตดีเซล 6.92 บาท/ลิตร แก๊สโซฮอล์ 95/91 6.75 บาท ขณะที่ E20 0.358 บาท และ B20 0.431 บาท</td>
+                <td class="py-3 px-4 space-x-1.5 whitespace-nowrap">
+                  <a href="https://www.thansettakij.com/economy/energy/673387" target="_blank" rel="noopener noreferrer" class="text-[#F26522] hover:underline font-medium">ฐานเศรษฐกิจ</a>
                 </td>
               </tr>
               <tr class="bg-slate-50/80 text-slate-500">
                 <td class="py-3 px-4 font-heading font-medium">
-                  <span class="inline-block w-2 h-2 rounded-full bg-slate-300 mr-1.5"></span>6. เบียร์, เครื่องดื่ม, แบตเตอรี่, น้ำหอม
+                  <span class="inline-block w-2 h-2 rounded-full bg-slate-300 mr-1.5"></span>4. เบียร์, เครื่องดื่ม, แบตเตอรี่, เอทานอล, น้ำหอม, ผลการจัดเก็บรายได้
                 </td>
                 <td class="py-3 px-4"><span class="bg-slate-200 text-slate-600 font-medium px-2.5 py-0.5 rounded-full text-xs">น้อยที่สุด (0 ข่าว)</span></td>
-                <td class="py-3 px-4">ไม่มีรายงานข่าวความเคลื่อนไหวเฉพาะพิกัดในรอบสัปดาห์ที่ผ่านมา</td>
+                <td class="py-3 px-4">ไม่มีรายงานข่าวความเคลื่อนไหวเฉพาะพิกัดที่เผยแพร่ในรอบสัปดาห์นี้</td>
                 <td class="py-3 px-4">-</td>
               </tr>
             </tbody>
@@ -459,12 +469,12 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="bg-[#F26522] text-white text-[10px] font-heading font-bold uppercase px-2 py-0.5 rounded">EXCISE WEEKLY INSIGHT UPDATE</span>
-              <span class="text-xs text-slate-500 font-medium">สัปดาห์ที่ 44/2569</span>
+              <span class="text-xs text-slate-500 font-medium">สัปดาห์ที่ 46/2569</span>
             </div>
             <h2 class="font-heading text-xl sm:text-2xl font-bold text-[#0F2537] mt-1">สรุปข่าวกรมสรรพสามิตรายสัปดาห์แยกตามพิกัดสินค้า</h2>
           </div>
           <div class="text-xs text-slate-600 sm:text-right">
-            <p class="font-semibold text-slate-800">รอบวันที่ 24 – 31 ตุลาคม 2569</p>
+            <p class="font-semibold text-slate-800">รอบวันที่ 9 – 15 พฤศจิกายน 2569</p>
             <p>สถานะตารางอัตโนมัติ: อัปเดตทุกวันจันทร์ เวลา ~08:00 น.</p>
           </div>
         </div>
@@ -474,39 +484,21 @@
           <h3 class="font-heading font-bold text-sm text-[#0F2537] uppercase tracking-wide">1. สรุปสาระสำคัญแยกตามพิกัดสินค้าสรรพสามิต (เฉพาะหมวดที่มีข่าว)</h3>
           <ul class="space-y-2 list-disc pl-5">
             <li>
-              <strong>พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน:</strong> ครม. มีมติเมื่อ 27 ต.ค. 2569 ออกกฎกระทรวงกำหนดพิกัดอัตราภาษีสรรพสามิต (ฉบับที่ 47) พ.ศ. 2569 ลดภาษีสรรพสามิตดีเซล B20 ลง 5.522 บาท/ลิตร (เหลือ 0.431 บาท/ลิตร) และแก๊สโซฮอล์ E20 ลง 5.642 บาท/ลิตร (เหลือ 0.358 บาท/ลิตร) เป็นเวลา 3 เดือน (28 ต.ค. 2569 – 27 ม.ค. 2570) คาดสูญเสียรายได้ราว 15,000 ล้านบาท โดยคงสัดส่วนกลไกราคาคาร์บอนที่ 200 บาท/ตัน CO₂e ส่งผลให้ราคาขายปลีก B20 และ E20 ลดลงมาอยู่ที่ 33.50 บาท/ลิตรเท่ากัน
-              (<a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยพับลิก้า</a>,
-              <a href="https://www.prachachat.net/finance/news-2086735" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ประชาชาติธุรกิจ</a>,
-              <a href="https://www.naewna.com/n/business-world/134510/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">แนวหน้า</a>,
-              <a href="https://www.js100.com/en/site/news/view/165429" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">จส.100</a>)
+              <strong>พิกัดยาสูบ &amp; การปราบปราม:</strong> อธิบดีกรมสรรพสามิตเปิดผลปราบปรามเดือน ต.ค. 2569 (เดือนแรกปีงบ 2570) รวม 3,693 คดี ค่าปรับ 87.61 ล้านบาท ประมาณการค่าปรับ 176.29 ล้านบาท โดยยาสูบ 2,395 คดี ยึด 333,246 ซอง และปรับแนวทางเป็นมาตรการตามพื้นที่และระดับความเสี่ยง
+              (<a href="https://www.bangkokbiznews.com/economics/1260069" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">กรุงเทพธุรกิจ</a>, <a href="https://www.thaipost.net/economy-news/1105422/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยโพสต์</a>, <a href="https://www.komchadluek.net/news/general-news/625567" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">คมชัดลึก</a>, <a href="https://www.thebangkokinsight.com/news/politics-general/general/1719476/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">The Bangkok Insight</a>)
+              สมาคมการค้ายาสูบไทยชื่นชมการปราบบุหรี่เถื่อน ระบุปีงบ 2569 สรรพสามิตดำเนินคดียาสูบ 24,321 คดี และรวมกับศุลกากรสกัดได้กว่า 228 ล้านมวน (<a href="https://www.thansettakij.com/economy/673316" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ฐานเศรษฐกิจ</a>) ขณะที่คอลัมน์แวดวงการเงินจี้เดินหน้าภาษีบุหรี่อัตราเดียว ชี้ระบบ 2 อัตราเส้นแบ่ง 72 บาท ทำบุหรี่กว่า 95% กระจุกใต้เส้น และรายได้หายปีละ 1–2 หมื่นล้านบาท (<a href="https://www.naewna.com/n/todays-columns/business-columns/162229/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">แนวหน้า</a>)
             </li>
             <li>
-              <strong>พิกัดยาสูบ:</strong> (1) สรรพสามิตสนธิกำลังศุลกากรอรัญประเทศและกองกำลังบูรพา ยึดบุหรี่ต่างประเทศผิดกฎหมาย 4.4 ล้านมวน มูลค่ากว่า 22 ล้านบาท ที่ชายแดน จ.สระแก้ว เมื่อ 28 ต.ค. 2569
-              (<a href="https://www.dailynews.co.th/news/6312687/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">เดลินิวส์</a>,
-              <a href="https://www.fm91bkk.com/newsarticle/81165" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">สวพ.FM91</a>)
-              (2) สรุปผลปราบปรามปีงบ 2569 จับกุมรวม 39,305 คดี (+7.81%) ค่าปรับ 1,069 ล้านบาท โดยบุหรี่เถื่อนครองแชมป์ผ่านขนส่งออนไลน์ พร้อมเร่งแก้ระเบียบเก็บภาษีบุหรี่ส่งออกล่วงหน้าสกัดการเวียนเทียนขายในประเทศ
-              (<a href="https://www.naewna.com/n/todays-columns/business-columns/134452/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">แนวหน้า 28 ต.ค.</a>,
-              <a href="https://www.naewna.com/n/breaking/140976/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">แนวหน้า 31 ต.ค.</a>)
-              และ (3) ภาคีสุขภาพ 491 องค์กร คัดค้านการยกเลิกจัดสรรภาษีบาปส่วนเพิ่ม 2% (Earmarked Tax) และทวงถามภาษีบุหรี่อัตราเดียว
-              (<a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">Hfocus</a>)
+              <strong>พิกัดสุรา / สถานบริการ:</strong> คดีสุราเดือน ต.ค. 69 จำนวน 1,071 คดี ยึด 11,149.452 ลิตร (<a href="https://www.bangkokbiznews.com/economics/1260069" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">กรุงเทพธุรกิจ</a>) และ ป.ป.ท. ประชุมร่วม กทม. บช.น. กรมการปกครอง และกรมสรรพสามิต 12 พ.ย. 69 ขับเคลื่อน Sandbox ข้าวสาร–รามบุตรี รวมถึงข้อมูลใบอนุญาตจำหน่ายสุรา (<a href="https://www.siamnews.com/news/politics/57251" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">สยามนิวส์</a>)
             </li>
             <li>
-              <strong>พิกัดรถยนต์ และพิกัดรถจักรยานยนต์:</strong> กรมสรรพสามิตเปิดรับฟังความคิดเห็น (22 – 29 ต.ค. 2569) ร่างประกาศแก้ไขมาตรการ EV 3 ฉบับ กำหนดวันสิ้นสุดการยื่นคำขอรับเงินอุดหนุนรถยนต์และรถจักรยานยนต์ไฟฟ้าตามมาตรการ EV3 ภายใน 5 ธ.ค. 2569 และมาตรการ EV3.5 ภายใน 30 มิ.ย. 2571 พร้อมปรับชื่อรายการชิ้นส่วนรถยนต์ไฟฟ้าที่ผลิตในประเทศจาก "PCU Inverter" เป็น "ระบบตัวแปลงกระแสไฟฟ้า (Integrated Inverter)"
-              (<a href="https://www.prachachat.net/finance/news-2085812" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ประชาชาติธุรกิจ</a>)
+              <strong>พิกัดรถยนต์ (EV) / รถจักรยานยนต์:</strong> บทวิเคราะห์ภาษี BEV–REEV นำเข้า 35% (มีผล 1 ม.ค. 2570) เทียบ EV ผลิตในประเทศ 2% คาดเร่งซื้อก่อนเส้นตายช่วง Motor Expo ธ.ค. 69 (<a href="https://marketeeronline.co/archives/498608" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">Marketeer Online</a>) ส่วนคดีรถจักรยานยนต์เดือน ต.ค. 69 มี 53 คดี ยึด 60 คัน (<a href="https://www.bangkokbiznews.com/economics/1260069" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">กรุงเทพธุรกิจ</a>)
             </li>
             <li>
-              <strong>พิกัดสุรา และพิกัดอื่นๆ (สถานบริการ):</strong> กรมสรรพสามิตร่วมประชุมบูรณาการกับสำนักนายกฯ กทม. บช.น. และ ป.ป.ท. เมื่อ 30 ต.ค. 2569 เดินหน้านำร่อง "Sandbox ถนนข้าวสาร–รามบุตรี" ทบทวนโซนนิ่งปี 2545 และพิจารณาขยายเวลาจำหน่ายแอลกอฮอล์หลัง 24.00 น. ควบคู่เกณฑ์ความปลอดภัย 17 ข้อ ให้ได้ข้อสรุปใน 15 วันรับเทศกาลปีใหม่
-              (<a href="https://www.thairath.co.th/news/politic/2969392" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยรัฐออนไลน์</a>,
-              <a href="https://www.thaipbs.or.th/news/content/571900" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยพีบีเอส</a>)
-              รวมถึงข้อคัดค้านการยกเลิกจัดสรรภาษีสุรา 2% ให้ 4 กองทุนสาธารณะ
-              (<a href="https://www.hfocus.org/content/2026/10/40033" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">Hfocus</a>)
-            </li>
-            <li>
-              <strong>พิกัดเอทานอล:</strong> การลดภาษีสรรพสามิตแก๊สโซฮอล์ E20 (ที่มีส่วนผสมเอทานอล 20% มากกว่า E10 ถึง 2 เท่า) มุ่งเพิ่มความต้องการใช้อ้อยและมันสำปะหลังเพื่อสร้างรายได้หมุนเวียนแก่เกษตรกรไทย
-              (<a href="https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ไทยพับลิก้า</a>)
+              <strong>พิกัดน้ำมัน:</strong> โครงสร้างราคาน้ำมัน 10 พ.ย. 69 ภาษีสรรพสามิตดีเซล 6.92 บาท/ลิตร แก๊สโซฮอล์ 95/91 6.75 บาท ขณะที่ E20 0.358 บาท และ B20 0.431 บาท (<a href="https://www.thansettakij.com/economy/energy/673387" target="_blank" rel="noopener noreferrer" class="text-[#F26522] underline">ฐานเศรษฐกิจ</a>)
             </li>
           </ul>
-          <p class="text-[11px] text-slate-500 italic">หมายเหตุ: พิกัดเบียร์, เครื่องดื่ม, แบตเตอรี่ และน้ำหอม ไม่มีรายงานข่าวเฉพาะหมวดในรอบสัปดาห์ที่ผ่านมา</p>
+          <p class="text-[11px] text-slate-500 italic">หมายเหตุ: พิกัดเบียร์, เครื่องดื่ม, แบตเตอรี่, เอทานอล, น้ำหอม และผลการจัดเก็บรายได้ ไม่มีรายงานข่าวเฉพาะหมวดที่เผยแพร่ในรอบสัปดาห์นี้</p>
         </div>
 
         <!-- Statistical Summary Box -->
@@ -515,14 +507,41 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
               <span class="font-semibold text-[#D94E0F]">• พิกัดที่มีข่าวมากที่สุด:</span>
-              <span><strong>น้ำมันและผลิตภัณฑ์น้ำมัน</strong> (อันดับ 1) และ <strong>ยาสูบ</strong> (อันดับ 2)</span>
+              <span><strong>ยาสูบ</strong> (3 ข่าว) ตามด้วย <strong>การปราบปราม</strong> และ <strong>สุรา/สถานบริการ</strong> (อย่างละ 2 ข่าว)</span>
             </div>
             <div>
               <span class="font-semibold text-slate-700">• พิกัดที่มีข่าวน้อยที่สุด:</span>
-              <span><strong>เบียร์, เครื่องดื่ม, แบตเตอรี่, น้ำหอม</strong> (0 ข่าว) | ที่่มีข่าวแต่ความถี่น้อยสุดคือ <strong>เอทานอล</strong></span>
+              <span><strong>เบียร์, เครื่องดื่ม, แบตเตอรี่, เอทานอล, น้ำหอม</strong> (0 ข่าว) | ที่มีข่าวแต่ความถี่น้อยสุดคือ <strong>รถยนต์ EV, รถจักรยานยนต์, น้ำมัน</strong> (อย่างละ 1 ข่าว)</span>
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: NEWS ARCHIVE & SEARCH (คลังข่าวย้อนหลัง) ==================== -->
+    <section id="section-archive" class="mt-2 hidden no-print">
+      <div class="bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-slate-200/90 space-y-5">
+        <div>
+          <span class="text-xs font-heading font-semibold uppercase tracking-wider text-[#F26522] bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200/60">News Archive • คลังข่าวย้อนหลัง</span>
+          <h2 class="font-heading text-2xl font-bold text-slate-900 mt-2">ค้นหาข่าวสรรพสามิตทุกสัปดาห์</h2>
+          <p class="text-sm text-slate-600 mt-1">พิมพ์คำค้น เช่น บุหรี่, B20, Sandbox, EV แล้วเลือกฉบับหรือหมวดเพื่อกรองผล ทุกข่าวมีลิงก์ต้นฉบับ</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <div class="sm:col-span-6">
+            <label for="archive-q" class="text-xs font-medium text-slate-600 block mb-1">คำค้น</label>
+            <input id="archive-q" type="search" placeholder="ค้นจากหัวข่าว สาระสำคัญ หรือชื่อสื่อ" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:outline-none focus:border-[#F26522] focus:ring-2 focus:ring-orange-200" />
+          </div>
+          <div class="sm:col-span-3">
+            <label for="archive-edition" class="text-xs font-medium text-slate-600 block mb-1">ฉบับ (สัปดาห์)</label>
+            <select id="archive-edition" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#F26522]"></select>
+          </div>
+          <div class="sm:col-span-3">
+            <label for="archive-cat" class="text-xs font-medium text-slate-600 block mb-1">หมวด</label>
+            <select id="archive-cat" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm bg-white focus:outline-none focus:border-[#F26522]"></select>
+          </div>
+        </div>
+        <p id="archive-count" class="text-xs text-slate-500"></p>
+        <div id="archive-results" class="space-y-3"></div>
       </div>
     </section>
 
@@ -573,193 +592,867 @@
         <span>• ระบบประมวลผลข่าวสารกรมสรรพสามิตรายสัปดาห์</span>
       </div>
       <div>
-        <span>ข้อมูลอ้างอิงจาก: ไทยพับลิก้า, ประชาชาติธุรกิจ, ไทยรัฐออนไลน์, ไทยพีบีเอส, เดลินิวส์, แนวหน้า, สวพ.FM91, จส.100 และ Hfocus</span>
+        <span>ข้อมูลอ้างอิงจาก: กรุงเทพธุรกิจ, ไทยโพสต์, คมชัดลึก, The Bangkok Insight, ฐานเศรษฐกิจ, แนวหน้า, สยามนิวส์ และ Marketeer Online</span>
       </div>
     </div>
   </footer>
 
   <script>
-    // Image paths (will be inlined as base64 data URIs for standalone Canvas preview)
+    // Article images (per-category files in img/)
     const IMAGES = {
-      heroFuel: "img/oil.jpg",
-      tobaccoSeizure: "img/tobacco.jpg",
-      evPolicy: "img/auto.jpg",
-      khaosanSandbox: "img/liquor.jpg",
-      ethanolBiofuel: "img/ethanol.jpg",
-      earmarkedTax: "img/health-tax.jpg",
-      onlineEnforcement: "img/enforcement.jpg"
+      tobacco: "img/tobacco.jpg",
+      liquor: "img/liquor.jpg",
+      auto: "img/auto.jpg",
+      oil: "img/oil.jpg",
+      other: "img/other.jpg"
     };
 
-    // Excise Product Categories Metadata
+    // Excise Product Categories Metadata (count = verified news articles in the week)
     const CATEGORIES = [
-      { id: "all", name: "ทั้งหมด", count: 7, hasNews: true },
-      { id: "oil", name: "น้ำมันและผลิตภัณฑ์น้ำมัน", count: 1, rank: "อันดับ 1 (ข่าวมากสุด)", hasNews: true },
-      { id: "tobacco", name: "ยาสูบ", count: 3, rank: "อันดับ 2", hasNews: true },
-      { id: "liquor", name: "สุรา และสถานบริการ", count: 2, rank: "อันดับ 3", hasNews: true },
-      { id: "auto", name: "รถยนต์", count: 1, rank: "อันดับ 4", hasNews: true },
-      { id: "motorcycle", name: "รถจักรยานยนต์", count: 1, rank: "อันดับ 4 ร่วม", hasNews: true },
-      { id: "ethanol", name: "เอทานอล", count: 1, rank: "อันดับ 5", hasNews: true },
-      { id: "zero", name: "เบียร์ • เครื่องดื่ม • แบตเตอรี่ • น้ำหอม", count: 0, rank: "0 ข่าว (น้อยสุด)", hasNews: false }
+      {
+        "id": "all",
+        "name": "ทั้งหมด",
+        "count": 6,
+        "hasNews": true
+      },
+      {
+        "id": "tobacco",
+        "name": "ยาสูบ",
+        "count": 3,
+        "rank": "อันดับ 1 (ข่าวมากสุด)",
+        "hasNews": true
+      },
+      {
+        "id": "enforcement",
+        "name": "การปราบปราม / จับกุม",
+        "count": 2,
+        "rank": "อันดับ 2",
+        "hasNews": true
+      },
+      {
+        "id": "liquor",
+        "name": "สุรา / สถานบริการ",
+        "count": 2,
+        "rank": "อันดับ 2",
+        "hasNews": true
+      },
+      {
+        "id": "auto",
+        "name": "รถยนต์ (EV)",
+        "count": 1,
+        "rank": "อันดับ 3",
+        "hasNews": true
+      },
+      {
+        "id": "motorcycle",
+        "name": "รถจักรยานยนต์",
+        "count": 1,
+        "rank": "อันดับ 3",
+        "hasNews": true
+      },
+      {
+        "id": "oil",
+        "name": "น้ำมัน",
+        "count": 1,
+        "rank": "อันดับ 3",
+        "hasNews": true
+      },
+      {
+        "id": "zero",
+        "name": "เบียร์ • เครื่องดื่ม • แบตเตอรี่ • เอทานอล • น้ำหอม • รายได้",
+        "count": 0,
+        "rank": "0 ข่าว (น้อยสุด)",
+        "hasNews": false
+      }
     ];
 
-    // Verified Weekly Articles Data (24 - 31 Oct 2569)
+    // Verified Weekly Articles Data (9 – 15 พ.ย. 2569)
     const ARTICLES = [
       {
-        id: "art-fuel-b20-e20",
-        isHero: true,
-        categories: ["oil", "ethanol"],
-        categoryLabel: "พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน",
-        date: "27 ตุลาคม 2569",
-        image: IMAGES.heroFuel,
-        posterTopLine: "เคาะลดภาษีน้ำมัน 3 เดือน",
-        posterBottomLine: "ดึง B20 – E20 เหลือ 33.50 บ./ลิตร",
-        posterBadgeText: "฿ -5.64 บ.",
-        title: "ครม. ไฟเขียวลดภาษีสรรพสามิตน้ำมัน B20 และ E20 นาน 3 เดือน คงกลไกราคาคาร์บอนมุ่งสู่ Net Zero",
-        summary: "คณะรัฐมนตรีมีมติเมื่อวันที่ 27 ต.ค. 2569 ออกกฎกระทรวงกำหนดพิกัดอัตราภาษีสรรพสามิต (ฉบับที่ 47) พ.ศ. 2569 ปรับลดภาษีสรรพสามิตน้ำมันดีเซล B20 และแก๊สโซฮอล์ E20 ลิตรละกว่า 5.50–5.64 บาท เป็นเวลา 3 เดือน (28 ต.ค. 2569 – 27 ม.ค. 2570) เพื่อช่วยแบ่งเบาภาระกองทุนน้ำมันเชื้อเพลิงและบรรเทาค่าครองชีพประชาชน โดยยังคงสัดส่วนภาษีคาร์บอน 200 บาท/ตัน CO₂e",
-        bullets: [
-          "ลดภาษีสรรพสามิตน้ำมันดีเซล B20 ลง 5.522 บาท/ลิตร (จาก 5.953 เหลือ 0.431 บาท/ลิตร) และแก๊สโซฮอล์ E20 ลง 5.642 บาท/ลิตร (จาก 6.000 เหลือ 0.358 บาท/ลิตร)",
-          "กบน. ปรับลดราคาขายปลีก B20 ลง 3.69 บาท/ลิตร และ E20 ลง 2.19 บาท/ลิตร ส่งผลให้ราคาขายปลีกทั้งสองชนิดอยู่ที่ 33.50 บาท/ลิตร มีผลตั้งแต่ 28 ต.ค. 2569",
-          "คงสัดส่วนกลไกราคาคาร์บอน (Carbon Price) ที่ 200 บาทต่อตันคาร์บอนไดออกไซด์เทียบเท่า เพื่อรักษามาตรฐานสิ่งแวดล้อมและมุ่งสู่เป้าหมาย Net Zero โดยคาดว่ากระทบรายได้รัฐราว 15,000 ล้านบาท"
+        "id": "art-oct70-enforcement",
+        "isHero": true,
+        "categories": [
+          "tobacco",
+          "enforcement",
+          "liquor",
+          "motorcycle"
         ],
-        sources: [
-          { name: "ไทยพับลิก้า", url: "https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" },
-          { name: "ประชาชาติธุรกิจ", url: "https://www.prachachat.net/finance/news-2086735" },
-          { name: "แนวหน้า", url: "https://www.naewna.com/n/business-world/134510/" },
-          { name: "จส.100", url: "https://www.js100.com/en/site/news/view/165429" }
+        "categoryLabel": "พิกัดยาสูบ & การปราบปราม",
+        "date": "10 – 12 พฤศจิกายน 2569",
+        "image": "img/tobacco.jpg",
+        "posterTopLine": "สรรพสามิตปราบสินค้าเถื่อน ต.ค. 69",
+        "posterBottomLine": "3,693 คดี บุหรี่–สุรานำโด่ง",
+        "posterBadgeText": "3,693 คดี",
+        "title": "สรรพสามิตเปิดผลปราบสินค้าผิดกฎหมายเดือนแรกปีงบ 2570 (ต.ค. 69) จับ 3,693 คดี ค่าปรับ 87.61 ล้านบาท ยาสูบครองอันดับ 1",
+        "summary": "นายพรชัย ฐีระเวช อธิบดีกรมสรรพสามิต เปิดเผยผลการปราบปรามสินค้าผิดกฎหมายเดือนตุลาคม 2569 ซึ่งเป็นเดือนแรกของปีงบประมาณ 2570 พร้อมปรับแนวทางจากมาตรการเดียวทั่วประเทศเป็นการปรับมาตรการตามพื้นที่และระดับความเสี่ยง ใช้ข้อมูลวิเคราะห์ความเสี่ยง และสกัดกั้นตั้งแต่ชายแดน",
+        "bullets": [
+          "จับกุมรวม 3,693 คดี ค่าปรับ 87.61 ล้านบาท และประมาณการค่าปรับ 176.29 ล้านบาท",
+          "ยาสูบ 2,395 คดี ค่าปรับ 66.37 ล้านบาท ตรวจยึด 333,246 ซอง | สุรา 1,071 คดี ค่าปรับ 12.29 ล้านบาท ตรวจยึด 11,149.452 ลิตร | รถจักรยานยนต์ 53 คดี ค่าปรับ 1.39 ล้านบาท ยึด 60 คัน",
+          "คดีสำคัญ: สรรพสามิตภาคที่ 2 พบยาสูบ 264,910 ซอง ที่ อ.คลองหาด จ.สระแก้ว (ประมาณการค่าปรับ 249.54 ล้านบาท) และสรรพสามิตภาคที่ 4 ยึดพัสดุ 407 กล่อง ยาสูบ 18,680 ซอง ที่ จ.สกลนคร"
+        ],
+        "sources": [
+          {
+            "name": "กรุงเทพธุรกิจ",
+            "url": "https://www.bangkokbiznews.com/economics/1260069"
+          },
+          {
+            "name": "ไทยโพสต์",
+            "url": "https://www.thaipost.net/economy-news/1105422/"
+          },
+          {
+            "name": "คมชัดลึก",
+            "url": "https://www.komchadluek.net/news/general-news/625567"
+          },
+          {
+            "name": "The Bangkok Insight",
+            "url": "https://www.thebangkokinsight.com/news/politics-general/general/1719476/"
+          }
         ]
       },
       {
-        id: "art-tobacco-seizure",
-        isHero: false,
-        categories: ["tobacco"],
-        categoryLabel: "พิกัดยาสูบ",
-        date: "28 ตุลาคม 2569",
-        image: IMAGES.tobaccoSeizure,
-        posterTopLine: "สกัดจับชายแดนสระแก้ว!",
-        posterBottomLine: "ยึดบุหรี่เถื่อน 4.4 ล้านมวน",
-        posterBadgeText: "22 ล้านบาท",
-        title: "สรรพสามิตสนธิกำลังศุลกากร-ทหาร ยึดบุหรี่ต่างประเทศผิดกฎหมาย 4.4 ล้านมวน มูลค่ากว่า 22 ล้านบาท",
-        summary: "เจ้าหน้าที่สรรพสามิตร่วมกับด่านศุลกากรอรัญประเทศ กองกำลังบูรพา และหน่วยเฉพาะกิจคลองหาด แถลงผลตรวจยึดบุหรี่ต่างประเทศไม่ผ่านพิธีการทางภาษีล็อตใหญ่ซุกป่าทึบแนวชายแดนไทย–กัมพูชา อ.คลองหาด จ.สระแก้ว",
-        bullets: [
-          "ตรวจยึดบุหรี่เมืองกำเนิดต่างประเทศผิดกฎหมายจำนวนประมาณ 4,400,000 มวน ประเมินมูลค่าของกลางรวมกว่า 22 ล้านบาท",
-          "ผู้ลักลอบขนย้ายประมาณ 5–10 คน ทิ้งของกลางหลบหนีข้ามแดนเมื่อพบเจ้าหน้าที่ลาดตระเวนช่วงเวลา 01.30 น. ของวันที่ 28 ต.ค. 2569",
-          "ยกระดับความเข้มงวดสกัดกั้นสินค้าหนีภาษีตามแนวชายแดนเพื่อปกป้องรายได้แผ่นดินและป้องกันการบิดเบือนกลไกราคาในประเทศ"
+        "id": "art-tobacco-assoc",
+        "isHero": false,
+        "categories": [
+          "tobacco",
+          "enforcement"
         ],
-        sources: [
-          { name: "เดลินิวส์", url: "https://www.dailynews.co.th/news/6312687/" },
-          { name: "สวพ.FM91", url: "https://www.fm91bkk.com/newsarticle/81165" },
-          { name: "ข่าวสด", url: "https://www.khaosod.co.th/around-thailand/news_10453163" }
+        "categoryLabel": "พิกัดยาสูบ",
+        "date": "9 พฤศจิกายน 2569",
+        "image": "img/tobacco.jpg",
+        "posterTopLine": "สมาคมการค้ายาสูบไทยชื่นชม",
+        "posterBottomLine": "รัฐลุยปราบบุหรี่เถื่อน หนุนร้านถูก กม.",
+        "posterBadgeText": "228 ล้านมวน",
+        "title": "สมาคมการค้ายาสูบไทยชื่นชมภาครัฐปราบบุหรี่เถื่อน ปีงบ 69 สรรพสามิต–ศุลกากรสกัดได้รวมกว่า 228 ล้านมวน",
+        "summary": "นางสาวธัญญศรัณ แสงทอง ผู้อำนวยการบริหาร สมาคมการค้ายาสูบไทย ชื่นชมการปราบปรามบุหรี่เถื่อนของหน่วยงานรัฐ ชี้ภาคอีสานเป็นอีกศูนย์กลางการลักลอบนำเข้า ขณะที่สมาคมมองว่าร้านค้าที่เสียภาษีถูกต้องเผชิญการแข่งขันที่ไม่เป็นธรรมจากสินค้าผิดกฎหมาย",
+        "bullets": [
+          "ปีงบประมาณ 2569 กรมสรรพสามิตดำเนินคดียาสูบ 24,321 คดี (ราว 61.9% ของคดีสรรพสามิตทั้งหมด) ยึดของกลาง 6.2 ล้านซอง หรือราว 124 ล้านมวน",
+          "รวมกับกรมศุลกากรที่ยึดได้ 104 ล้านมวน สองหน่วยงานสกัดบุหรี่เถื่อนได้มากกว่า 228 ล้านมวน",
+          "โทษขายบุหรี่ที่ไม่เสียภาษี: จำคุกไม่เกิน 1 เดือน ปรับ 5–15 เท่าของค่าภาษี (ขั้นต่ำ 800 บาท) หรือทั้งจำทั้งปรับ"
+        ],
+        "sources": [
+          {
+            "name": "ฐานเศรษฐกิจ",
+            "url": "https://www.thansettakij.com/economy/673316"
+          }
         ]
       },
       {
-        id: "art-ev-policy",
-        isHero: false,
-        categories: ["auto", "motorcycle"],
-        categoryLabel: "พิกัดรถยนต์ & รถจักรยานยนต์",
-        date: "26 ตุลาคม 2569",
-        image: IMAGES.evPolicy,
-        posterTopLine: "แก้ประกาศอีวี 3 ฉบับ",
-        posterBottomLine: "ขีดเส้นวันสิ้นสุด EV3 – EV3.5",
-        posterBadgeText: "EV 3.0 / 3.5",
-        title: "สรรพสามิตเปิดรับฟังความเห็นแก้ประกาศมาตรการ EV 3 ฉบับ กำหนดวันสิ้นสุดยื่นขอเงินอุดหนุนและปรับชื่อชิ้นส่วน",
-        summary: "กรมสรรพสามิตเปิดรับฟังความคิดเห็น (22–29 ต.ค. 2569) ร่างประกาศเกี่ยวกับนโยบายยานยนต์ไฟฟ้า (รถยนต์และรถจักรยานยนต์) รวม 3 ฉบับ เพื่อบริหารงบประมาณภาครัฐอย่างคุ้มค่าและปรับชื่อชิ้นส่วนในประเทศให้สอดคล้องกัน",
-        bullets: [
-          "กำหนดวันสิ้นสุดการยื่นแบบคำขอรับเงินอุดหนุนรถยนต์และรถจักรยานยนต์ไฟฟ้าตามมาตรการ EV3 ภายในวันที่ 5 ธ.ค. 2569 (ภายใน 60 วันหลังมติ ครม. 6 ต.ค. 2569)",
-          "กำหนดวันสิ้นสุดการยื่นแบบคำขอรับเงินอุดหนุนตามมาตรการ EV3.5 ภายในวันที่ 30 มิ.ย. 2571 ให้สอดคล้องกับอายุหนังสือค้ำประกัน",
-          "แก้ไขชื่อรายการชิ้นส่วนรถยนต์ไฟฟ้าที่ผลิตในประเทศจากเดิม 'PCU Inverter' เป็น 'ระบบตัวแปลงกระแสไฟฟ้า (Integrated Inverter)' ให้ตรงกับประกาศรถยนต์ HEV และ PHEV"
+        "id": "art-tobacco-single-rate",
+        "isHero": false,
+        "categories": [
+          "tobacco"
         ],
-        sources: [
-          { name: "ประชาชาติธุรกิจ", url: "https://www.prachachat.net/finance/news-2085812" }
+        "categoryLabel": "พิกัดยาสูบ (นโยบายภาษี)",
+        "date": "13 พฤศจิกายน 2569",
+        "image": "img/tobacco.jpg",
+        "posterTopLine": "จี้เดินหน้าภาษีบุหรี่อัตราเดียว",
+        "posterBottomLine": "ระบบ 2 อัตราทำรายได้หาย",
+        "posterBadgeText": "1–2 หมื่นล้าน/ปี",
+        "title": "คอลัมน์แวดวงการเงินจี้รัฐเดินหน้าภาษีบุหรี่อัตราเดียว ชี้ระบบ 2 อัตราเส้นแบ่ง 72 บาท ทำรายได้หายปีละ 1–2 หมื่นล้านบาท",
+        "summary": "คอลัมน์แวดวงการเงิน (บทความแสดงความเห็น) ของแนวหน้า เรียกร้องรัฐบาลอย่าลืมการปรับโครงสร้างภาษีสรรพสามิตบุหรี่เป็นอัตราเดียว ซึ่งกรมสรรพสามิตศึกษาไว้หลายครั้งและรับฟังความเห็นแล้ว โดยชี้ว่าไม่ต้องผ่านสภา ทำได้ด้วยกฎกระทรวงและมติ ครม.",
+        "bullets": [
+          "โครงสร้างสองอัตราที่ใช้เส้นแบ่ง 72 บาท ทำให้บุหรี่กว่า 95% ในตลาดไปกระจุกอยู่ใต้เส้น",
+          "ผู้เขียนระบุว่าอธิบดีกรมสรรพสามิตยอมรับกับกรรมาธิการงบประมาณว่ารายได้หายไปปีละ 1–2 หมื่นล้านบาท",
+          "เรื่องนี้เคยเกือบเข้า ครม. ช่วงปลายปีที่แล้วแต่สะดุดจากการยุบสภา ผู้เขียนเห็นว่าเมื่อภาษีรถยนต์ผ่านไปแล้ว ภาษีบุหรี่ไม่ควรค้างคิว"
+        ],
+        "sources": [
+          {
+            "name": "แนวหน้า",
+            "url": "https://www.naewna.com/n/todays-columns/business-columns/162229/"
+          }
         ]
       },
       {
-        id: "art-khaosan-sandbox",
-        isHero: false,
-        categories: ["liquor"],
-        categoryLabel: "พิกัดสุรา & สถานบริการ",
-        date: "30 ตุลาคม 2569",
-        image: IMAGES.khaosanSandbox,
-        posterTopLine: "นำร่อง Sandbox ข้าวสาร",
-        posterBottomLine: "ทบทวนโซนนิ่ง-เวลาขายสุรา",
-        posterBadgeText: "สรุปใน 15 วัน",
-        title: "สรรพสามิตร่วมถก กทม.–ตร.–ป.ป.ท. ขับเคลื่อน Sandbox ข้าวสาร–รามบุตรี ทบทวนโซนนิ่งสถานบริการปี 45",
-        summary: "รมต.ประจำสำนักนายกรัฐมนตรี ประชุมบูรณาการร่วมกับกรมสรรพสามิต กทม. บช.น. และ ป.ป.ท. เตรียมใช้ถนนข้าวสารและรามบุตรีเป็นพื้นที่นำร่องปรับปรุงกฎระเบียบสถานบริการและเวลาจำหน่ายเครื่องดื่มแอลกอฮอล์รับไฮซีซันปลายปี",
-        bullets: [
-          "แก้ข้อจำกัด พ.ร.ฎ. โซนนิ่ง พ.ศ. 2545 ที่อนุญาตตั้งสถานบริการใน กทม. เพียง 3 เขต (RCA, พัฒน์พงษ์, รัชดาภิเษก) ซึ่งไม่สอดคล้องกับพื้นที่ท่องเที่ยวปัจจุบัน",
-          "เตรียมเสนอคณะกรรมการควบคุมเครื่องดื่มแอลกอฮอล์พิจารณาขยายเวลาเปิดบริการเกิน 24.00 น. ในพื้นที่ Sandbox ควบคู่เกณฑ์ความปลอดภัย 17 ข้อของ กทม.",
-          "เร่งจัดทำฐานข้อมูลใบอนุญาตจำหน่ายสุราและสถานบริการให้เป็นมาตรฐานเดียวกันเพื่อลดช่องว่างการเรียกรับสินบน โดยขีดเส้นสรุปผลใน 15 วัน"
+        "id": "art-khaosan-sandbox",
+        "isHero": false,
+        "categories": [
+          "liquor"
         ],
-        sources: [
-          { name: "ไทยรัฐออนไลน์", url: "https://www.thairath.co.th/news/politic/2969392" },
-          { name: "ไทยพีบีเอส", url: "https://www.thaipbs.or.th/news/content/571900" }
+        "categoryLabel": "พิกัดสุรา & สถานบริการ",
+        "date": "12 พฤศจิกายน 2569",
+        "image": "img/liquor.jpg",
+        "posterTopLine": "ป.ป.ท.–กทม. ดัน Sandbox ข้าวสาร",
+        "posterBottomLine": "สรรพสามิตร่วมจัดระเบียบสถานบริการ",
+        "posterBadgeText": "Sandbox",
+        "title": "ป.ป.ท. จับมือ กทม. ดัน Sandbox ข้าวสาร–รามบุตรีเป็นโมเดลนำร่อง สรรพสามิตร่วมถกข้อมูลใบอนุญาตจำหน่ายสุรา",
+        "summary": "ป.ป.ท. จัดประชุมร่วมกับ กทม. กองบัญชาการตำรวจนครบาล กรมการปกครอง และกรมสรรพสามิต เมื่อ 12 พ.ย. 2569 ที่ศาลาว่าการ กทม. เพื่อขับเคลื่อนมาตรการ Sandbox ถนนข้าวสารและรามบุตรี ยกระดับการอนุญาตและบังคับใช้กฎหมายกับสถานบริการ และป้องกันการทุจริตของเจ้าหน้าที่รัฐ",
+        "bullets": [
+          "วาระรวมถึงข้อมูลสถานบริการและสถานประกอบการคล้ายสถานบริการที่ได้รับใบอนุญาตจำหน่ายสุราในกรุงเทพฯ",
+          "เลขาธิการ ป.ป.ท. ระบุ Sandbox ข้าวสารจะเป็นต้นแบบ ขั้นแรกคือให้ผู้ประกอบการทุกรายปฏิบัติตามกฎหมายให้ถูกต้อง",
+          "ตัวอย่าง: หากยื่นขอใบอนุญาต 8 ราย ได้รับอนุมัติ 1 ราย ผู้ประกอบการส่งรายชื่ออีก 7 รายให้หน่วยงานตรวจสอบหาสาเหตุได้"
+        ],
+        "sources": [
+          {
+            "name": "สยามนิวส์",
+            "url": "https://www.siamnews.com/news/politics/57251"
+          }
         ]
       },
       {
-        id: "art-earmarked-tax",
-        isHero: false,
-        categories: ["tobacco", "liquor"],
-        categoryLabel: "พิกัดยาสูบ & สุรา",
-        date: "27 – 31 ตุลาคม 2569",
-        image: IMAGES.earmarkedTax,
-        posterTopLine: "491 เครือข่ายค้านแก้ พ.ร.บ.",
-        posterBottomLine: "ปกป้องภาษีบาป – จี้บุหรี่อัตราเดียว",
-        posterBadgeText: "Earmarked Tax",
-        title: "เครือข่ายสุขภาพ 491 องค์กรจี้ถอนร่างกฎหมายยกเลิกภาษีบาป 4 กองทุน พร้อมจับตาระเบียบภาษีบุหรี่ส่งออก",
-        summary: "ขบวนการสร้างเสริมสุขภาพประชาชนและภาคี 491 องค์กร ยื่นหนังสือคัดค้านการยกเลิกระบบจัดสรรภาษีสรรพสามิตสุราและยาสูบส่วนเพิ่ม 2% ให้ 4 กองทุนสาธารณะ ขณะที่สื่อเศรษฐกิจติดตามการแก้ระเบียบเก็บภาษีบุหรี่ส่งออกล่วงหน้า",
-        bullets: [
-          "นายกรัฐมนตรียืนยันเมื่อ 27 ต.ค. 2569 ว่ายังไม่ได้ลงนามรับรองร่างแก้ไข พ.ร.บ. 4 ฉบับ (สสส., ไทยพีบีเอส, กองทุนผู้สูงอายุ, กองทุนพัฒนาการกีฬาฯ) และอยู่ระหว่างพิจารณา",
-          "ภาคประชาสังคมทวงถามความคืบหน้าการปรับโครงสร้างภาษีบุหรี่เป็นอัตราเดียว (Single Tier) เพื่อลดการบิดเบือนราคาและเพิ่มรายได้รัฐ",
-          "ติดตามความคืบหน้ากรมสรรพสามิตในการปรับปรุงระเบียบให้บุหรี่ส่งออกต้องบวกภาษีไปก่อนและขอคืนเมื่อส่งออกจริง เพื่อสกัดขบวนการเวียนเทียนกลับเข้ามาขายในไทย"
+        "id": "art-ev-reset",
+        "isHero": false,
+        "categories": [
+          "auto"
         ],
-        sources: [
-          { name: "Hfocus", url: "https://www.hfocus.org/content/2026/10/40033" },
-          { name: "แนวหน้า", url: "https://www.naewna.com/n/breaking/140976/" }
+        "categoryLabel": "พิกัดรถยนต์ (EV)",
+        "date": "9 พฤศจิกายน 2569",
+        "image": "img/auto.jpg",
+        "posterTopLine": "กำแพงภาษี EV นำเข้า 35%",
+        "posterBottomLine": "ค่ายรถเตรียมหั่นราคาโค้งสุดท้าย",
+        "posterBadgeText": "35% vs 2%",
+        "title": "รีเซ็ตยุครถยนต์ไฟฟ้า: ภาษีสรรพสามิต EV นำเข้า 35% สกัดอีวีนำเข้า คาดตลาดแข่งดุงาน Motor Expo ธ.ค. 69",
+        "summary": "Marketeer Online วิเคราะห์ผลจากมติ ครม. 3 พ.ย. 2569 ที่ปรับภาษีสรรพสามิตรถ BEV และ REEV นำเข้าทั้งคัน (CBU) เป็น 35% มีผล 1 ม.ค. 2570 ซึ่งคาดว่าจะเกิดการเร่งซื้อก่อนเส้นตาย และทำให้งาน Motor Expo เดือนธันวาคม 2569 แข่งขันดุเดือด",
+        "bullets": [
+          "BEV นำเข้าปรับจาก 10% เป็น 35% และ REEV จาก 15% เป็น 35% ขณะที่ EV ผลิตในประเทศเสียภาษี 2%",
+          "รัฐตั้งเป้าเปลี่ยนจากการนำเข้ารถเป็นการดึงลงทุนและสร้างฐานส่งออกยานยนต์พลังงานสะอาดของภูมิภาค ควบคู่เงื่อนไข Local Content ของ BOI (BEV อย่างน้อย 40%)",
+          "ม.ค.–ต.ค. 2569 BEV จดทะเบียนใหม่ 182,283 คัน ส่วนแบ่ง 34.20% เติบโต 53.84% จากปีก่อน"
+        ],
+        "sources": [
+          {
+            "name": "Marketeer Online",
+            "url": "https://marketeeronline.co/archives/498608"
+          }
         ]
       },
       {
-        id: "art-online-enforcement",
-        isHero: false,
-        categories: ["tobacco"],
-        categoryLabel: "พิกัดยาสูบ & ปราบปราม",
-        date: "28 ตุลาคม 2569",
-        image: IMAGES.onlineEnforcement,
-        posterTopLine: "ปราบสินค้าเถื่อนปี'69",
-        posterBottomLine: "พุ่ง 39,305 คดี รุกสกัดขนส่งออนไลน์",
-        posterBadgeText: "+7.81% YoY",
-        title: "เจาะผลงานปราบปรามสรรพสามิตปีงบ 2569 ทะลุ 39,305 คดี เร่งสกัดขบวนการกองทัพมดส่งบุหรี่เถื่อนออนไลน์",
-        summary: "บทวิเคราะห์เศรษฐกิจเปิดเผยผลงานสำนักตรวจสอบ ป้องกันและปราบปราม (สตป.) กรมสรรพสามิต ในปีงบประมาณ 2569 ที่จับกุมคดีเพิ่มขึ้น 7.81% ท่ามกลางความท้าทายจากผู้รับเหมาช่วงขนส่งพัสดุออนไลน์",
-        bullets: [
-          "สรุปผลปราบปรามปีงบประมาณ 2569 จับกุมรวม 39,305 คดี (เพิ่มขึ้น 2,848 คดี หรือ +7.81% จากปีงบ 2568) คิดเป็นค่าปรับรวมกว่า 1,069 ล้านบาท และประมาณการค่าปรับกว่า 5,420 ล้านบาท",
-          "สินค้ายาสูบ (บุหรี่เถื่อน) ยังคงเป็นสินค้าที่มีการกระทำผิดสูงสุดอันดับ 1 โดยเปลี่ยนรูปแบบจากโกดังใหญ่เป็นจุดกระจายย่อยผ่านแพลตฟอร์มขนส่งออนไลน์",
-          "เดินหน้ายกระดับความร่วมมือตาม MOU กับบริษัทขนส่งพัสดุเพื่อตรวจสอบผู้รับเหมาช่วง (กองทัพมด) ที่รับส่งสินค้าหนีภาษีถึงหน้าบ้าน"
+        "id": "art-oil-excise-structure",
+        "isHero": false,
+        "categories": [
+          "oil"
         ],
-        sources: [
-          { name: "แนวหน้า", url: "https://www.naewna.com/n/todays-columns/business-columns/134452/" }
-        ]
-      },
-      {
-        id: "art-ethanol-farmers",
-        isHero: false,
-        categories: ["ethanol", "oil"],
-        categoryLabel: "พิกัดเอทานอล & พืชพลังงาน",
-        date: "27 ตุลาคม 2569",
-        image: IMAGES.ethanolBiofuel,
-        posterTopLine: "หนุนเอทานอล E20 – B20",
-        posterBottomLine: "พยุงราคาอ้อย-มัน-ปาล์มเกษตรกร",
-        posterBadgeText: "เอทานอล 20%",
-        title: "มาตรการลดภาษีสรรพสามิต E20–B20 หนุนการใช้เอทานอลและไบโอดีเซล สร้างรายได้หมุนเวียนเกษตรกรไทย",
-        summary: "การเลือกปรับลดภาษีเฉพาะแก๊สโซฮอล์ E20 และดีเซล B20 มุ่งสร้างแรงจูงใจด้านราคาให้ผู้ใช้รถหันมาเติมพลังงานทางเลือกที่มีสัดส่วนวัตถุดิบทางการเกษตรในประเทศสูงกว่าน้ำมันพื้นฐานถึง 2–3 เท่า",
-        bullets: [
-          "น้ำมันแก๊สโซฮอล์ E20 มีส่วนผสมของเอทานอลร้อยละ 20 (ผลิตจากอ้อยและมันสำปะหลัง) ซึ่งมากกว่าแก๊สโซฮอล์ E10 ถึง 2 เท่าต่อลิตร",
-          "น้ำมันดีเซล B20 มีส่วนผสมของไบโอดีเซล B100 (ผลิตจากน้ำมันปาล์มดิบ) ร้อยละ 20 ซึ่งมากกว่าดีเซล B7 เกือบ 3 เท่าต่อลิตร",
-          "ช่วยให้รถยนต์นั่งที่เติม E20 เต็มถัง (45 ลิตร) ประหยัดได้ราว 380 บาท/ถัง และรถกระบะที่เติม B20 เต็มถัง (70 ลิตร) ประหยัดได้กว่า 700 บาท/ถัง เมื่อเทียบกับแก๊สโซฮอล์ 95 และดีเซล B7"
+        "categoryLabel": "พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน",
+        "date": "10 พฤศจิกายน 2569",
+        "image": "img/oil.jpg",
+        "posterTopLine": "โครงสร้างราคาน้ำมัน 10 พ.ย. 69",
+        "posterBottomLine": "ภาษีสรรพสามิต E20–B20 ยังลดอยู่",
+        "posterBadgeText": "B20 0.431 บ.",
+        "title": "เจาะต้นทุนน้ำมัน 10 พ.ย. 69: ภาษีสรรพสามิต E20 และ B20 ยังอยู่ระดับต่ำตามมาตรการลดภาษี ขณะที่ดีเซลทั่วไป 6.92 บาท/ลิตร",
+        "summary": "ฐานเศรษฐกิจเปิดโครงสร้างราคาน้ำมันหน้าโรงกลั่น ณ 10 พ.ย. 2569 (23.37–33.97 บาท/ลิตร) พร้อมอัตราภาษีสรรพสามิตรายชนิดน้ำมัน ซึ่งสะท้อนว่าอัตรา E20 และ B20 ยังอยู่ในช่วงมาตรการลดภาษี",
+        "bullets": [
+          "ภาษีสรรพสามิตต่อลิตร: เบนซิน 95 7.50 บาท, แก๊สโซฮอล์ 95/91 6.75 บาท, E85 1.125 บาท, ดีเซล 6.92 บาท",
+          "แก๊สโซฮอล์ E20 0.358 บาท/ลิตร และดีเซล B20 0.431 บาท/ลิตร",
+          "ราคาหน้าโรงกลั่นเบนซิน–ดีเซล ณ 10 พ.ย. 2569 อยู่ที่ 23.37–33.97 บาท/ลิตร"
         ],
-        sources: [
-          { name: "ไทยพับลิก้า", url: "https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/" },
-          { name: "ประชาชาติธุรกิจ", url: "https://www.prachachat.net/finance/news-2086735" }
+        "sources": [
+          {
+            "name": "ฐานเศรษฐกิจ",
+            "url": "https://www.thansettakij.com/economy/energy/673387"
+          }
         ]
       }
     ];
+
+    // ---------- News archive (previous weekly editions; newest first) ----------
+    // Each weekly update: move the outgoing week's ARTICLES into the top of ARCHIVE (no images needed).
+    const ARCHIVE = [
+      {
+        "edition": "2569-11-02",
+        "label": "ฉบับ 2 – 8 พ.ย. 2569",
+        "week": "45/2569",
+        "range": "2 – 8 พฤศจิกายน 2569",
+        "articles": [
+          {
+            "id": "w2569-1102-art-ev-import-35",
+            "categories": [
+              "auto"
+            ],
+            "categoryLabel": "พิกัดรถยนต์ (EV นำเข้า)",
+            "date": "3 พฤศจิกายน 2569",
+            "title": "ครม. อนุมัติปรับภาษีสรรพสามิตรถยนต์ BEV และ REEV นำเข้าเป็น 35% มีผล 1 ม.ค. 2570",
+            "summary": "คณะรัฐมนตรีในการประชุม ครม.สัญจร จ.อุดรธานี เมื่อ 3 พ.ย. 2569 อนุมัติปรับโครงสร้างภาษีสรรพสามิตรถยนต์ไฟฟ้าแบตเตอรี่ (BEV) และรถยนต์ไฟฟ้าแบบขยายระยะทาง (REEV) ที่นำเข้าจากต่างประเทศ ตามมติคณะกรรมการนโยบายยานยนต์ไฟฟ้าแห่งชาติที่มอบหมายให้กรมสรรพสามิตดำเนินการ เพื่อสร้างความเป็นธรรมในการแข่งขันให้รถยนต์ที่ผลิตในประเทศ",
+            "bullets": [
+              "BEV นำเข้าปรับจาก 10% เป็น 35% และ REEV จาก 15% เป็น 35% มีผลตั้งแต่ 1 มกราคม 2570",
+              "ดำเนินการตามมติคณะกรรมการนโยบายยานยนต์ไฟฟ้าแห่งชาติ ครั้งที่ 1/2568 (25 พ.ย. 2568) และครั้งที่ 1/2569 (10 ก.ย. 2569) ภายใต้หลักการ Investment-Driven Import, Regional and Global EV Hub และ High Value-Added Local Content",
+              "นายพรชัย ฐีระเวช อธิบดีกรมสรรพสามิต ระบุว่าเพื่อจูงใจการลงทุนผลิตหรือประกอบชิ้นส่วนสำคัญในประเทศ เสริมความแข็งแกร่งห่วงโซ่อุปทาน และสร้างงานให้คนไทย"
+            ],
+            "sources": [
+              {
+                "name": "กรุงเทพธุรกิจ",
+                "url": "https://www.bangkokbiznews.com/economics/1259043"
+              },
+              {
+                "name": "PPTV Online",
+                "url": "https://www.pptvhd36.com/news/Wealth/286393"
+              },
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/?p=145930"
+              },
+              {
+                "name": "ไทยรัฐออนไลน์",
+                "url": "https://thairath.co.th/news/politic/2970110"
+              },
+              {
+                "name": "ไทยพีบีเอส Policy Watch",
+                "url": "https://policywatch.thaipbs.or.th/article/economy-314"
+              },
+              {
+                "name": "ฐานเศรษฐกิจ",
+                "url": "https://www.thansettakij.com/economy/672847"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1102-art-ev-price-impact",
+            "categories": [
+              "auto"
+            ],
+            "categoryLabel": "พิกัดรถยนต์ (ผลต่อผู้ซื้อ)",
+            "date": "3 พฤศจิกายน 2569",
+            "title": "เปิดผลกระทบผู้ซื้อรถ EV นำเข้า หลังภาษีขึ้นเป็น 35% รถราคานำเข้า 1 ล้านบาท ภาษีเพิ่ม 250,000 บาท",
+            "summary": "เดลินิวส์คำนวณผลกระทบจากการปรับภาษีสรรพสามิตรถ BEV และ REEV นำเข้าทั้งคัน (CBU) ที่ไม่ได้เข้าร่วมมาตรการส่งเสริมของรัฐเป็น 35% โดยฐานภาษีคำนวณจากราคานำเข้า CIF ก่อนบวกกำไรและภาษีมูลค่าเพิ่ม",
+            "bullets": [
+              "รถราคานำเข้า 700,000 บาท: ภาษี BEV เพิ่มจาก 70,000 เป็น 245,000 บาท (+175,000) และ REEV จาก 105,000 เป็น 245,000 บาท (+140,000)",
+              "รถราคานำเข้า 1,000,000 บาท: ภาษี BEV เพิ่มจาก 100,000 เป็น 350,000 บาท (+250,000) และ REEV จาก 150,000 เป็น 350,000 บาท (+200,000)",
+              "ผู้ที่สั่งซื้อและรับรถภายในปลายปี 2569 ยังได้อัตราภาษีและราคาเดิม ส่วนแบรนด์ที่ผลิตในไทยหรือเข้าร่วม EV 3.0/EV 3.5 ยังได้อัตราภาษีต่ำกว่า"
+            ],
+            "sources": [
+              {
+                "name": "เดลินิวส์",
+                "url": "https://www.dailynews.co.th/news/6327418/"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1102-art-ev-phase2-local",
+            "categories": [
+              "auto"
+            ],
+            "categoryLabel": "พิกัดรถยนต์ (นโยบายระยะต่อไป)",
+            "date": "3 พฤศจิกายน 2569",
+            "title": "คลังเตรียมเฟส 2 ทบทวนภาษีรถยนต์ประกอบในประเทศที่ใช้ชิ้นส่วนไทยต่ำ ให้กรมสรรพสามิตเจรจาอัตราพิเศษผู้ลงทุนใหม่",
+            "summary": "หลัง ครม. อนุมัติภาษีรถ EV นำเข้า 35% กรมสรรพสามิตได้รับมอบหมายให้เจรจาอัตราภาษีพิเศษสำหรับการลงทุนใหม่ และเตรียมพิจารณาภาษีรถยนต์ประหยัดพลังงานที่ผลิตในประเทศแต่มีสัดส่วนชิ้นส่วนไทย (Local Content) ต่ำถึงปานกลางภายใน 1 ปี",
+            "bullets": [
+              "รถ EV ที่ประกอบในประเทศตามมาตรการเสียภาษีสรรพสามิต 2% เทียบกับรถนำเข้า 10% ส่วนต่าง 8% จะขยายเป็น 33% เมื่ออัตราใหม่มีผล",
+              "เฟส 2 ภายใน 1 ปี: กรมสรรพสามิตจะพิจารณาภาษีรถยนต์ประหยัดพลังงานที่ผลิตในประเทศแต่มี Local Content ต่ำถึงปานกลาง โดยไม่นับค่าไฟฟ้า–ค่าน้ำเป็น Local Content และกำหนดสัดส่วนขั้นต่ำให้ชัดเจน",
+              "ปลัดกระทรวงการคลังระบุปัจจุบันมีโรงงาน 8 โรงงาน กรมสรรพสามิตต้องกำหนดรายละเอียดสัดส่วนชิ้นส่วนในประเทศภายใน 3 ปี และจะนำมาตรการไปโรดโชว์นักลงทุนญี่ปุ่นร่วมกับ BOI วันที่ 17 พ.ย."
+            ],
+            "sources": [
+              {
+                "name": "ฐานเศรษฐกิจ",
+                "url": "https://www.thansettakij.com/economy/672892"
+              },
+              {
+                "name": "เดลินิวส์",
+                "url": "https://www.dailynews.co.th/news/6327576/"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1102-art-ev-industry-reaction",
+            "categories": [
+              "auto"
+            ],
+            "categoryLabel": "พิกัดรถยนต์ (ปฏิกิริยาตลาด)",
+            "date": "3 – 4 พฤศจิกายน 2569",
+            "title": "ส.อ.ท. มั่นใจภาษี EV นำเข้า 35% ดันยอดผลิตรถยนต์ไทยโต 7% จับตาผู้บริโภคเร่งซื้อรถอีวีก่อนสิ้นปี",
+            "summary": "ภาคอุตสาหกรรมยานยนต์ตอบรับการขึ้นภาษีสรรพสามิตรถ EV นำเข้า ขณะที่ผู้บริหารค่ายรถจีนระบุว่าราคาจะไม่ขึ้นเต็มสัดส่วนภาษี และคาดว่าผู้นำเข้าจะเร่งนำเข้าและจดทะเบียนก่อนอัตราใหม่มีผล โดยเฉพาะช่วงงาน Motor Expo 2026 เดือนธันวาคม",
+            "bullets": [
+              "สภาอุตสาหกรรมแห่งประเทศไทย (ส.อ.ท.) คาดอุตสาหกรรมยานยนต์โตอย่างน้อย 7% ตั้งแต่ปี 2570 ยอดผลิตไม่ต่ำกว่า 1.55 ล้านคัน อุตสาหกรรมมีสัดส่วนราว 10% ของ GDP และจ้างงานกว่า 800,000 คน",
+              "ผู้บริหารค่ายรถจีนระบุราคาบางรุ่นอาจขึ้นหลักหมื่นถึงหลักแสนบาท และอาจคุมไว้ราว 10% ขณะที่ EV ที่ผลิตในไทยยังคงเสียภาษีสรรพสามิตอัตราเดิม 2%",
+              "Tesla, Volvo, Porsche และ Audi ถูกระบุเป็นแบรนด์ที่ยังไม่มีแผนผลิตในไทยและมีแนวโน้มขึ้นราคา ส่วน Leap Motor วางแผนเริ่มผลิตในไทยปี 2570"
+            ],
+            "sources": [
+              {
+                "name": "ฐานเศรษฐกิจ",
+                "url": "https://www.thansettakij.com/economy/672920"
+              },
+              {
+                "name": "เดลินิวส์",
+                "url": "https://www.dailynews.co.th/news/6329023/"
+              },
+              {
+                "name": "ฐานเศรษฐกิจ (ยานยนต์)",
+                "url": "https://www.thansettakij.com/motor/672865"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1102-art-tobacco-single-rate",
+            "categories": [
+              "tobacco"
+            ],
+            "categoryLabel": "พิกัดยาสูบ",
+            "date": "2 พฤศจิกายน 2569",
+            "title": "คอลัมน์แวดวงการเงินชี้ภาษีบุหรี่อัตราเดียวยังไม่คืบ คลังให้ศึกษาเพิ่มแต่ยังไม่ได้จ้างจุฬาฯ เพราะไม่ได้ตั้งงบไว้",
+            "summary": "คอลัมน์แวดวงการเงิน (บทความแสดงความเห็น) ของแนวหน้า ติดตามความคืบหน้าการปรับโครงสร้างภาษีบุหรี่เป็นอัตราเดียวที่ ดร.พรชัย ฐีระเวช อธิบดีกรมสรรพสามิต ผลักดันและส่งผลการศึกษาให้กระทรวงการคลังแล้วหลายเดือน",
+            "bullets": [
+              "รัฐมนตรีว่าการกระทรวงการคลังให้ศึกษาเพิ่มเติมและรับฟังความเห็นผู้เกี่ยวข้อง โดยเสนอให้จุฬาลงกรณ์มหาวิทยาลัยเป็นผู้ศึกษา",
+              "ผู้เขียนระบุว่าได้ยินมาว่ากระทรวงการคลังยังไม่ได้จัดจ้างจุฬาฯ เนื่องจากไม่ได้ตั้งงบประมาณไว้ล่วงหน้า และยังไม่ชัดว่าจะใช้งบปี 2570 อย่างไร",
+              "กรรมาธิการงบประมาณปี 2570 เคยเชิญอธิบดีกรมสรรพสามิตชี้แจง ห่วงการสูญเสียรายได้ภาษียาสูบจึงสนับสนุนภาษีอัตราเดียว และอาจเชิญ รมว.คลัง ชี้แจงความล่าช้า"
+            ],
+            "sources": [
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/?p=142090"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1102-art-online-cig-enforcement",
+            "categories": [
+              "enforcement",
+              "tobacco"
+            ],
+            "categoryLabel": "การปราบปราม / จับกุม",
+            "date": "5 พฤศจิกายน 2569",
+            "title": "คอลัมน์แวดวงการเงินสะท้อนเสียงวิจารณ์วิธีจับบุหรี่เถื่อนสั่งออนไลน์ของสรรพสามิต แนะใช้แนวทางโปร่งใสแบบกรมศุลกากร",
+            "summary": "คอลัมน์แวดวงการเงิน (บทความแสดงความเห็น) ของแนวหน้า อธิบายวิธีปราบปรามบุหรี่ผิดกฎหมายที่สั่งซื้อทางออนไลน์ ซึ่งเจ้าหน้าที่จะไปกับพนักงานขนส่งและแสดงตัวเมื่อผู้รับจ่ายเงินปลายทาง แล้วยึดของกลางและเปรียบเทียบปรับ ณ จุดนั้น",
+            "bullets": [
+              "ชาวเน็ตวิจารณ์ว่าค่าปรับ ณ จุดรับของไม่มีมาตรฐานชัดเจน สูงเกินไป และดูไม่เหมาะสม ขณะที่ผู้เขียนชี้ว่าผู้สั่งซื้อคือผู้กระทำผิดกฎหมาย",
+              "ผู้เขียนเสนอให้ ดร.พรชัย ฐีระเวช อธิบดีกรมสรรพสามิต พิจารณาวิธีเปิดตรวจพัสดุต้องสงสัยและเรียกผู้กระทำผิดมาดำเนินการที่นุ่มนวลและโปร่งใสกว่า",
+              "เสนอให้กรมสรรพสามิตปรับแนวทางให้สอดคล้องกับวิธีของกรมศุลกากร (บทความไม่ระบุจำนวนคดีหรือยอดค่าปรับ)"
+            ],
+            "sources": [
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/?p=148163"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "edition": "2569-10-26",
+        "label": "ฉบับ 26 ต.ค. – 1 พ.ย. 2569",
+        "week": "44/2569",
+        "range": "26 ตุลาคม – 1 พฤศจิกายน 2569",
+        "articles": [
+          {
+            "id": "w2569-1026-art-fuel-b20-e20",
+            "categories": [
+              "oil",
+              "ethanol"
+            ],
+            "categoryLabel": "พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน",
+            "date": "27 ตุลาคม 2569",
+            "title": "ครม. ไฟเขียวลดภาษีสรรพสามิตดีเซล B20 และแก๊สโซฮอล์ E20 นาน 3 เดือน ราคาขายปลีกเหลือ 33.50 บาท/ลิตร",
+            "summary": "คณะรัฐมนตรีมีมติเมื่อวันที่ 27 ต.ค. 2569 ลดภาษีสรรพสามิตเฉพาะน้ำมันดีเซล B20 และแก๊สโซฮอล์ E20 เป็นเวลา 3 เดือน (28 ต.ค. 2569 – 27 ม.ค. 2570) เพื่อแบ่งเบาภาระกองทุนน้ำมันเชื้อเพลิงที่ต้องชดเชยสูงจากราคาน้ำมันโลก หนุนพลังงานทางเลือกและเกษตรกร โดยคงโครงสร้างภาษีคาร์บอน 200 บาท/ตัน CO₂e",
+            "bullets": [
+              "ภาษีสรรพสามิตดีเซล B20 ลดจาก 5.953 เหลือ 0.431 บาท/ลิตร (-5.522 บาท) และแก๊สโซฮอล์ E20 ลดจาก 6.000 เหลือ 0.358 บาท/ลิตร (-5.642 บาท)",
+              "กบน. ปรับลดราคาขายปลีก B20 ลง 3.69 บาท/ลิตร (จาก 37.19) และ E20 ลง 2.19 บาท/ลิตร (จาก 35.69) เหลือ 33.50 บาท/ลิตรเท่ากัน มีผล 28 ต.ค. 2569 โดย B20 ถูกกว่า B7 10.04 บาท และ E20 ถูกกว่าแก๊สโซฮอล์ 95 อยู่ 8.54 บาท",
+              "คงอัตราราคาคาร์บอน 200 บาทต่อตันคาร์บอนไดออกไซด์เทียบเท่า ลดเฉพาะส่วนภาษีสรรพสามิต ขณะที่กองทุนน้ำมันฯ จ่ายชดเชยราว 287.11 ล้านบาทต่อวัน"
+            ],
+            "sources": [
+              {
+                "name": "ไทยพับลิก้า",
+                "url": "https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/"
+              },
+              {
+                "name": "กรุงเทพธุรกิจ",
+                "url": "https://www.bangkokbiznews.com/economics/1258113"
+              },
+              {
+                "name": "โพสต์ทูเดย์",
+                "url": "https://www.posttoday.com/business/751032"
+              },
+              {
+                "name": "ฐานเศรษฐกิจ",
+                "url": "https://www.thansettakij.com/economy/672338"
+              },
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/?p=135431"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1026-art-tobacco-seizure",
+            "categories": [
+              "tobacco",
+              "enforcement"
+            ],
+            "categoryLabel": "พิกัดยาสูบ & ปราบปราม",
+            "date": "28 ตุลาคม 2569",
+            "title": "สรรพสามิตสนธิกำลังศุลกากร–ทหาร ยึดบุหรี่ต่างประเทศผิดกฎหมายกว่า 4.4 ล้านมวน มูลค่ากว่า 22 ล้านบาท",
+            "summary": "ด่านศุลกากรอรัญประเทศ กองกำลังบูรพา หน่วยเฉพาะกิจคลองหาด ทหารพราน และเจ้าหน้าที่สรรพสามิต แถลงผลตรวจยึดบุหรี่ต่างประเทศที่ไม่ผ่านพิธีการศุลกากร ซุกในป่าทึบแนวชายแดนไทย–กัมพูชา บริเวณคลองหาด จ.สระแก้ว",
+            "bullets": [
+              "ตรวจยึดบุหรี่ต่างประเทศผิดกฎหมายกว่า 4.4 ล้านมวน มูลค่ากว่า 22 ล้านบาท แถลงผลที่จุดผ่อนปรนบ้านหนองเอี่ยน อ.อรัญประเทศ",
+              "ชุดสืบสวนออกปฏิบัติการราว 01.30 น. ตามเบาะแส ผู้ลักลอบราว 5–10 คนทิ้งของกลางหลบหนีกลับฝั่งกัมพูชา",
+              "ของกลางส่งด่านศุลกากรอรัญประเทศดำเนินการต่อ ฐานความผิดตามมาตรา 242 พ.ร.บ.ศุลกากร พ.ศ. 2560"
+            ],
+            "sources": [
+              {
+                "name": "เดลินิวส์",
+                "url": "https://www.dailynews.co.th/news/6312687/"
+              },
+              {
+                "name": "สวพ.FM91",
+                "url": "https://www.fm91bkk.com/newsarticle/81165"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1026-art-online-enforcement",
+            "categories": [
+              "enforcement",
+              "tobacco"
+            ],
+            "categoryLabel": "การปราบปราม / จับกุม",
+            "date": "28 ตุลาคม 2569",
+            "title": "สรรพสามิตปีงบ 2569 จับกุมสินค้าผิดกฎหมาย 39,305 คดี ค่าปรับกว่า 1,069 ล้านบาท บุหรี่เถื่อนยังครองอันดับ 1",
+            "summary": "คอลัมน์แวดวงการเงินของแนวหน้าสรุปผลงานสำนักตรวจสอบ ป้องกันและปราบปราม (สตป.) กรมสรรพสามิต ปีงบประมาณ 2569 ที่จับกุมคดีเพิ่มขึ้น ท่ามกลางความท้าทายจากการส่งบุหรี่เถื่อนผ่านแพลตฟอร์มขนส่งออนไลน์",
+            "bullets": [
+              "จับกุมรวม 39,305 คดี เพิ่มขึ้น 2,848 คดี หรือ 7.81% จากปีงบประมาณ 2568",
+              "ค่าปรับรวมกว่า 1,069 ล้านบาท และประมาณการค่าปรับกว่า 5,420 ล้านบาท",
+              "บุหรี่เถื่อนเป็นสินค้ากระทำผิดสูงสุด และจับยากขึ้นจากแพลตฟอร์มขนส่งออนไลน์และผู้รับเหมาช่วงอิสระ แม้กรมฯ ลงนาม MOU กับแพลตฟอร์มส่วนใหญ่แล้ว"
+            ],
+            "sources": [
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/todays-columns/business-columns/134452/"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1026-art-illicit-share",
+            "categories": [
+              "tobacco"
+            ],
+            "categoryLabel": "พิกัดยาสูบ",
+            "date": "31 ตุลาคม 2569",
+            "title": "คอลัมน์แวดวงการเงินชี้บุหรี่ผิดกฎหมายขยับเป็นราว 28% ของตลาด ตั้งคำถามระเบียบภาษีบุหรี่ส่งออก",
+            "summary": "คอลัมน์แวดวงการเงิน (บทความแสดงความเห็น) ของแนวหน้า ติดตามสถานการณ์บุหรี่ผิดกฎหมายในไทย และความคืบหน้าแนวทางของกรมสรรพสามิตในการสกัดบุหรี่ที่ผลิตเพื่อส่งออกแต่ถูกนำกลับมาขายในประเทศ",
+            "bullets": [
+              "ผู้เขียนระบุสัดส่วนบุหรี่ผิดกฎหมายต้นปีอยู่ราว 25% ของตลาดบุหรี่ถูกกฎหมาย และปัจจุบันขยับเป็นราว 28%",
+              "บุหรี่ผลิตเพื่อส่งออกไม่ต้องเสียภาษี แต่มีบางส่วนถูกนำกลับมาขายในไทยในราคาที่รวมภาษี ทำให้ผู้ขายยังมีกำไร",
+              "กรมสรรพสามิตเคยเตรียมระเบียบให้บุหรี่ส่งออกตั้งราคารวมภาษีและคืนภาษีเมื่อไม่พบสินค้าย้อนกลับเข้าไทย ผู้เขียนระบุว่ายังไม่ทราบความคืบหน้า"
+            ],
+            "sources": [
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/breaking/140976/"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1026-art-earmarked-tax",
+            "categories": [
+              "tobacco",
+              "liquor"
+            ],
+            "categoryLabel": "ภาษีบาป (ยาสูบ & สุรา)",
+            "date": "27 ตุลาคม 2569",
+            "title": "เครือข่ายสุขภาพ 491 องค์กรค้านยกเลิกภาษีบาปส่วนเพิ่ม 2% ของ 4 กองทุน นายกฯ ยืนยันยังไม่เซ็นรับรองร่างกฎหมาย",
+            "summary": "ขบวนการสร้างเสริมสุขภาพประชาชน (ขสช.) และภาคี 491 องค์กร คัดค้านการย้ายเงินภาษีสรรพสามิตสุราและยาสูบส่วนเพิ่มที่จัดสรรให้ 4 หน่วยงานไปอยู่ในงบประมาณประจำปี ขณะที่โฆษกกรมสรรพสามิตยืนยันว่าไม่ใช่การลดภาษี",
+            "bullets": [
+              "นายกรัฐมนตรีระบุเมื่อ 27 ต.ค. 2569 ว่าร่างกฎหมาย 4 ฉบับ (สสส., ไทยพีบีเอส, กองทุนผู้สูงอายุ, กองทุนพัฒนาการกีฬาแห่งชาติ) \"ขณะนี้ยังไม่มีการเซ็นรับรอง\" และอยู่ระหว่างพิจารณา",
+              "โฆษกกรมสรรพสามิตชี้แจงว่าเป็นการยกเลิกภาษีส่วนเพิ่ม 2% แล้วปรับอัตราภาษีปกติขึ้นผ่านกฎกระทรวง ส่วนเครือข่ายไม่มั่นใจและประเมินว่าเกี่ยวข้องกับเงินราว 14,000 ล้านบาทต่อปี",
+              "เครือข่ายทวงถามการรวมภาษีบุหรี่ 2 อัตราเป็นอัตราเดียว ซึ่งเป็นแนวคิดตั้งแต่ปี 2560 แต่ยังไม่ดำเนินการ และชี้ว่าระบบ 2 อัตราทำให้รัฐสูญรายได้หลายพันล้านบาทต่อปี"
+            ],
+            "sources": [
+              {
+                "name": "Hfocus",
+                "url": "https://www.hfocus.org/content/2026/10/40033"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1026-art-khaosan-sandbox",
+            "categories": [
+              "liquor"
+            ],
+            "categoryLabel": "พิกัดสุรา & สถานบริการ",
+            "date": "30 ตุลาคม 2569",
+            "title": "สรรพสามิตร่วมถก กทม.–บช.น.–ป.ป.ท. นำร่อง Sandbox ข้าวสาร–รามบุตรี ทบทวนโซนนิ่งสถานบริการปี 2545",
+            "summary": "รัฐมนตรีประจำสำนักนายกรัฐมนตรีเป็นประธานประชุมร่วมกับผู้ว่าฯ กทม. บช.น. ป.ป.ท. กรมการปกครอง และกรมสรรพสามิต เมื่อ 30 ต.ค. 2569 เตรียมใช้ถนนข้าวสารและรามบุตรีเป็นพื้นที่นำร่องปรับกฎระเบียบสถานบริการก่อนไฮซีซันปลายปี",
+            "bullets": [
+              "พ.ร.ฎ. โซนนิ่ง พ.ศ. 2545 ไม่ได้ปรับปรุงมา 25 ปี กทม. มีโซนสถานบริการเพียง 3 แห่ง (RCA, พัฒน์พงษ์, รัชดาภิเษก) และ 22 จังหวัดไม่เคยประกาศโซน",
+              "ถนนข้าวสารมีร้านลักษณะคล้ายสถานบริการกว่า 30 แห่ง แต่มีใบอนุญาตถูกต้องเพียง 4 แห่ง จะเสนอคณะกรรมการควบคุมเครื่องดื่มแอลกอฮอล์พิจารณาขยายเวลาเกิน 24.00 น. ภายใต้เกณฑ์ความปลอดภัย 17 ข้อ",
+              "ป.ป.ท. ในฐานะเลขานุการที่ประชุมต้องติดตามและรายงานผลภายใน 15 วัน ขณะที่ บช.น. ตั้งกรรมการสอบวินัยกรณีเรียกรับสินบน"
+            ],
+            "sources": [
+              {
+                "name": "ไทยรัฐออนไลน์",
+                "url": "https://www.thairath.co.th/news/politic/2969392"
+              },
+              {
+                "name": "ไทยพีบีเอส",
+                "url": "https://www.thaipbs.or.th/news/content/571900"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1026-art-fuel-analysis",
+            "categories": [
+              "oil"
+            ],
+            "categoryLabel": "พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน",
+            "date": "26 ตุลาคม 2569",
+            "title": "ฐานเศรษฐกิจประเมินลดภาษีสรรพสามิต E20–B20 ทุก 1 บาท ราคาหน้าปั๊มลดราว 1.18 บาท รัฐเสียรายได้ราว 287 ล้านบาท/เดือน",
+            "summary": "บทวิเคราะห์ก่อนการประชุม ครม. 27 ต.ค. ประเมินผลกระทบทางการคลังจากแนวคิดของกระทรวงการคลังที่จะลดภาษีสรรพสามิตเฉพาะดีเซล B20 และแก๊สโซฮอล์ E20 เพื่อหนุนเชื้อเพลิงชีวภาพและเกษตรกร",
+            "bullets": [
+              "ภาษีสรรพสามิตที่ลดทุก 1 บาท/ลิตร ทำให้ราคาขายปลีกลดราว 1.18 บาท/ลิตร (รวมภาษีท้องถิ่นและ VAT)",
+              "รายได้ภาษีสรรพสามิตหายราว 287 ล้านบาท/เดือน (ราว 3,490 ล้านบาท/ปี) หรือราว 338 ล้านบาท/เดือนเมื่อรวมภาษีท้องถิ่นและ VAT",
+              "ปัจจุบัน E20 และ B20 สร้างรายได้ภาษีสรรพสามิตราว 1,716 ล้านบาท/เดือน (ราว 20,900 ล้านบาท/ปี) ขณะที่กองทุนน้ำมันฯ ติดลบกว่า 100,000 ล้านบาท"
+            ],
+            "sources": [
+              {
+                "name": "ฐานเศรษฐกิจ",
+                "url": "https://www.thansettakij.com/economy/energy/672264"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "edition": "2569-10-24",
+        "label": "ฉบับ 24 – 31 ต.ค. 2569",
+        "week": "44/2569",
+        "range": "24 – 31 ตุลาคม 2569",
+        "articles": [
+          {
+            "id": "w2569-1024-art-fuel-b20-e20",
+            "categories": [
+              "oil",
+              "ethanol"
+            ],
+            "categoryLabel": "พิกัดน้ำมันและผลิตภัณฑ์น้ำมัน",
+            "date": "27 ตุลาคม 2569",
+            "title": "ครม. ไฟเขียวลดภาษีสรรพสามิตน้ำมัน B20 และ E20 นาน 3 เดือน คงกลไกราคาคาร์บอนมุ่งสู่ Net Zero",
+            "summary": "คณะรัฐมนตรีมีมติเมื่อวันที่ 27 ต.ค. 2569 ปรับลดภาษีสรรพสามิตน้ำมันดีเซล B20 และแก๊สโซฮอล์ E20 ลิตรละกว่า 5.50–5.64 บาท เป็นเวลา 3 เดือน (28 ต.ค. 2569 – 27 ม.ค. 2570) เพื่อช่วยแบ่งเบาภาระกองทุนน้ำมันเชื้อเพลิงและบรรเทาค่าครองชีพประชาชน โดยยังคงสัดส่วนภาษีคาร์บอน 200 บาท/ตัน CO₂e",
+            "bullets": [
+              "ลดภาษีสรรพสามิตน้ำมันดีเซล B20 ลง 5.522 บาท/ลิตร (จาก 5.953 เหลือ 0.431 บาท/ลิตร) และแก๊สโซฮอล์ E20 ลง 5.642 บาท/ลิตร (จาก 6.000 เหลือ 0.358 บาท/ลิตร)",
+              "กบน. ปรับลดราคาขายปลีก B20 ลง 3.69 บาท/ลิตร และ E20 ลง 2.19 บาท/ลิตร ส่งผลให้ราคาขายปลีกทั้งสองชนิดอยู่ที่ 33.50 บาท/ลิตร มีผลตั้งแต่ 28 ต.ค. 2569",
+              "คงสัดส่วนกลไกราคาคาร์บอน (Carbon Price) ที่ 200 บาทต่อตันคาร์บอนไดออกไซด์เทียบเท่า เพื่อรักษามาตรฐานสิ่งแวดล้อมและมุ่งสู่เป้าหมาย Net Zero"
+            ],
+            "sources": [
+              {
+                "name": "ไทยพับลิก้า",
+                "url": "https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/"
+              },
+              {
+                "name": "ประชาชาติธุรกิจ",
+                "url": "https://www.prachachat.net/finance/news-2086735"
+              },
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/business-world/134510/"
+              },
+              {
+                "name": "จส.100",
+                "url": "https://www.js100.com/en/site/news/view/165429"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1024-art-tobacco-seizure",
+            "categories": [
+              "tobacco"
+            ],
+            "categoryLabel": "พิกัดยาสูบ",
+            "date": "28 ตุลาคม 2569",
+            "title": "สรรพสามิตสนธิกำลังศุลกากร-ทหาร ยึดบุหรี่ต่างประเทศผิดกฎหมาย 4.4 ล้านมวน มูลค่ากว่า 22 ล้านบาท",
+            "summary": "เจ้าหน้าที่สรรพสามิตร่วมกับด่านศุลกากรอรัญประเทศ กองกำลังบูรพา และหน่วยเฉพาะกิจคลองหาด แถลงผลตรวจยึดบุหรี่ต่างประเทศไม่ผ่านพิธีการทางภาษีล็อตใหญ่ซุกป่าทึบแนวชายแดนไทย–กัมพูชา อ.คลองหาด จ.สระแก้ว",
+            "bullets": [
+              "ตรวจยึดบุหรี่เมืองกำเนิดต่างประเทศผิดกฎหมายจำนวนประมาณ 4,400,000 มวน ประเมินมูลค่าของกลางรวมกว่า 22 ล้านบาท",
+              "ผู้ลักลอบขนย้ายประมาณ 5–10 คน ทิ้งของกลางหลบหนีข้ามแดนเมื่อพบเจ้าหน้าที่ลาดตระเวนช่วงเวลา 01.30 น. ของวันที่ 28 ต.ค. 2569",
+              "ยกระดับความเข้มงวดสกัดกั้นสินค้าหนีภาษีตามแนวชายแดนเพื่อปกป้องรายได้แผ่นดินและป้องกันการบิดเบือนกลไกราคาในประเทศ"
+            ],
+            "sources": [
+              {
+                "name": "เดลินิวส์",
+                "url": "https://www.dailynews.co.th/news/6312687/"
+              },
+              {
+                "name": "สวพ.FM91",
+                "url": "https://www.fm91bkk.com/newsarticle/81165"
+              },
+              {
+                "name": "ข่าวสด",
+                "url": "https://www.khaosod.co.th/around-thailand/news_10453163"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1024-art-ev-policy",
+            "categories": [
+              "auto",
+              "motorcycle"
+            ],
+            "categoryLabel": "พิกัดรถยนต์ & รถจักรยานยนต์",
+            "date": "26 ตุลาคม 2569",
+            "title": "สรรพสามิตเปิดรับฟังความเห็นแก้ประกาศมาตรการ EV 3 ฉบับ กำหนดวันสิ้นสุดยื่นขอเงินอุดหนุนและปรับชื่อชิ้นส่วน",
+            "summary": "กรมสรรพสามิตเปิดรับฟังความคิดเห็น (22–29 ต.ค. 2569) ร่างประกาศเกี่ยวกับนโยบายยานยนต์ไฟฟ้า (รถยนต์และรถจักรยานยนต์) รวม 3 ฉบับ เพื่อบริหารงบประมาณภาครัฐอย่างคุ้มค่าและปรับชื่อชิ้นส่วนในประเทศให้สอดคล้องกัน",
+            "bullets": [
+              "กำหนดวันสิ้นสุดการยื่นแบบคำขอรับเงินอุดหนุนรถยนต์และรถจักรยานยนต์ไฟฟ้าตามมาตรการ EV3 ภายในวันที่ 5 ธ.ค. 2569 (ภายใน 60 วันหลังมติ ครม. 6 ต.ค. 2569)",
+              "กำหนดวันสิ้นสุดการยื่นแบบคำขอรับเงินอุดหนุนตามมาตรการ EV3.5 ภายในวันที่ 30 มิ.ย. 2571 ให้สอดคล้องกับอายุหนังสือค้ำประกัน",
+              "แก้ไขชื่อรายการชิ้นส่วนรถยนต์ไฟฟ้าที่ผลิตในประเทศจากเดิม 'PCU Inverter' เป็น 'ระบบตัวแปลงกระแสไฟฟ้า (Integrated Inverter)' ให้ตรงกับประกาศรถยนต์ HEV และ PHEV"
+            ],
+            "sources": [
+              {
+                "name": "ประชาชาติธุรกิจ",
+                "url": "https://www.prachachat.net/finance/news-2085812"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1024-art-khaosan-sandbox",
+            "categories": [
+              "liquor"
+            ],
+            "categoryLabel": "พิกัดสุรา & สถานบริการ",
+            "date": "30 ตุลาคม 2569",
+            "title": "สรรพสามิตร่วมถก กทม.–ตร.–ป.ป.ท. ขับเคลื่อน Sandbox ข้าวสาร–รามบุตรี ทบทวนโซนนิ่งสถานบริการปี 45",
+            "summary": "รมต.ประจำสำนักนายกรัฐมนตรี ประชุมบูรณาการร่วมกับกรมสรรพสามิต กทม. บช.น. และ ป.ป.ท. เตรียมใช้ถนนข้าวสารและรามบุตรีเป็นพื้นที่นำร่องปรับปรุงกฎระเบียบสถานบริการและเวลาจำหน่ายเครื่องดื่มแอลกอฮอล์รับไฮซีซันปลายปี",
+            "bullets": [
+              "แก้ข้อจำกัด พ.ร.ฎ. โซนนิ่ง พ.ศ. 2545 ที่อนุญาตตั้งสถานบริการใน กทม. เพียง 3 เขต (RCA, พัฒน์พงษ์, รัชดาภิเษก) ซึ่งไม่สอดคล้องกับพื้นที่ท่องเที่ยวปัจจุบัน",
+              "เตรียมเสนอคณะกรรมการควบคุมเครื่องดื่มแอลกอฮอล์พิจารณาขยายเวลาเปิดบริการเกิน 24.00 น. ในพื้นที่ Sandbox ควบคู่เกณฑ์ความปลอดภัย 17 ข้อของ กทม.",
+              "เร่งจัดทำฐานข้อมูลใบอนุญาตจำหน่ายสุราและสถานบริการให้เป็นมาตรฐานเดียวกันเพื่อลดช่องว่างการเรียกรับสินบน โดยขีดเส้นสรุปผลใน 15 วัน"
+            ],
+            "sources": [
+              {
+                "name": "ไทยรัฐออนไลน์",
+                "url": "https://www.thairath.co.th/news/politic/2969392"
+              },
+              {
+                "name": "ไทยพีบีเอส",
+                "url": "https://www.thaipbs.or.th/news/content/571900"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1024-art-earmarked-tax",
+            "categories": [
+              "tobacco",
+              "liquor"
+            ],
+            "categoryLabel": "พิกัดยาสูบ & สุรา",
+            "date": "27 – 31 ตุลาคม 2569",
+            "title": "เครือข่ายสุขภาพ 491 องค์กรจี้ถอนร่างกฎหมายยกเลิกภาษีบาป 4 กองทุน พร้อมจับตาระเบียบภาษีบุหรี่ส่งออก",
+            "summary": "ขบวนการสร้างเสริมสุขภาพประชาชนและภาคี 491 องค์กร ยื่นหนังสือคัดค้านการยกเลิกระบบจัดสรรภาษีสรรพสามิตสุราและยาสูบส่วนเพิ่ม 2% ให้ 4 กองทุนสาธารณะ ขณะที่สื่อเศรษฐกิจติดตามการแก้ระเบียบเก็บภาษีบุหรี่ส่งออกล่วงหน้า",
+            "bullets": [
+              "นายกรัฐมนตรียืนยันเมื่อ 27 ต.ค. 2569 ว่ายังไม่ได้ลงนามรับรองร่างแก้ไข พ.ร.บ. 4 ฉบับ (สสส., ไทยพีบีเอส, กองทุนผู้สูงอายุ, กองทุนพัฒนาการกีฬาฯ) และอยู่ระหว่างพิจารณา",
+              "ภาคประชาสังคมทวงถามความคืบหน้าการปรับโครงสร้างภาษีบุหรี่เป็นอัตราเดียว (Single Tier) เพื่อลดการบิดเบือนราคาและเพิ่มรายได้รัฐ",
+              "ติดตามความคืบหน้ากรมสรรพสามิตในการปรับปรุงระเบียบให้บุหรี่ส่งออกต้องบวกภาษีไปก่อนและขอคืนเมื่อส่งออกจริง เพื่อสกัดขบวนการเวียนเทียนกลับเข้ามาขายในไทย"
+            ],
+            "sources": [
+              {
+                "name": "Hfocus",
+                "url": "https://www.hfocus.org/content/2026/10/40033"
+              },
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/breaking/140976/"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1024-art-online-enforcement",
+            "categories": [
+              "tobacco"
+            ],
+            "categoryLabel": "พิกัดยาสูบ & ปราบปราม",
+            "date": "28 ตุลาคม 2569",
+            "title": "เจาะผลงานปราบปรามสรรพสามิตปีงบ 2569 ทะลุ 39,305 คดี เร่งสกัดขบวนการกองทัพมดส่งบุหรี่เถื่อนออนไลน์",
+            "summary": "บทวิเคราะห์เศรษฐกิจเปิดเผยผลงานสำนักตรวจสอบ ป้องกันและปราบปราม (สตป.) กรมสรรพสามิต ในปีงบประมาณ 2569 ที่จับกุมคดีเพิ่มขึ้น 7.81% ท่ามกลางความท้าทายจากผู้รับเหมาช่วงขนส่งพัสดุออนไลน์",
+            "bullets": [
+              "สรุปผลปราบปรามปีงบประมาณ 2569 จับกุมรวม 39,305 คดี (เพิ่มขึ้น 2,848 คดี หรือ +7.81% จากปีงบ 2568) คิดเป็นค่าปรับรวมกว่า 1,069 ล้านบาท และประมาณการค่าปรับกว่า 5,420 ล้านบาท",
+              "สินค้ายาสูบ (บุหรี่เถื่อน) ยังคงเป็นสินค้าที่มีการกระทำผิดสูงสุดอันดับ 1 โดยเปลี่ยนรูปแบบจากโกดังใหญ่เป็นจุดกระจายย่อยผ่านแพลตฟอร์มขนส่งออนไลน์",
+              "เดินหน้ายกระดับความร่วมมือตาม MOU กับบริษัทขนส่งพัสดุเพื่อตรวจสอบผู้รับเหมาช่วง (กองทัพมด) ที่รับส่งสินค้าหนีภาษีถึงหน้าบ้าน"
+            ],
+            "sources": [
+              {
+                "name": "แนวหน้า",
+                "url": "https://www.naewna.com/n/todays-columns/business-columns/134452/"
+              }
+            ]
+          },
+          {
+            "id": "w2569-1024-art-ethanol-farmers",
+            "categories": [
+              "ethanol",
+              "oil"
+            ],
+            "categoryLabel": "พิกัดเอทานอล & พืชพลังงาน",
+            "date": "27 ตุลาคม 2569",
+            "title": "มาตรการลดภาษีสรรพสามิต E20–B20 หนุนการใช้เอทานอลและไบโอดีเซล สร้างรายได้หมุนเวียนเกษตรกรไทย",
+            "summary": "การเลือกปรับลดภาษีเฉพาะแก๊สโซฮอล์ E20 และดีเซล B20 มุ่งสร้างแรงจูงใจด้านราคาให้ผู้ใช้รถหันมาเติมพลังงานทางเลือกที่มีสัดส่วนวัตถุดิบทางการเกษตรในประเทศสูงกว่าน้ำมันพื้นฐานถึง 2–3 เท่า",
+            "bullets": [
+              "น้ำมันแก๊สโซฮอล์ E20 มีส่วนผสมของเอทานอลร้อยละ 20 (ผลิตจากอ้อยและมันสำปะหลัง) ซึ่งมากกว่าแก๊สโซฮอล์ E10 ถึง 2 เท่าต่อลิตร",
+              "น้ำมันดีเซล B20 มีส่วนผสมของไบโอดีเซล B100 (ผลิตจากน้ำมันปาล์มดิบ) ร้อยละ 20 ซึ่งมากกว่าดีเซล B7 เกือบ 3 เท่าต่อลิตร",
+              "ช่วยให้รถยนต์นั่งที่เติม E20 เต็มถัง (45 ลิตร) ประหยัดได้ราว 380 บาท/ถัง และรถกระบะที่เติม B20 เต็มถัง (70 ลิตร) ประหยัดได้กว่า 700 บาท/ถัง เมื่อเทียบกับแก๊สโซฮอล์ 95 และดีเซล B7"
+            ],
+            "sources": [
+              {
+                "name": "ไทยพับลิก้า",
+                "url": "https://thaipublica.org/2026/10/excise-dept-b20-e20-fuel-tax-cut-3-months/"
+              },
+              {
+                "name": "ประชาชาติธุรกิจ",
+                "url": "https://www.prachachat.net/finance/news-2086735"
+              }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const CURRENT_EDITION = { edition: "current", label: "ฉบับล่าสุด 9 – 15 พ.ย. 2569", week: "46/2569", range: "9 – 15 พฤศจิกายน 2569", articles: null };
+    const ARCHIVE_CATS = [
+      ["oil", "น้ำมัน"], ["tobacco", "ยาสูบ"], ["liquor", "สุรา/สถานบริการ"], ["beer", "เบียร์"], ["drinks", "เครื่องดื่ม"],
+      ["auto", "รถยนต์"], ["motorcycle", "รถจักรยานยนต์"], ["battery", "แบตเตอรี่"], ["ethanol", "เอทานอล"],
+      ["perfume", "น้ำหอม"], ["enforcement", "ปราบปราม/จับกุม"], ["revenue", "ผลการจัดเก็บรายได้"]
+    ];
+    const escHtml = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    function allEditions() {
+      return [Object.assign({}, CURRENT_EDITION, { articles: ARTICLES })].concat(ARCHIVE);
+    }
+
+    function initArchiveControls() {
+      const edSel = document.getElementById("archive-edition");
+      const catSel = document.getElementById("archive-cat");
+      if (!edSel || !catSel) return;
+      edSel.innerHTML = '<option value="all">ทุกฉบับ</option>' + allEditions().map(e => `<option value="${escHtml(e.edition)}">${escHtml(e.label)}</option>`).join("");
+      catSel.innerHTML = '<option value="all">ทุกหมวด</option>' + ARCHIVE_CATS.map(c => `<option value="${c[0]}">${c[1]}</option>`).join("");
+      ["input", "change"].forEach(ev => {
+        document.getElementById("archive-q").addEventListener(ev, renderArchive);
+        edSel.addEventListener(ev, renderArchive);
+        catSel.addEventListener(ev, renderArchive);
+      });
+    }
+
+    function renderArchive() {
+      const box = document.getElementById("archive-results");
+      if (!box) return;
+      const q = (document.getElementById("archive-q").value || "").trim().toLowerCase();
+      const ed = document.getElementById("archive-edition").value;
+      const cat = document.getElementById("archive-cat").value;
+      const rows = [];
+      allEditions().forEach(e => {
+        if (ed !== "all" && e.edition !== ed) return;
+        e.articles.forEach(a => {
+          if (cat !== "all" && !(a.categories || []).includes(cat)) return;
+          const hay = [a.title, a.summary, (a.bullets || []).join(" "), a.categoryLabel, a.date, (a.sources || []).map(s => s.name).join(" ")].join(" ").toLowerCase();
+          if (q && !q.split(/\s+/).every(t => hay.includes(t))) return;
+          rows.push({ e, a });
+        });
+      });
+      document.getElementById("archive-count").textContent = `พบ ${rows.length} ข่าว จาก ${allEditions().length} ฉบับ`;
+      if (!rows.length) {
+        box.innerHTML = '<div class="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500">ไม่พบข่าวที่ตรงกับคำค้น ลองใช้คำที่สั้นลงหรือเลือก "ทุกฉบับ"</div>';
+        return;
+      }
+      box.innerHTML = rows.map(({ e, a }) => `
+        <details class="group rounded-xl border border-slate-200 bg-slate-50/50 open:bg-white open:shadow-sm">
+          <summary class="cursor-pointer list-none p-4 flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
+            <div class="flex flex-wrap items-center gap-1.5 sm:w-56 shrink-0">
+              <span class="text-[11px] font-heading font-semibold text-[#D94E0F] bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full">${escHtml(e.label)}</span>
+              <span class="text-[11px] text-slate-500">${escHtml(a.date)}</span>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[11px] font-heading font-semibold text-teal-800">${escHtml(a.categoryLabel)}</span>
+              <h3 class="font-heading text-sm sm:text-base font-bold text-slate-900 leading-snug group-open:text-[#D94E0F]">${escHtml(a.title)}</h3>
+            </div>
+          </summary>
+          <div class="px-4 pb-4 sm:pl-64 space-y-2 text-sm text-slate-700">
+            <p>${escHtml(a.summary)}</p>
+            <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">${(a.bullets || []).map(b => `<li>${escHtml(b)}</li>`).join("")}</ul>
+            <div class="flex flex-wrap gap-1.5 pt-1">${(a.sources || []).map(s => `<a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-medium text-[#D94E0F] hover:underline bg-orange-50/80 px-2 py-0.5 rounded border border-orange-200/60">${escHtml(s.name)}</a>`).join("")}</div>
+          </div>
+        </details>`).join("");
+    }
 
     // App State
     let currentCategory = "all";
@@ -836,7 +1529,7 @@
 
       if (currentCategory === "zero") {
         heroContainer.innerHTML = "";
-        gridTitle.innerHTML = `<span class="w-1.5 h-6 rounded-full bg-slate-400 inline-block"></span><span>หมวดสินค้าที่ไม่มีรายงานข่าวในรอบสัปดาห์นี้ (24 – 31 ต.ค. 2569)</span>`;
+        gridTitle.innerHTML = `<span class="w-1.5 h-6 rounded-full bg-slate-400 inline-block"></span><span>หมวดสินค้าที่ไม่มีรายงานข่าวในรอบสัปดาห์นี้ (9 – 15 พ.ย. 2569)</span>`;
         countBadge.textContent = "0 ข่าว (คัดกรองออกตามเกณฑ์)";
         gridContainer.innerHTML = `
           <div class="col-span-full bg-white rounded-2xl p-8 border border-slate-200 text-center space-y-3">
@@ -845,7 +1538,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 class="font-heading text-lg font-bold text-slate-800">พิกัดเบียร์, เครื่องดื่ม, แบตเตอรี่ และน้ำหอม ไม่มีข่าวเฉพาะเจาะจงในสัปดาห์นี้</h3>
+            <h3 class="font-heading text-lg font-bold text-slate-800">พิกัดเบียร์, เครื่องดื่ม, แบตเตอรี่, เอทานอล และน้ำหอม ไม่มีข่าวเฉพาะเจาะจงในสัปดาห์นี้</h3>
             <p class="text-sm text-slate-600 max-w-xl mx-auto">
               ตามเกณฑ์ของ Excise Weekly Insight Update หมวดสินค้าใดที่ไม่มีความเคลื่อนไหวหรือข่าวจากสำนักข่าวในรอบสัปดาห์จะไม่นำมาสรุปเนื้อหาย่อย แต่บันทึกไว้ในสถิติว่าเป็นกลุ่มพิกัดที่มีข่าวน้อยที่สุด (0 ข่าว)
             </p>
@@ -1073,6 +1766,8 @@
       const secArticles = document.getElementById("section-articles");
       const secOverview = document.getElementById("section-overview");
       const secA4 = document.getElementById("section-a4");
+      const secArchive = document.getElementById("section-archive");
+      if (secArchive) secArchive.classList.toggle("hidden", mode !== "archive");
       const pillsBar = document.getElementById("category-pills-bar");
       const heading = document.getElementById("main-section-heading");
       const pageText = document.getElementById("page-indicator-text");
@@ -1094,7 +1789,7 @@
         secA4.classList.add("hidden");
         pillsBar.classList.remove("hidden");
         heading.textContent = "บทความ";
-        pageText.textContent = "มุมมอง 1/3 • บทความ";
+        pageText.textContent = "มุมมอง 1/4 • บทความ";
       } else if (mode === "overview") {
         secArticles.classList.add("hidden");
         secOverview.classList.remove("hidden");
@@ -1102,14 +1797,22 @@
         secA4.classList.add("hidden");
         pillsBar.classList.remove("hidden");
         heading.textContent = "ภาพรวมและสถิติ";
-        pageText.textContent = "มุมมอง 2/3 • สถิติ";
+        pageText.textContent = "มุมมอง 2/4 • สถิติ";
       } else if (mode === "a4") {
         secArticles.classList.add("hidden");
         secOverview.classList.add("hidden");
         secA4.classList.remove("hidden");
         pillsBar.classList.add("hidden");
         heading.textContent = "สรุป 1 หน้า A4";
-        pageText.textContent = "มุมมอง 3/3 • A4";
+        pageText.textContent = "มุมมอง 3/4 • A4";
+      } else if (mode === "archive") {
+        secArticles.classList.add("hidden");
+        secOverview.classList.add("hidden");
+        secA4.classList.add("hidden");
+        pillsBar.classList.add("hidden");
+        heading.textContent = "ข่าวย้อนหลัง";
+        pageText.textContent = "มุมมอง 4/4 • ย้อนหลัง";
+        renderArchive();
       }
     }
 
@@ -1127,28 +1830,30 @@
         type: "bar",
         data: {
           labels: [
-            "น้ำมัน (B20/E20)",
             "ยาสูบ",
+            "ปราบปราม",
             "สุรา/สถานบริการ",
             "รถยนต์ (EV)",
             "รถจักรยานยนต์",
-            "เอทานอล",
+            "น้ำมัน",
             "เบียร์",
             "เครื่องดื่ม",
             "แบตเตอรี่",
+            "เอทานอล",
             "น้ำหอม"
           ],
           datasets: [
             {
-              label: "จำนวนข่าว/แหล่งอ้างอิงหลักในรอบสัปดาห์",
-              data: [6, 5, 3, 2, 2, 1, 0, 0, 0, 0],
+              label: "จำนวนข่าวที่ตรวจสอบแล้วในรอบสัปดาห์",
+              data: [3, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0],
               backgroundColor: [
                 "#F26522",
                 "#F59E0B",
-                "#4F46E5",
-                "#0D9488",
-                "#14B8A6",
-                "#10B981",
+                "#F59E0B",
+                "#0EA5E9",
+                "#0EA5E9",
+                "#0EA5E9",
+                "#CBD5E1",
                 "#CBD5E1",
                 "#CBD5E1",
                 "#CBD5E1",
@@ -1200,13 +1905,13 @@
     // Copy Executive Summary to Clipboard
     function copyExecutiveSummary() {
       const summaryText = [
-        "Excise Weekly Insight Update (รอบวันที่ 24 – 31 ตุลาคม 2569)",
-        "1. น้ำมันและผลิตภัณฑ์น้ำมัน (ข่าวมากสุด อันดับ 1): ครม. ลดภาษีสรรพสามิตดีเซล B20 (-5.522 บ./ลิตร) และ E20 (-5.642 บ./ลิตร) นาน 3 เดือน (28 ต.ค. 69 – 27 ม.ค. 70) คงราคาคาร์บอน 200 บ./ตัน ดึงราคาขายปลีกเหลือ 33.50 บ./ลิตร [อ้างอิง: ไทยพับลิก้า, ประชาชาติธุรกิจ, แนวหน้า, จส.100]",
-        "2. ยาสูบ (อันดับ 2): ยึดบุหรี่เถื่อนชายแดนสระแก้ว 4.4 ล้านมวน (22 ล้านบาท), สรุปคดีปีงบ 69 พุ่ง 39,305 คดี, เล็งเก็บภาษีบุหรี่ส่งออกล่วงหน้า และเครือข่ายสุขภาพ 491 องค์กรค้านยกเลิกภาษีบาป 4 กองทุน [อ้างอิง: เดลินิวส์, สวพ.FM91, แนวหน้า, Hfocus]",
-        "3. รถยนต์และรถจักรยานยนต์: เปิดรับฟังความเห็นแก้ประกาศ EV 3 ฉบับ กำหนดวันสิ้นสุดยื่นขอเงินอุดหนุน EV3 (5 ธ.ค. 69) และ EV3.5 (30 มิ.ย. 71) พร้อมปรับชื่อชิ้นส่วน Integrated Inverter [อ้างอิง: ประชาชาติธุรกิจ]",
-        "4. สุราและสถานบริการ: บูรณาการนำร่อง Sandbox ถนนข้าวสาร–รามบุตรี ทบทวนโซนนิ่งปี 2545 ขยายเวลาจำหน่ายสุราหลังเที่ยงคืนรับปีใหม่ สรุปผลใน 15 วัน [อ้างอิง: ไทยรัฐออนไลน์, ไทยพีบีเอส]",
-        "5. เอทานอล: ส่งเสริมการใช้เอทานอล 20% ใน E20 พยุงราคาอ้อยและมันสำปะหลังให้เกษตรกรไทย [อ้างอิง: ไทยพับลิก้า]",
-        "• สถิติ: พิกัดที่มีข่าวมากสุดคือ น้ำมัน และ ยาสูบ | พิกัดที่ไม่มีข่าวในสัปดาห์นี้ (0 ข่าว) คือ เบียร์, เครื่องดื่ม, แบตเตอรี่ และน้ำหอม"
+        "Excise Weekly Insight Update สัปดาห์ที่ 46/2569 (รอบวันที่ 9 – 15 พฤศจิกายน 2569)",
+        "1. ยาสูบ & ปราบปราม (ข่าวมากสุด): ผลปราบ ต.ค. 69 รวม 3,693 คดี ค่าปรับ 87.61 ล้านบาท ยาสูบ 2,395 คดี ยึด 333,246 ซอง | สมาคมการค้ายาสูบไทยชื่นชม ปีงบ 69 สรรพสามิต+ศุลกากรสกัดบุหรี่เถื่อนกว่า 228 ล้านมวน | คอลัมน์จี้ภาษีบุหรี่อัตราเดียว ชี้รายได้หายปีละ 1–2 หมื่นล้านบาท [อ้างอิง: กรุงเทพธุรกิจ, ไทยโพสต์, คมชัดลึก, The Bangkok Insight, ฐานเศรษฐกิจ, แนวหน้า]",
+        "2. สุรา/สถานบริการ: คดีสุรา ต.ค. 69 1,071 คดี | ป.ป.ท.–กทม.–สรรพสามิต ประชุม Sandbox ข้าวสาร–รามบุตรี 12 พ.ย. [อ้างอิง: กรุงเทพธุรกิจ, สยามนิวส์]",
+        "3. รถยนต์ EV: บทวิเคราะห์ภาษี EV นำเข้า 35% (มีผล 1 ม.ค. 70) เทียบผลิตในประเทศ 2% [อ้างอิง: Marketeer Online] | จักรยานยนต์: ต.ค. 69 จับ 53 คดี ยึด 60 คัน",
+        "4. น้ำมัน: ภาษีสรรพสามิต 10 พ.ย. 69 ดีเซล 6.92 บ./ลิตร, E20 0.358 บ., B20 0.431 บ. [อ้างอิง: ฐานเศรษฐกิจ]",
+        "• สถิติ: ข่าวมากสุดคือ ยาสูบ | 0 ข่าว: เบียร์, เครื่องดื่ม, แบตเตอรี่, เอทานอล, น้ำหอม",
+        "อ่านฉบับเต็ม: https://claude.ai/artifact/A6aFeSRLYqU44TJZ1k3X69"
       ].join("\n");
 
       const showToast = (msg) => {
@@ -1252,6 +1957,7 @@
       renderCategoryPills();
       renderArticles();
       initStatsChart();
+      initArchiveControls();
 
       // Dropdown filter
       const selectEl = document.getElementById("category-select");
@@ -1272,7 +1978,7 @@
       });
 
       // Next/Prev View Pager Buttons
-      const viewsOrder = ["all", "overview", "a4"];
+      const viewsOrder = ["all", "overview", "a4", "archive"];
       document.getElementById("btn-prev-view").addEventListener("click", () => {
         const idx = viewsOrder.indexOf(currentView);
         const nextIdx = (idx - 1 + viewsOrder.length) % viewsOrder.length;
