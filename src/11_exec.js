@@ -141,6 +141,7 @@ function xrPillarPage(code, page) {
   let special = { html: '', p: [], r: [] };
   if (code === 'BA') special = xrRevenue();
   if (code === 'LA') special = xrEng();
+  if (code === 'N' && typeof xrDG === 'function') special = xrDG();
   if (code === 'E' && GEO['5.3']) geoIds.push('5.3');
   return `<div class="xr-page">${xrHead(`${esc(grp)} · ${esc(code)} ${esc(pl ? pillarShort(pl) : code)}`, `ยุทธศาสตร์ที่ ${pl?.num || ''} ${esc(pl?.name_en || '')} · เป้าหมาย 5 ปี: ${esc(PGOAL[code] || pl?.goal || '')}`, color, page)}
     <div class="xr-sh">ผล · KPI ปีงบ ${kyr()}</div>${xrKpiCards(K)}

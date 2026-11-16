@@ -1843,4 +1843,55 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 @media (max-width: 1560px) { .top:has(#back-kpi:not([hidden])) .scope { display: none; } }
 @media (max-width: 1100px) { .wow-t { font-size: 12.5px; } .top .scope { display: none; } }
 @media (max-width: 860px) { .wow-t { display: none; } .back-kpi span { display: none; } .wow-logo { height: 18px; } }
+
+/* ---------- N · DG Readiness ---------- */
+.dg { display: grid; gap: 14px; margin-bottom: 14px; } .dg .zc { align-content: start; }
+.dg-row { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(300px, 1.7fr) minmax(240px, 1.3fr); gap: 20px; align-items: start; }
+.dg-cap { font-size: 12.5px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+.dg-score { display: grid; gap: 6px; align-content: start; }
+.dg-score small { color: var(--muted); font-size: 12.5px; }
+.dg-score > b { font-size: 40px; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; } .dg-score > b em { font-size: 18px; font-style: normal; margin-left: 2px; }
+.dg-lv { display: flex; gap: 3px; } .dg-lv span { width: 26px; height: 10px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); }
+.dg-lv span.on { background: #7CC2F5; border-color: #5AA9E6; }
+.dg-lvt { font-size: 12.5px; font-weight: 600; }
+.dg-pills { display: grid; gap: 4px; margin-top: 4px; } .dg-pills span { font-size: 12px; border-radius: 6px; padding: 3px 8px; }
+.dg-up { background: var(--ok-soft); color: var(--ok); } .dg-dn { background: var(--warn-soft); color: #A86400; } .dg-nt { background: var(--accent-soft); color: var(--accent); }
+.dgt { width: 100%; height: auto; display: block; }
+.dgt-g { stroke: var(--line); stroke-width: 1; } .dgt-a, .dgt-x { font-size: 11px; fill: var(--muted); } .dgt-x { font-weight: 600; fill: var(--fg); }
+.dgt-t { stroke: var(--ok); stroke-width: 1.5; stroke-dasharray: 5 4; } .dgt-top { stroke: #1F3A8A; stroke-width: 1; stroke-dasharray: 2 3; opacity: .7; }
+.dgt-tl { font-size: 10.5px; fill: var(--ok); font-weight: 600; } .dgt-tl2 { fill: #3550A8; }
+.dgt-l { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.dgt-d { fill: var(--accent); stroke: var(--surface); stroke-width: 2; } .dgt-p { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.5; stroke-dasharray: 2 2; }
+.dgt-v { font-size: 12px; font-weight: 700; fill: var(--accent); } .dgt-s { font-size: 10px; fill: var(--muted); } .dgt-s1 { fill: var(--ok); font-weight: 600; }
+.dg-bench { display: grid; gap: 7px; }
+.dgb { display: grid; grid-template-columns: 1fr 52px; grid-template-areas: "n v" "b b"; gap: 2px 8px; font-size: 12px; }
+.dgb span { grid-area: n; color: var(--muted); } .dgb b { grid-area: v; text-align: right; font-variant-numeric: tabular-nums; }
+.dgb i { grid-area: b; height: 8px; border-radius: 4px; background: #C9D3E3; }
+.dgb-me span, .dgb-me b { color: var(--accent); font-weight: 700; } .dgb-me i { background: var(--accent); }
+.dgb-top i { background: #1F3A8A; } .dgb-top span { color: var(--fg); }
+.dg-2 { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 14px; }
+.dg-tbl td { vertical-align: middle; } .dg-tbl td small { color: var(--muted); font-size: 11.5px; } .dg-tbl .dg-subs { margin-top: 5px; } .dg-tbl td:first-child { min-width: 330px; }
+.dg-barc { min-width: 120px; } .dg-bar { position: relative; height: 10px; background: var(--surface-2); border-radius: 5px; }
+.dg-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: var(--accent); } .dg-bar i.mid { background: #5AA9E6; }
+.dg-m { position: absolute; top: -3px; height: 16px; width: 2px; border-radius: 1px; }
+.dg-mavg, .dg-key .k-avg { background: #8A96A8; } .dg-mtop, .dg-key .k-top { background: #1F3A8A; }
+.dg-key { font-weight: 400; font-size: 11px; color: var(--muted); margin-left: 6px; white-space: nowrap; } .dg-key i { display: inline-block; width: 2px; height: 10px; margin: 0 3px 0 6px; vertical-align: -1px; }
+.dg-lvs { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; font-weight: 700; font-size: 12px; }
+.dg-subs { display: flex; flex-wrap: wrap; gap: 4px; }
+.dgt-v { paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
+.dg-sub { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; border-radius: 999px; padding: 2px 4px 2px 9px; white-space: nowrap; }
+.dg-sub b { display: inline-grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; font-size: 10.5px; background: rgba(255,255,255,.75); }
+.l5 { background: #DDF1E4; color: #17713F; } .l4 { background: #DCEEFC; color: #155C9C; } .l3 { background: #FFF6C2; color: #7A6400; } .l2 { background: #FFE6CC; color: #9A4A00; } .l1 { background: #FBDADC; color: #A3222A; }
+.dg-lv span.l1, .dg-lv span.l2, .dg-lv span.l3, .dg-lv span.l4, .dg-lv span.l5 { color: transparent; }
+.dg-lv span:not(.on) { background: var(--surface-2); }
+.dg-gaps { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.dg-gaps li { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 4px; }
+.dg-gh { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; } .dg-arrow { font-size: 12px; font-weight: 700; color: var(--ok); } .dg-yr { margin-left: auto; font-size: 11.5px; color: var(--muted); }
+.dg-gaps p { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--fg); }
+.dg-ins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.dg-ic { border-radius: 10px; padding: 10px 12px; border: 1px solid var(--line); }
+.dg-ic h4 { margin: 0 0 6px; font-size: 14px; } .dg-ic ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: 13px; line-height: 1.5; }
+.dg-ic.g { background: var(--ok-soft); } .dg-ic.g h4 { color: var(--ok); } .dg-ic.r { background: var(--warn-soft); } .dg-ic.r h4 { color: #A86400; } .dg-ic.b { background: var(--accent-soft); } .dg-ic.b h4 { color: var(--accent); }
+@media (max-width: 1200px) { .dg-row { grid-template-columns: 1fr 1fr; } .dg-row > :nth-child(2) { grid-column: 1 / -1; order: 3; } .dg-2 { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .dg-row, .dg-ins { grid-template-columns: 1fr; } }
 </style>
