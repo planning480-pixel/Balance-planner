@@ -114,7 +114,7 @@ async function publicBoot() {
     cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: Array.isArray(P.plans) ? P.plans : [], plans: [], reports: {}, profiles: {},
     profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
   scopePlans();
-  loadReal();
+  loadReal(); loadEng();
   fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
   document.body.classList.add('public');
   enterApp();
@@ -141,7 +141,7 @@ async function boot() {
   db.doc('profiles/' + S.uid).onSnapshot((snap) => { S.profile = snap.exists ? snap.data() : null; S.profileLoaded = true; scopePlans(); onData('profile'); }, () => { S.profileLoaded = true; onData('profile'); });
   db.collection('profiles').onSnapshot((q) => { const m = {}; q.docs.forEach((d) => { m[d.id] = d.data(); }); S.profiles = m; onData('profiles'); }, () => {});
   db.collection('plans').onSnapshot((q) => { S.allPlans = q.docs.map((d) => d.data()).filter((p) => p && p.id); scopePlans(); S.plansLoaded = true; onData('plans'); }, () => { S.plansLoaded = true; onData('plans'); });
-  loadReal();
+  loadReal(); loadEng();
   fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
   db.doc('config/hr').onSnapshot((snap) => { S.hr = snap.exists ? snap.data() : null; if (S.inApp && S.route === 'pillar' && S.param === 'LA') renderView(); }, () => {});
   db.doc('config/ops').onSnapshot((snap) => { S.ops = snap.exists ? snap.data() : null; if (S.inApp && S.route === 'dashboard') renderView(); }, () => {});

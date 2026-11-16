@@ -196,12 +196,13 @@ function ePanels(id, code) {
   return `${geoPanel(code, '5.3')}${zcard('ความพึงพอใจตามขั้นตอนบริการ', 'เลือกสินค้าด้านบน แล้วกดแต่ละขั้นตอนเพื่อดูรายละเอียดและคะแนน', journeyPanel(code), { fold: 'e-journey' })}`;
 }
 const PSPEC = {
-  LA: { kpis: ['2.1', '2.2', '2.3'], panel: (id, code) => geoPanel(code, id) },
+  LA: { kpis: ['2.1', '2.2', '2.3'], panel: (id, code) => (id === '2.3' && S.eng ? engPanel() : geoPanel(code, id)) },
   N: { kpis: ['3.1', '3.2', '3.3'], panel: (id) => nPanels(id) },
   C: { kpis: ['4.1', '4.2', '4.3', '4.4'], panel: (id, code) => (id === '4.1' ? zcard('ทบทวนและปรับปรุงกฎหมายตามแผน', 'กฎหมายและมาตรการรายกลุ่มสินค้า แยกตามสถานะ 5 ขั้น · เลื่อนการ์ดซ้ายขวาได้', lawsPanel(), {}) : geoPanel(code, id)) },
   E: { kpis: ['5.1', '5.2', '5.3'], panel: (id, code) => ePanels(id, code) }
 };
 function kpiCardVal(id) {
+  if (id === '2.3' && S.eng?.rounds?.length) { const r = S.eng.rounds[S.eng.rounds.length - 1]; return { v: r.v[0], sub: 'Engagement ' + r.label }; }
   const k = kpiAny(id); if (k?.latest != null) return { v: k.latest, sub: k.latestAt || '' };
   if (GEO[id]) { const gs = GEO[id]; const items = allAreas().map((a) => gs.rec(a, '')); const ag = gsAgg(gs, [...items, ...(gs.central ? gsCentral(id) : [])]); if (!ag) return { v: null, sub: '' }; if (gs.kind === 'sum') return { v: ag.t ? (ag.a / ag.t) * 100 : null, sub: `${fmtM(ag.a)} / ${fmtM(ag.t)} ล้านบาท` }; if (id === '2.2') { const all = allAreas().map((a) => gs.rec(a)).concat(gsCentral(id) || []).filter(Boolean); return { v: (all.filter((r) => fillTone(gsVal(gs, r)) === 'ok').length / all.length) * 100, sub: `กำลังคนจริง ${gsVal(gs, ag).toFixed(1)}% ของอัตรา` }; } return { v: gsVal(gs, ag), sub: 'จากข้อมูลรายพื้นที่' }; }
   if (id === '4.1') { const all = LAWS.flatMap((c) => c.items); return { v: Math.round((all.filter((x) => x[1] >= 4).length / all.length) * 1000) / 10, sub: 'ถึงขั้นประกาศ/บังคับใช้' }; }
