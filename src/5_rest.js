@@ -5,29 +5,34 @@ const din = (path, val, opts = {}) => opts.ta
   ? `<textarea class="textarea" data-d="${path}" aria-label="${esc(opts.label || path)}" ${S.canAdmin ? '' : 'disabled'}>${esc(val)}</textarea>`
   : `<input class="input" data-d="${path}" value="${esc(val)}" aria-label="${esc(opts.label || path)}" ${opts.w ? `style="min-width:${opts.w}"` : ''} ${S.canAdmin ? '' : 'disabled'}>`;
 
+const KSET_YEARS = [2568, 2569, 2570, 2571, 2572, 2573, 2574];
 function viewKpi() {
   const g = needCfg(); if (g) return g;
   const D = S.draft;
   const unitsOpt = (sel) => `<option value="">—</option>` + D.units.map((u) => `<option value="${esc(u.id)}" ${u.id === sel ? 'selected' : ''}>${esc(u.name)}</option>`).join('');
   const rows = D.pillars.map((p) => {
     const ks = D.kpis.map((k, i) => ({ k, i })).filter((x) => x.k.pillar === p.code);
-    return `<tr class="grp-h" data-p="${p.code}"><td colspan="9">ยุทธศาสตร์ที่ ${p.num} · ${esc(p.code)} ${esc(p.name_en)}</td></tr>` +
+    return `<tr class="grp-h" data-p="${p.code}"><td colspan="10">ยุทธศาสตร์ที่ ${p.num} · ${esc(p.code)} ${esc(p.name_en)}</td></tr>` +
       ks.map(({ k, i }) => {
         const n = S.plans.filter((x) => (x.kpis || []).includes(k.id) && x.name).length;
         return `<tr><td>${din(`kpis.${i}.id`, k.id, { w: '64px', label: 'รหัส' })}</td>
           <td style="min-width:280px;display:grid;gap:6px">${din(`kpis.${i}.name`, k.name, { ta: true, label: 'ชื่อตัวชี้วัด' })}${din(`kpis.${i}.name_en`, k.name_en, { label: 'ชื่อภาษาอังกฤษ' })}${din(`kpis.${i}.calc`, k.calc || '', { ta: true, label: 'วิธีคำนวณ' })}<span class="help">ช่องล่าง: วิธีคำนวณ (แสดงเมื่อชี้ที่ไอคอน ⓘ)</span></td>
           <td style="min-width:200px">${din(`kpis.${i}.target`, k.target, { label: 'ค่าเป้าหมาย' })}</td>
           <td style="min-width:130px">${din(`kpis.${i}.baseline`, k.baseline, { label: 'ค่าฐาน' })}</td>
-          <td style="min-width:220px"><div class="kset"><span class="help">ผลล่าสุด</span>${din(`kpis.${i}.latest`, k.latest ?? '', { label: 'ผลล่าสุด' })}<span class="help">ณ งวด</span>${din(`kpis.${i}.latestAt`, k.latestAt || '', { label: 'งวดของผลล่าสุด' })}<span class="help">เป้าเทียบ</span><span style="display:flex;gap:6px">${din(`kpis.${i}.tval`, k.tval ?? '', { label: 'ค่าเป้าหมายตัวเลข' })}${din(`kpis.${i}.unit`, k.unit || '', { label: 'หน่วย', w: '72px' })}</span><span class="help">ทิศทาง</span><select class="select" data-d="kpis.${i}.dir" aria-label="ทิศทางที่ดี" ${S.canAdmin ? '' : 'disabled'}><option value="ge" ${k.dir !== 'le' ? 'selected' : ''}>≥ ยิ่งมากยิ่งดี</option><option value="le" ${k.dir === 'le' ? 'selected' : ''}>≤ ยิ่งน้อยยิ่งดี</option></select></div></td>
+          <td style="min-width:200px"><div class="kset"><span class="help">เป้าเทียบ (ทุกปี)</span><span style="display:flex;gap:6px">${din(`kpis.${i}.tval`, k.tval ?? '', { label: 'ค่าเป้าหมายตัวเลข' })}${din(`kpis.${i}.unit`, k.unit || '', { label: 'หน่วย', w: '72px' })}</span><span class="help">ทิศทาง</span><select class="select" data-d="kpis.${i}.dir" aria-label="ทิศทางที่ดี" ${S.canAdmin ? '' : 'disabled'}><option value="ge" ${k.dir !== 'le' ? 'selected' : ''}>≥ ยิ่งมากยิ่งดี</option><option value="le" ${k.dir === 'le' ? 'selected' : ''}>≤ ยิ่งน้อยยิ่งดี</option></select></div></td>
+          <td style="min-width:430px"><table class="kyt"><thead><tr><th></th>${KSET_YEARS.map((y) => `<th>${y}</th>`).join('')}</tr></thead><tbody>
+            <tr><th>ผล</th>${KSET_YEARS.map((y) => `<td>${din(`kpis.${i}.res.${y}`, k.res?.[y] ?? '', { label: `ผล ปี ${y}` })}</td>`).join('')}</tr>
+            <tr><th>เป้า</th>${KSET_YEARS.map((y) => `<td>${y < 2570 ? '' : din(`kpis.${i}.ty.${y}`, k.ty?.[y] ?? '', { label: `เป้า ปี ${y} (ว่าง = เป้าเทียบ)` })}</td>`).join('')}</tr></tbody></table>
+            <span class="help">${k.id === '2.3' ? 'ดึงผลจากผลสำรวจ Engagement อัตโนมัติ · ' : ''}เป้ารายปีเว้นว่างได้ จะใช้เป้าเทียบ · ปี 2568–2569 คือค่าฐาน</span></td>
           <td style="min-width:200px">${din(`kpis.${i}.detailUrl`, k.detailUrl || '', { label: 'ลิงก์หน้ารายละเอียด' })}<span class="help">https:// หน้ารายละเอียดเชิงลึก</span></td>
           <td style="min-width:180px"><select class="select" data-d="kpis.${i}.owner" aria-label="หน่วยงานรับผิดชอบ" ${S.canAdmin ? '' : 'disabled'}>${unitsOpt(k.owner)}</select></td>
           <td class="num" style="text-align:center"><span class="cnt ${n ? 'on' : ''}" data-p="${p.code}">${n}</span></td>
           <td>${S.canAdmin ? `<button class="icon-btn btn-danger" data-act="d-del" data-v="kpis.${i}" aria-label="ลบตัวชี้วัด">${ic('trash', 'ic-sm')}</button>` : ''}</td></tr>`;
-      }).join('') + (S.canAdmin ? `<tr><td colspan="9"><button class="btn btn-sm btn-ghost" data-act="d-add-kpi" data-v="${p.code}">${ic('plus', 'ic-sm')}เพิ่มตัวชี้วัดเสา ${esc(p.code)}</button></td></tr>` : '');
+      }).join('') + (S.canAdmin ? `<tr><td colspan="10"><button class="btn btn-sm btn-ghost" data-act="d-add-kpi" data-v="${p.code}">${ic('plus', 'ic-sm')}เพิ่มตัวชี้วัดเสา ${esc(p.code)}</button></td></tr>` : '');
   }).join('');
   return `<div class="ph"><div class="ph-t"><span class="eyebrow">ตัวชี้วัดระดับกรม ${D.kpis.length} ตัว</span><h1>KPI Setting</h1><span class="muted small">กำหนดตัวชี้วัด ค่าเป้าหมาย ค่าฐาน และหน่วยงานรับผิดชอบ ซึ่งจะใช้เป็นตัวเลือกตอนสร้างแผน</span></div></div>
   ${roNote()}
-  <div class="card tbl-wrap"><table class="tbl"><thead><tr><th>รหัส</th><th>ตัวชี้วัด</th><th>ค่าเป้าหมาย</th><th>ค่าฐาน</th><th>ผลล่าสุดและเป้าเทียบ</th><th>ลิงก์รายละเอียด</th><th>หน่วยงานรับผิดชอบ</th><th>แผนที่ผูก</th><th><span class="sr">ลบ</span></th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="card tbl-wrap"><table class="tbl"><thead><tr><th>รหัส</th><th>ตัวชี้วัด</th><th>ค่าเป้าหมาย</th><th>ค่าฐาน</th><th>เป้าเทียบ</th><th>ผลและเป้ารายปี</th><th>ลิงก์รายละเอียด</th><th>หน่วยงานรับผิดชอบ</th><th>แผนที่ผูก</th><th><span class="sr">ลบ</span></th></tr></thead><tbody>${rows}</tbody></table></div>
   ${dirtyBar()}`;
 }
 
@@ -121,11 +126,11 @@ function aiContext() {
   const p = S.route === 'edit' ? S.plan : S.route === 'report' ? reportPlan() : null;
   if (p) lines.push('แผนที่กำลังดู (JSON): ' + JSON.stringify(planForAi(p)));
   if (S.route === 'monthly') lines.push(...monthlyAiLines());
-  if (S.route === 'kpis' || S.route === 'dashboard') lines.push('ผล KPI ล่าสุด: ' + cfg().kpis.map((k) => `${k.id} ${k.name_en || k.name}: ${k.latest ?? '-'} / เป้า ${k.tval ?? k.target}`).join('; '));
-  if (S.route === 'risks' || S.route === 'dashboard') lines.push('ความเสี่ยงระดับกรม (โอกาส×ผลกระทบ): ' + cfg().risks.map((r) => `${r.id} ${r.name} [${r.pillar}] ${(Number(r.l) || 0) * (Number(r.i) || 0)}`).join('; '));
+  if (S.route === 'kpis' || S.route === 'dashboard') lines.push(`ผล KPI ปีงบ ${kyr()}: ` + cfg().kpis.map(kpiEff).map((k) => `${k.id} ${k.name_en || k.name}: ${k.latest ?? '-'} / เป้า ${k.tval ?? k.target}`).join('; '));
+  if (S.route === 'risks' || S.route === 'kpis') lines.push('ความเสี่ยงระดับกรม (โอกาส×ผลกระทบ): ' + cfg().risks.map((r) => `${r.id} ${r.name} [${r.pillar}] ${(Number(r.l) || 0) * (Number(r.i) || 0)}`).join('; '));
   if (S.route === 'pillar') { const pp = filteredPlans().filter((p) => p.pillar === S.param); lines.push(`เสาที่เปิด: ${S.param}; กลยุทธ์: ${cfg().strategies.filter((x) => x.pillar === S.param).map((x) => x.code + ' ' + x.name).join('; ')}; โครงการ: ` + pp.map((p) => `${p.name} [${p.strategy}, ${unitName(p.unitId)}, ${money(p.budget)} บาท]`).join(' | ')); }
   if (S.route === 'users' && S.isSuper) lines.push('ผู้ใช้: ' + Object.values(S.accounts).map((a) => `${a.name} (${unitName(a.unitId)})`).join('; '));
-  if (S.route === 'dashboard') {
+  if (S.route === 'kpis') {
     const ps = filteredPlans().slice(0, 60);
     lines.push(`ตัวกรอง: ปี ${S.filt.year || 'ทุกปี'}, หน่วยงาน ${S.filt.unit ? unitName(S.filt.unit) : 'ทั้งหมด'}, เสา ${S.filt.pillar || 'ทั้งหมด'}`);
     lines.push(`โครงการตามตัวกรอง ${ps.length} โครงการ: ` + ps.map((x) => `${x.name} [${x.pillar}/${x.strategy}, ${unitName(x.unitId)}, ${x.category}, ${money(x.budget)} บาท, ${x.status}]`).join(' | '));
@@ -286,6 +291,9 @@ document.addEventListener('click', (e) => {
     case 'nav-trigger': if (window.matchMedia('(max-width: 900px)').matches) { $('#shell').classList.add('open'); $('#scrim').hidden = false; } else { const sh = $('#shell'); sh.classList.toggle('mini'); ls.set('bp_mini', sh.classList.contains('mini') ? '1' : '0'); syncMini(); } break;
     case 'theme': { const r = document.documentElement; const t = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; r.setAttribute('data-theme', t); ls.set('bp_theme', t); syncThemeBtn(); break; }
     case 'kpi-p': S.kpiP = v; renderView(); break;
+    case 'kpi-g': S.kgrp = v; if (v) { S.kdg = v; S.kdp = ''; } renderView(); break;
+    case 'kd-g': S.kdg = v; S.kdp = ''; if (S.kgrp && S.kgrp !== v) S.kgrp = v; { const y = $('#view').scrollTop; renderView(); $('#view').scrollTop = y; } break;
+    case 'kd-p': S.kdp = v; { const y = $('#view').scrollTop; renderView(); $('#view').scrollTop = y; } break;
     case 'close-overlays': closeOverlays(); break;
     case 'toggle-mini': { const sh = $('#shell'); sh.classList.toggle('mini'); ls.set('bp_mini', sh.classList.contains('mini') ? '1' : '0'); syncMini(); break; }
     case 'logout': if (S.plan) flushSave(); ss.del('bp_in'); S.inApp = false; S.authMode = 'login'; S.authErr = {}; S.authMsg = ''; closeOverlays(); location.hash = ''; renderAuth(); break;
@@ -396,3 +404,4 @@ document.addEventListener('keydown', (e) => {
 });
 window.addEventListener('hashchange', () => { if (S.inApp) route(); });
 window.addEventListener('pagehide', () => { if (S.plan) flushSave(); });
+document.addEventListener('change', (e) => { const t = e.target; if (t.matches?.('[data-kyr]')) { S.kyr = Number(t.value); if (t.value >= 2570 && t.value <= 2574) S.so = Object.assign(S.so || {}, { year: Number(t.value) }); renderView(); } });

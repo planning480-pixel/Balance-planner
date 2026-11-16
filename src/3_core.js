@@ -16,7 +16,7 @@ const S = {
   account: null, accounts: {}, isSuper: false,
   reports: {}, reportsLoaded: false, mon: null, repTab: 'mine', repScope: 'mine', repOpen: null, repDraft: {}, ovFilt: { unit: '', pillar: '' }, confirmAcct: null,
   plans: [], allPlans: [], plansLoaded: false,
-  route: 'dashboard', param: null,
+  route: 'kpis', param: null,
   filt: { year: '', unit: '', pillar: '', month: '' }, ops: null, opsMetric: 'revenue', opsRegion: '',
   scope: 'mine', confirmDel: null,
   plan: null, saveT: null, writing: false, pending: false, saveMsg: '', saveErr: false,
@@ -105,7 +105,7 @@ function missing(p) {
 
 /* ---- boot ---- */
 /* โหมดแสดงผลสาธารณะ (เช่น Vercel): ไม่มีระบบ Claude → อ่านข้อมูลจาก public-data.json ดูได้อย่างเดียว */
-const PUBLIC_ROUTES = ['dashboard', 'kpis', 'risks', 'pillar', 'report', 'library'];
+const PUBLIC_ROUTES = ['kpis', 'risks', 'pillar', 'report', 'library'];
 async function publicBoot() {
   let P = null;
   try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
@@ -115,7 +115,7 @@ async function publicBoot() {
     profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
   scopePlans();
   loadReal(); loadEng();
-  fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
+  fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'kpis') renderView(); } }).catch(() => {});
   document.body.classList.add('public');
   enterApp();
   return true;
@@ -142,9 +142,9 @@ async function boot() {
   db.collection('profiles').onSnapshot((q) => { const m = {}; q.docs.forEach((d) => { m[d.id] = d.data(); }); S.profiles = m; onData('profiles'); }, () => {});
   db.collection('plans').onSnapshot((q) => { S.allPlans = q.docs.map((d) => d.data()).filter((p) => p && p.id); scopePlans(); S.plansLoaded = true; onData('plans'); }, () => { S.plansLoaded = true; onData('plans'); });
   loadReal(); loadEng();
-  fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
+  fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'kpis') renderView(); } }).catch(() => {});
   db.doc('config/hr').onSnapshot((snap) => { S.hr = snap.exists ? snap.data() : null; if (S.inApp && S.route === 'pillar' && S.param === 'LA') renderView(); }, () => {});
-  db.doc('config/ops').onSnapshot((snap) => { S.ops = snap.exists ? snap.data() : null; if (S.inApp && S.route === 'dashboard') renderView(); }, () => {});
+  db.doc('config/ops').onSnapshot((snap) => { S.ops = snap.exists ? snap.data() : null; if (S.inApp && ['kpis', 'pillar'].includes(S.route)) renderView(); }, () => {});
   db.collection('reports').onSnapshot((q) => { const m = {}; q.docs.forEach((d) => { m[d.id] = d.data(); }); S.reports = m; S.reportsLoaded = true; onData('reports'); }, () => { S.reportsLoaded = true; });
   db.doc('accounts/' + S.uid).onSnapshot(async (snap) => {
     S.account = snap.exists ? snap.data() : null;
@@ -336,7 +336,6 @@ function scopePlans() {
 }
 function visUnits() { const us = cfg().units || []; if (S.isSuper) return us; const u = S.profile?.unitId; return us.filter((x) => x.id === u); }
 const NAV = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'grid' },
   { id: 'kpis', label: 'KPI Scoreboard', icon: 'target' },
   { id: 'risks', label: 'TOP5 Risk', icon: 'shield' },
   { id: 'new', label: 'สร้างแผนงานใหม่', icon: 'fileplus' },
@@ -351,6 +350,7 @@ const NAV = [
   { id: 'users', label: 'จัดการผู้ใช้', icon: 'user', superOnly: true }
 ];
 const INSIGHT_URL = 'https://claude.ai/artifact/A6aFeSRLYqU44TJZ1k3X69';
+const PLAN_URL = 'https://claude.ai/artifact/3N1XkVve7bjAkKanNsmdA7';
 const DEFAULT_LINKS = [{ label: 'Excise Knowledge Hub', url: '' }, { label: 'แผนระดับต่างๆ', url: '' }, { label: 'ผลการดำเนินงานสำคัญ กรมสรรพสามิต', url: '' }];
 function workLinks() {
   const C = cfg();
@@ -365,9 +365,9 @@ function renderNav() {
   const link = (l) => l.url ? `<li><a class="nav-item" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(l.label)} (เปิดแท็บใหม่)">${ic('book')}<span class="nav-label">${esc(l.label)}</span></a></li>`
     : `<li><button class="nav-item" data-act="link-empty" title="${esc(l.label)}">${ic('book')}<span class="nav-label">${esc(l.label)}</span></button></li>`;
   $('#nav-list').innerHTML = NAV.filter((n) => (!n.superOnly || S.isSuper) && !(S.publicMode && ['new', 'monthly', 'ai'].includes(n.id))).map((n) => {
-    if (!n.sec) return item(n) + (n.id === 'dashboard' ? `<li><a class="nav-item" href="${esc(S.publicMode ? 'insight/' : (cfg().insightUrl || INSIGHT_URL))}" target="_blank" rel="noopener noreferrer" title="Excise Insight Update · สรุปข่าวและนโยบายรายสัปดาห์ (เปิดแท็บใหม่)">${ic('spark')}<span class="nav-label">Excise Insight Update</span></a></li>` : '');
+    if (!n.sec) return item(n) + (n.id === 'kpis' ? `<li><a class="nav-item" href="${esc(S.publicMode ? 'insight/' : (cfg().insightUrl || INSIGHT_URL))}" target="_blank" rel="noopener noreferrer" title="Excise Insight Update · สรุปข่าวและนโยบายรายสัปดาห์ (เปิดแท็บใหม่)">${ic('spark')}<span class="nav-label">Excise Insight Update</span></a></li>` : '');
     let h = `<li class="nav-sec"><span>${n.sec}</span></li>`;
-    if (n.pillars) h += `<li><button class="nav-item" data-act="plan-view" title="ร่างแผนยุทธศาสตร์กรมสรรพสามิต 2570–2574 · เปิดดูหรือดาวน์โหลด PDF">${ic('book')}<span class="nav-label">แผนยุทธศาสตร์ 2570–2574</span></button></li>`;
+    if (n.pillars) h += `<li><a class="nav-item" href="${esc(cfg().planUrl || PLAN_URL)}" target="_blank" rel="noopener noreferrer" title="แผนยุทธศาสตร์กรมสรรพสามิต 2570–2574 (เปิดแท็บใหม่)">${ic('book')}<span class="nav-label">แผนยุทธศาสตร์ 2570–2574</span></a></li>`;
     if (n.pillars) h += cfg().pillars.map((pl) => `<li><button class="nav-item nav-p" data-p="${esc(pl.code)}" data-act="go" data-v="p-${esc(pl.code)}" ${cur === 'p-' + pl.code ? 'aria-current="page"' : ''} title="${esc(pl.code)} : ${esc(pillarShort(pl))}"><span class="nav-code">${esc(pl.code)}</span><span class="nav-label">${esc(pillarShort(pl))}</span></button></li>`).join('');
     if (n.links) { h += `<li><button class="nav-item" data-act="go" data-v="library" ${cur === 'library' ? 'aria-current="page"' : ''} title="แผนระดับต่างๆ · คลังแผนและเอกสาร">${ic('book')}<span class="nav-label">แผนระดับต่างๆ</span></button></li>`; h += workLinks().filter((l) => l.label && l.label.trim() !== 'แผนระดับต่างๆ').map(link).join(''); }
     return h;
@@ -375,14 +375,14 @@ function renderNav() {
 }
 function go(r) { if (location.hash === '#' + r) route(); else location.hash = r; }
 function route() {
-  const h = (location.hash || '').slice(1) || 'dashboard';
+  const h0 = (location.hash || '').slice(1), h = !h0 || h0 === 'dashboard' ? 'kpis' : h0;
   if (S.route === 'edit' && S.plan) flushSave();
   const m = h.match(/^(edit|report)-(.+)$/), pm = h.match(/^p-([A-Za-z]+)$/);
   if (m) { S.route = m[1]; S.param = m[2]; }
   else if (pm) { S.route = 'pillar'; S.param = pm[1]; }
-  else { S.route = ['dashboard', 'new', 'kpi', 'setup', 'monthly', 'hub', 'users', 'kpis', 'risks', 'library'].includes(h) ? h : 'dashboard'; S.param = null; }
-  if (['users', 'kpi', 'setup'].includes(S.route) && !S.isSuper) S.route = 'dashboard';
-  if (S.publicMode && !PUBLIC_ROUTES.includes(S.route)) { S.route = 'dashboard'; S.param = null; }
+  else { S.route = ['new', 'kpi', 'setup', 'monthly', 'hub', 'users', 'kpis', 'risks', 'library'].includes(h) ? h : 'kpis'; S.param = null; }
+  if (['users', 'kpi', 'setup'].includes(S.route) && !S.isSuper) S.route = 'kpis';
+  if (S.publicMode && !PUBLIC_ROUTES.includes(S.route)) { S.route = 'kpis'; S.param = null; }
   if (S.route === 'edit') {
     const p = S.plans.find((x) => x.id === S.param);
     S.plan = p ? Object.assign(newPlan(p.type, p.category), clone(p)) : (S.plan && S.plan.id === S.param ? S.plan : null);

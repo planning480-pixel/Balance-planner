@@ -210,13 +210,14 @@ const PSPEC = {
   E: { kpis: ['5.1', '5.2', '5.3'], panel: (id, code) => ePanels(id, code) }
 };
 function kpiCardVal(id) {
-  const c = kpiCardVal0(id), k = kpiAny(id);
-  if (k?.basePhase && k.latest == null && c.v != null) c.sub = `ข้อมูลตัวอย่าง · ${k.basePhase}`;
+  const c = kpiCardVal0(id), k = kpiEff(kpiAny(id));
+  if (k && k.latest == null && c.v != null && (GEO[id] ? GEO[id].sample() : true)) c.sub = 'ข้อมูลตัวอย่าง' + (k.basePhase ? ' · ' + k.basePhase : '');
   return c;
 }
 function kpiCardVal0(id) {
-  if (id === '2.3' && S.eng?.rounds?.length) { const r = S.eng.rounds[S.eng.rounds.length - 1]; return { v: r.v[0], sub: 'Engagement ' + r.label }; }
-  const k = kpiAny(id); if (k?.latest != null) return { v: k.latest, sub: k.latestAt || '' };
+  const k = kpiEff(kpiAny(id));
+  if (id === '2.3' && S.eng && k?.latest == null) return { v: null, sub: 'รอผลสำรวจปีงบ ' + kyr() };
+  if (k?.latest != null) return { v: k.latest, sub: (id === '2.3' ? 'Engagement ครั้งที่ ' : '') + (k.latestAt || '') + (k.yBase ? ' (ค่าฐาน)' : '') };
   if (GEO[id]) { const gs = GEO[id]; const items = allAreas().map((a) => gs.rec(a, '')); const ag = gsAgg(gs, [...items, ...(gs.central ? gsCentral(id) : [])]); if (!ag) return { v: null, sub: '' }; if (gs.kind === 'sum') return { v: ag.t ? (ag.a / ag.t) * 100 : null, sub: `${fmtM(ag.a)} / ${fmtM(ag.t)} ล้านบาท` }; if (id === '2.2') { const all = allAreas().map((a) => gs.rec(a)).concat(gsCentral(id) || []).filter(Boolean); return { v: (all.filter((r) => fillTone(gsVal(gs, r)) === 'ok').length / all.length) * 100, sub: `กำลังคนจริง ${gsVal(gs, ag).toFixed(1)}% ของอัตรา` }; } return { v: gsVal(gs, ag), sub: 'จากข้อมูลรายพื้นที่' }; }
   if (id === '4.1') { const all = LAWS.flatMap((c) => c.items); return { v: Math.round((all.filter((x) => x[1] >= 4).length / all.length) * 1000) / 10, sub: 'ถึงขั้นประกาศ/บังคับใช้' }; }
   return { v: null, sub: '' };
@@ -225,7 +226,7 @@ const KICON = { '2.1': 'bulb', '2.2': 'user', '2.3': 'spark', '3.1': 'chart', '3
 function viewPillarGeneric(code) {
   const pl = pillarOf(code), spec = PSPEC[code], st = pst(code);
   const kid = spec.kpis.includes(st.k) ? st.k : spec.kpis[0];
-  const cards = carousel(spec.kpis.map((id) => { const k = kpiAny(id); if (!k) return ''; const c = kpiCardVal(id); return bigKpi(k, c.v, c.sub, { act: 'g-k', v: code + '|' + id, on: id === kid, badge: `<span class="bk-ic">${ic(KICON[id] || 'target')}</span>` }); }).join(''), 'k-' + code);
+  const cards = carousel(spec.kpis.map((id) => { const k = kpiEff(kpiAny(id)); if (!k) return ''; const c = kpiCardVal(id); return bigKpi(k, c.v, c.sub, { act: 'g-k', v: code + '|' + id, on: id === kid, badge: `<span class="bk-ic">${ic(KICON[id] || 'target')}</span>` }); }).join(''), 'k-' + code);
   return `${pillarHead(code, pl)}
   ${cards}
   ${spec.panel(kid, code)}
@@ -250,11 +251,15 @@ document.addEventListener('click', (e) => {
   keep();
 });
 document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.lal li[data-act]')) { e.preventDefault(); e.target.click(); } });
-/* KPI Scoreboard → pillar deep-dive with that KPI selected */
+/* KPI card → deep-dive under the scoreboard (or the pillar page itself) with that KPI selected */
 function kpiDrill(id) {
   const k = kpiAny(id); if (!k) return;
   const code = k.pillar;
   if (PSPEC[code]) { const st = pst(code); st.k = id; st.region = ''; st.prov = ''; st.central = false; }
-  go('p-' + code);
-  setTimeout(() => { const el = document.querySelector('#view .bk.on'); const sc = el?.closest('.car-t'); if (!el || !sc) return; const a = el.getBoundingClientRect(), b = sc.getBoundingClientRect(); if (a.right > b.right || a.left < b.left) sc.scrollLeft += a.left - b.left - 8; }, 120);
+  const showCard = () => setTimeout(() => { const el = document.querySelector('#view .bk.on'); const sc = el?.closest('.car-t'); if (!el || !sc) return; const a = el.getBoundingClientRect(), b = sc.getBoundingClientRect(); if (a.right > b.right || a.left < b.left) sc.scrollLeft += a.left - b.left - 8; }, 120);
+  if (S.route === 'pillar' && S.param === code) { renderView(); showCard(); return; }
+  S.kdg = kGroupOf(code); S.kdp = code; if (S.kgrp && S.kgrp !== S.kdg) S.kgrp = '';
+  if (COLL.kdeep) { COLL.kdeep = false; try { localStorage.setItem('bp_coll', JSON.stringify(COLL)); } catch (e) {} }
+  const jump = () => setTimeout(() => { const d = $('#kdeep'); const vw = $('#view'); if (d && vw) vw.scrollTop += d.getBoundingClientRect().top - vw.getBoundingClientRect().top - 8; showCard(); }, 60);
+  if (S.route === 'kpis') { renderView(); jump(); } else { go('kpis'); jump(); }
 }

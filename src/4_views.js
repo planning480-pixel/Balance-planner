@@ -37,10 +37,39 @@ function riskMapHTML({ pick = false, sel = {}, markers = [], size = 'lg' } = {})
 }
 
 /* ---------- KPI scoreboard ---------- */
-/* live value: Engagement (2.3) uses the latest survey round */
+/* ---------- KPI by fiscal year ----------
+   k.res = { 2568: v, 2569: v, ... } ผลรายปี · k.ty = { 2570: v } เป้ารายปี (ว่าง = ใช้ tval)
+   ปี 2569 (ก่อนเริ่มแผน) แสดงผลล่าสุดที่มีถึงปีนั้นเป็นค่าฐาน · ปี 2570 ขึ้นไปแสดงเฉพาะผลของปีนั้น */
+const KYEARS = [2569, 2570, 2571, 2572, 2573, 2574];
+const KGROUPS = [['F', 'กองหน้า', ['BA', 'C']], ['M', 'กองกลาง', ['LA', 'N']], ['B', 'กองหลัง', ['E']]];
+const kGroupOf = (code) => (KGROUPS.find((g) => g[2].includes(code)) || KGROUPS[0])[0];
+const kGroup = (g) => KGROUPS.find((x) => x[0] === g) || null;
+const numOr = (x) => (x === '' || x == null || isNaN(Number(x)) ? null : Number(x));
+function kpiResults(k) {
+  const out = {};
+  Object.entries(k.res || {}).forEach(([y, v]) => { if (numOr(v) != null) out[y] = { v: Number(v), at: 'FY' + y }; });
+  if (k.id === '2.3' && S.eng?.rounds?.length) S.eng.rounds.forEach((r) => { out[r.fy] = { v: r.v[0], at: r.r + '/' + r.fy }; });
+  if (!Object.keys(out).length && numOr(k.latest) != null) { const y = (String(k.latestAt || '').match(/25\d\d/) || [String(KYEARS[0])])[0]; out[y] = { v: Number(k.latest), at: k.latestAt || 'FY' + y }; }
+  return out;
+}
+function kpiYear(k, y) {
+  y = Number(y || S.kyr || kpiDefaultYear());
+  const R = kpiResults(k), first = KYEARS[0];
+  let hit = R[y] || null;
+  if (!hit && y === first) { const ys = Object.keys(R).map(Number).filter((x) => x <= y).sort((a, b) => b - a); if (ys.length) hit = Object.assign({ base: true }, R[ys[0]]); }
+  const tv = numOr(k.ty?.[y]) ?? numOr(k.tval);
+  return { v: hit ? hit.v : null, at: hit ? hit.at : '', base: !!hit?.base, tv, y };
+}
+function kpiDefaultYear() {
+  const ys = (cfg().kpis || []).flatMap((k) => Object.keys(kpiResults(k)).map(Number)).filter((y) => KYEARS.includes(y));
+  return ys.length ? Math.max(...ys) : KYEARS[0];
+}
+const kyr = () => Number(S.kyr || kpiDefaultYear());
+/* the KPI as it reads for the selected year */
 function kpiEff(k) {
-  if (k.id === '2.3' && S.eng?.rounds?.length) { const r = S.eng.rounds[S.eng.rounds.length - 1]; return Object.assign({}, k, { latest: r.v[0], latestAt: r.r + '/' + r.fy }); }
-  return k;
+  if (!k) return k;
+  const r = kpiYear(k);
+  return Object.assign({}, k, { latest: r.v, latestAt: r.at, tval: r.tv, yBase: r.base });
 }
 function kpiState(k) {
   k = kpiEff(k);
@@ -56,7 +85,8 @@ function kpiState(k) {
 const fmtNum = (v) => Number(v).toLocaleString('th-TH', { maximumFractionDigits: 2 });
 function kpiBoard(pf, opt = {}) {
   const noHead = opt === true || opt.noHead;
-  const ks = cfg().kpis.filter((k) => !pf || k.pillar === pf);
+  const pfs = Array.isArray(pf) ? pf : pf ? [pf] : null;
+  const ks = cfg().kpis.filter((k) => !pfs || pfs.includes(k.pillar));
   const st = ks.map((k) => ({ k: kpiEff(k), s: kpiState(k) }));
   const n = (key) => st.filter((x) => x.s.key === key).length;
   const EN = { ok: 'On target', warn: 'Near target', bad: 'Below target', none: 'No data' };
@@ -68,7 +98,7 @@ function kpiBoard(pf, opt = {}) {
       <div class="kt-top"><span class="kt-id">${esc(k.id)}</span><span class="kt-dot" aria-hidden="true"></span><span class="kt-st">${EN[s.key]}</span>
         <button type="button" class="kt-info" data-act="kpi-info" aria-expanded="false" aria-label="รายละเอียดภาษาไทยของ ${esc(k.id)}">${ic('info', 'ic-sm')}</button>${go}</div>
       <h3 class="kt-name" title="${esc(k.name_en || '')}">${esc(k.name_en || k.id)}</h3>
-      <div class="kt-val">${s.v == null && k.basePhase ? `<small class="kt-base">${esc(k.basePhase.replace('เก็บค่าฐานปี', 'ค่าฐานปี'))}</small>` : `<b>${s.v == null ? '—' : fmtNum(s.v)}</b>`}${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
+      <div class="kt-val">${s.v == null ? `<small class="kt-base">${kyr() === 2570 && k.basePhase ? 'เก็บค่าฐานปีนี้' : kyr() > 2570 && k.basePhase && !Object.keys(k.res || {}).length ? 'รอค่าฐาน' : 'ยังไม่มีผล FY' + kyr()}</small>` : `<b>${fmtNum(s.v)}</b>`}${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
       <div class="kt-bar" aria-hidden="true"><i style="width:${Math.round(s.ratio * 100)}%"></i></div>
       <div class="kc-pop" role="tooltip"><b>${esc(k.name)}</b><span>เป้าหมาย: ${esc(k.target || '—')}</span>${k.baseline ? `<span>ค่าฐาน: ${esc(k.baseline)}</span>` : ''}<span>${s.v == null ? 'ยังไม่มีผลการดำเนินงาน' : `ผลล่าสุด ${fmtNum(s.v)} ${esc(k.unit || '')}${k.latestAt ? ' (' + esc(k.latestAt) + ')' : ''}`}</span><span class="pop-calc"><b>วิธีคำนวณ</b> ${k.calc ? esc(k.calc) : 'รอระบุ'}</span></div>
     </article>`;
@@ -86,7 +116,7 @@ function kpiBoard(pf, opt = {}) {
   return `<section class="dsec" id="kpi-board" aria-labelledby="h-kpi">
     ${noHead ? '<h2 id="h-kpi" class="sr">KPI Scoreboard</h2>' : `<div class="dsec-h"><div><h2 id="h-kpi">KPI Scoreboard</h2><span class="sub">Latest result vs target · กด ${ic('info', 'ic-sm')} ดูคำอธิบายภาษาไทย</span></div></div>`}
     ${opt.noSum ? '' : summary}
-    <div class="sb ${pf ? 'sb-one' : ''} ${opt.bare ? 'sb-bare' : ''}">${cols}</div>
+    <div class="sb ${pfs?.length === 1 ? 'sb-one' : pfs?.length === 2 ? 'sb-two' : ''} ${opt.bare ? 'sb-bare' : ''}">${cols}</div>
   </section>`;
 }
 

@@ -18,7 +18,8 @@ const zcard = (title, desc, body, opts = {}) => { const shut = opts.fold && COLL
 const statCard = (label, icon, value, sub) => `<div class="zs"><div class="zs-h"><span>${label}</span>${ic(icon, 'ic-sm')}</div><div class="zs-v">${value}</div><div class="zs-d">${sub}</div></div>`;
 
 function kpiStats(pf) {
-  const st = cfg().kpis.filter((k) => !pf || k.pillar === pf).map((k) => ({ k: kpiEff(k), s: kpiState(k) }));
+  const pfs = Array.isArray(pf) ? pf : pf ? [pf] : null;
+  const st = cfg().kpis.filter((k) => !pfs || pfs.includes(k.pillar)).map((k) => ({ k: kpiEff(k), s: kpiState(k) }));
   const c = (key) => st.filter((x) => x.s.key === key).length;
   return { st, ok: c('ok'), warn: c('warn'), bad: c('bad'), none: c('none'), n: st.length };
 }
@@ -319,9 +320,31 @@ function viewDashboard() {
 
 function viewKpis() {
   const g = needCfg(); if (g) return g;
-  const C = cfg(), pf = S.kpiP || '';
-  const chips = `<div class="seg seg-sm" role="group" aria-label="เลือกเสา">${[['', 'ทุกเสา'], ...C.pillars.map((p) => [p.code, p.code])].map(([c, l]) => `<button type="button" data-act="kpi-p" data-v="${c}" aria-pressed="${pf === c}" ${c ? `data-p="${c}"` : ''}>${l}</button>`).join('')}</div>`;
-  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">Latest result vs target · กด ${ic('info', 'ic-sm')} ดูคำอธิบายภาษาไทย</span></div>${chips}</div>${kpiBoard(pf, true)}<div class="zgrid" style="margin-top:16px">${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ', stratOverview(), { span: 12 })}</div>`;
+  const C = cfg(), gr = kGroup(S.kgrp || ''), pfs = gr ? gr[2] : null, y = kyr();
+  const ks = kpiStats(pfs);
+  const yrs = `<label class="kf-y"><span>ปีงบประมาณ</span><select class="select" data-kyr aria-label="เลือกปีงบประมาณ">${KYEARS.map((x) => `<option value="${x}" ${x === y ? 'selected' : ''}>${x}${x === KYEARS[0] ? ' (ค่าฐาน)' : ''}</option>`).join('')}</select></label>`;
+  const grp = `<div class="seg seg-sm kf-g" role="group" aria-label="เลือกกอง"><button type="button" data-act="kpi-g" data-v="" aria-pressed="${!gr}">ทุกกอง</button>${KGROUPS.map(([id, n, ps]) => `<button type="button" data-act="kpi-g" data-v="${id}" aria-pressed="${gr?.[0] === id}">${n} <small>${ps.join(' · ')}</small></button>`).join('')}</div>`;
+  const summary = `<div class="sb-sum">
+    <div class="sbs"><span>KPIs</span><b>${ks.n}</b></div>
+    <div class="sbs sbs-ok"><span>On target</span><b>${ks.ok}</b></div>
+    <div class="sbs sbs-warn"><span>Near target</span><b>${ks.warn}</b></div>
+    <div class="sbs sbs-bad"><span>Below target</span><b>${ks.bad}</b></div>
+    <div class="sbs sbs-none"><span>No data</span><b>${ks.none}</b></div></div>`;
+  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">ผล FY${y}${y === KYEARS[0] ? ' (ค่าฐาน)' : ''} เทียบเป้า · กดการ์ดเพื่อดูผลเชิงลึก</span></div><div class="kf">${yrs}${grp}</div></div>
+  ${summary}${kpiBoard(pfs, { noHead: true, noSum: true })}
+  <div class="zgrid" style="margin-top:16px">${zcard('ผลเชิงลึก', 'กองหน้า BA · C &nbsp;|&nbsp; กองกลาง LA · N &nbsp;|&nbsp; กองหลัง E — เนื้อหาเดียวกับหน้าเสาแต่ละด้านทางซ้าย', kDeep(), { span: 12, fold: 'kdeep', id: 'kdeep' })}</div>
+  <div class="zgrid" style="margin-top:16px">${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ', stratOverview(), { span: 12, fold: 'kso' })}</div>`;
+}
+/* deep-dive under the scoreboard: group tabs → pillar tabs → the pillar page body */
+function kDeep() {
+  const gid = S.kgrp || S.kdg || 'F', gr = kGroup(gid);
+  const pc = gr[2].includes(S.kdp) ? S.kdp : gr[2][0];
+  const gt = `<div class="kd-tabs"><div class="seg" role="tablist" aria-label="เลือกกอง">${KGROUPS.map(([id, n, ps]) => `<button type="button" role="tab" data-act="kd-g" data-v="${id}" aria-selected="${id === gid}" aria-pressed="${id === gid}">${n} <small>${ps.join(' · ')}</small></button>`).join('')}</div>
+    ${gr[2].length > 1 ? `<div class="kd-ps" role="tablist" aria-label="เลือกเสา">${gr[2].map((c) => { const pl = pillarOf(c); const st = kpiStats(c); return `<button type="button" role="tab" class="kd-p" data-p="${c}" data-act="kd-p" data-v="${c}" aria-selected="${c === pc}"><span class="pbadge">${c}</span><b>${esc(pl ? pillarShort(pl) : c)}</b><small>${st.ok}/${st.n} on target</small></button>`; }).join('')}</div>` : ''}</div>`;
+  S.embed = true;
+  let body = '';
+  try { body = pc === 'BA' ? viewPillarBA() : PSPEC[pc] ? viewPillarGeneric(pc) : ''; } finally { S.embed = false; }
+  return `${gt}<div class="kd-body" data-p="${pc}">${body}</div>`;
 }
 
 function rankedRisks(pf) {

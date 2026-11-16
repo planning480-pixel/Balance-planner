@@ -100,6 +100,7 @@ function projTree(code) {
   }).join('')}</div>`;
 }
 function pillarHead(code, pl, extra = '') {
+  if (S.embed) return `<section class="zgoal" data-p="${code}"><span>${esc(code)} · เป้าหมาย 5 ปี</span><p>${esc(PGOAL[code] || pl.goal)}</p><button class="zlink" data-act="go" data-v="p-${esc(code)}">เปิดหน้าเสา ${ic('expand', 'ic-sm')}</button></section>`;
   return `<div class="ph" data-p="${code}"><div class="ph-t ph-pillar"><span class="pbadge pbadge-lg">${esc(code)}</span><div><h1>${esc(pillarShort(pl))}</h1><span class="sub">ยุทธศาสตร์ที่ ${pl.num} · ${esc(pl.name_en)}${extra}</span></div></div>${filterBar(true)}</div>
   <section class="zgoal" data-p="${code}"><span>เป้าหมาย 5 ปี</span><p>${esc(PGOAL[code] || pl.goal)}</p></section>`;
 }
@@ -125,7 +126,8 @@ function viewPillarBA() {
   const k11 = kpiOf('1.1'), k12 = kpiOf('1.2');
   const ytd = cumT ? (cum / cumT) * 100 : null;
   const H = histData().years || {}, polEv = Object.keys(H).map(Number).sort((a, b) => b - a).flatMap((y) => (H[y].ev || []).map((e) => Object.assign({ y }, e))).filter((e) => e.i === 'str' || /ภาษี/.test(e.t)).slice(0, 8);
-  const kcards = [k11 ? bigKpi(k11, k11.latest, k11.latestAt || '') : '', k12 ? bigKpi(k12, k12.latest, k12.latestAt || 'ประเมินเมื่อมาตรการครบกำหนด') : '',
+  const e11 = kpiEff(k11), e12 = kpiEff(k12);
+  const kcards = [k11 ? bigKpi(e11, e11.latest, e11.latestAt || '') : '', k12 ? bigKpi(e12, e12.latest, e12.latestAt || 'ประเมินเมื่อมาตรการครบกำหนด') : '',
     `<div class="bk"><span class="bk-h"><span class="bk-id">โครงการ BA</span><span class="bk-en">Projects</span></span><span class="bk-v"><b class="num">${plans.length}</b><small>โครงการ</small></span><span class="bk-t">งบประมาณรวม ${mb(plans.reduce((s, p) => s + Number(p.budget || 0), 0))} ล้านบาท</span><span class="bk-f"><span>Flagship ${plans.filter((p) => p.category === 'flagship').length}</span><button class="zlink" data-act="pt-jump">ดูโครงการ ${ic('chevron', 'ic-sm')}</button></span></div>`].join('');
   const cards = `${periodBar()}${opsCards({ metrics: ['revenue'], metric: 'revenue', extra: kcards })}`;
   const policy = `<div class="pol">${['BA1', 'BA2', 'BA3', 'BA4'].map((s) => { const st = C.strategies.find((x) => x.code === s); const n = plans.filter((p) => p.strategy === s).length; return `<div class="pol-c" data-p="BA"><span class="pcode">${s}</span><b>${esc(st?.name || '')}</b><ul>${(APPR[s] || []).slice(0, 3).map((a) => `<li>${esc(a)}</li>`).join('')}</ul><span class="pol-n">${n} โครงการ</span></div>`; }).join('')}</div>
