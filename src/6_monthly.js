@@ -154,24 +154,25 @@ function viewOverview() {
 }
 
 /* ---------- PDF (multi-page, landscape A4) ---------- */
-async function pdfFromPages(build, filename) {
-  if (!S.dl) { toast('ดาวน์โหลดไฟล์ไม่ได้ในมุมมองนี้ ลองเปิดหน้านี้ใน claude.ai', 'err'); return; }
+async function pdfFromPages(build, filename, opt = {}) {
+  const P = opt.orient === 'p';
+  if (!S.dl && !S.publicMode) { toast('ดาวน์โหลดไฟล์ไม่ได้ในมุมมองนี้ ลองเปิดหน้านี้ใน claude.ai', 'err'); return; }
   S.pdfBusy = true; renderView();
   const host = document.createElement('div');
-  host.style.cssText = 'position:fixed;left:-14000px;top:0;width:1123px;z-index:-1';
+  host.style.cssText = `position:fixed;left:-14000px;top:0;width:${P ? 794 : 1123}px;z-index:-1`;
   document.body.append(host);
   try {
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
     try { await document.fonts.ready; } catch (e) {}
     const pages = build(host);
-    const pdf = new window.jspdf.jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
+    const pdf = new window.jspdf.jsPDF({ orientation: P ? 'p' : 'l', unit: 'mm', format: 'a4' });
     for (let i = 0; i < pages.length; i++) {
       const c = await window.html2canvas(pages[i], { scale: 2, backgroundColor: '#ffffff', logging: false });
       if (i) pdf.addPage();
-      pdf.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 297, 210);
+      pdf.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, P ? 210 : 297, P ? 297 : 210);
     }
-    await S.dl.save({ filename, data: pdf.output('blob') });
+    if (S.dl) await S.dl.save({ filename, data: pdf.output('blob') }); else pdf.save(filename);
     toast('ดาวน์โหลด PDF แล้ว');
   } catch (e) {
     toast(e?.code === 'declined' ? 'ยกเลิกการดาวน์โหลด' : 'สร้าง PDF ไม่สำเร็จ ลองอีกครั้ง', 'err');

@@ -330,7 +330,7 @@ function viewKpis() {
     <div class="sbs sbs-warn"><span>Near target</span><b>${ks.warn}</b></div>
     <div class="sbs sbs-bad"><span>Below target</span><b>${ks.bad}</b></div>
     <div class="sbs sbs-none"><span>No data</span><b>${ks.none}</b></div></div>`;
-  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">ผล FY${y}${y === KYEARS[0] ? ' (ค่าฐาน)' : ''} เทียบเป้า · กดการ์ดเพื่อดูผลเชิงลึก</span></div><div class="kf">${yrs}${grp}</div></div>
+  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">ผล FY${y}${y === KYEARS[0] ? ' (ค่าฐาน)' : ''} เทียบเป้า · กดการ์ดเพื่อดูผลเชิงลึก</span></div><div class="kf">${yrs}${grp}<button type="button" class="btn btn-primary btn-sm" data-act="exec-pdf" ${S.pdfBusy ? 'disabled' : ''} title="A4 แนวตั้ง 6 หน้า: ภาพรวม · BA · C · LA · N · E">${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง…' : 'รายงานผู้บริหาร (PDF)'}</button></div></div>
   ${summary}${kpiBoard(pfs, { noHead: true, noSum: true })}
   <div class="zgrid" style="margin-top:16px">${zcard('ผลเชิงลึก', 'กองหน้า BA · C &nbsp;|&nbsp; กองกลาง LA · N &nbsp;|&nbsp; กองหลัง E — เนื้อหาเดียวกับหน้าเสาแต่ละด้านทางซ้าย', kDeep(), { span: 12, fold: 'kdeep', id: 'kdeep' })}</div>
   <div class="zgrid" style="margin-top:16px">${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ', stratOverview(), { span: 12, fold: 'kso' })}</div>`;

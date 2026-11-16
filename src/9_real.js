@@ -68,6 +68,15 @@ function mofLine(sel) {
   return ` · กระทรวงฯ ${fmtM(r.mof)} (${rlPct((r.a / r.mof - 1) * 100)})`;
 }
 
+/* product rows for one fiscal year: actual, previous year, dept target, MOF target (lines = months reported) */
+function realRows(fy) {
+  const F = realFy(fy), L = F?.lines || []; if (!L.length) return null;
+  const grp = (n) => (n <= 6 ? RP[n - 1] : 'อื่นๆ');
+  const rows = RP.map((p) => { const ls = L.filter((x) => grp(x.n) === p); const s = (k) => ls.reduce((a, x) => a + Number(x[k] || 0), 0); return { p, a: s('a'), prev: s('prev'), t: s('tDept'), mof: s('tMof') }; });
+  const tot = rows.reduce((o, r) => ({ a: o.a + r.a, prev: o.prev + r.prev, t: o.t + r.t, mof: o.mof + r.mof }), { a: 0, prev: 0, t: 0, mof: 0 });
+  return { rows, tot, ins: S.real?.insights?.[fy] || null };
+}
+
 /* ---------- BA: ผลรายสินค้า + Insight ---------- */
 function realPanel() {
   if (!S.real?.insights) return '';

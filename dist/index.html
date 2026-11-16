@@ -1786,6 +1786,50 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
   .sheet, .sheet * { visibility: visible !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .sheet { position: fixed !important; left: 0; top: 0; width: 297mm !important; height: 210mm !important; min-height: 0 !important; margin: 0 !important; box-shadow: none !important; overflow: hidden; }
 }
+
+/* ---------- executive report (A4 portrait, rendered off-screen) ---------- */
+.xr-page { position: relative; width: 794px; height: 1123px; overflow: hidden; background: #fff; color: #0E1B33; padding: 30px 34px 44px; box-sizing: border-box; font-size: calc(12px * var(--xf, 1)); line-height: 1.45; display: flex; flex-direction: column; gap: .85em; font-family: var(--font-body, 'Noto Sans Thai', sans-serif); }
+.xr-page * { box-sizing: border-box; }
+.xr-hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; border-bottom: 3px solid var(--pc); padding-bottom: .7em; }
+.xr-hd h1 { margin: .15em 0 .1em; font-size: 1.85em; line-height: 1.2; color: var(--pc); font-family: var(--font-display, inherit); }
+.xr-hd p { margin: 0; color: #4A5872; font-size: .95em; }
+.xr-k { font-size: .85em; color: #5B6B86; letter-spacing: .02em; }
+.xr-pg { font-weight: 700; color: #fff; background: var(--pc); border-radius: 8px; padding: .25em .7em; font-size: .9em; white-space: nowrap; }
+.xr-sh { font-weight: 700; font-size: 1.05em; color: #0E2756; margin: 0 0 .4em; padding-left: .5em; border-left: 3px solid #2360E0; }
+.xr-page section { min-width: 0; }
+.xr-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6em; }
+.xr-tiles > div { border: 1px solid #DCE3EE; border-radius: 10px; padding: .6em .8em; display: grid; gap: .1em; }
+.xr-tiles small { color: #5B6B86; } .xr-tiles b { font-size: 1.7em; color: #0E2756; line-height: 1.15; } .xr-tiles span { color: #4A5872; font-size: .88em; }
+.xr-t { width: 100%; border-collapse: collapse; font-size: .92em; }
+.xr-t th { text-align: left; font-weight: 600; color: #4A5872; background: #F2F5FA; padding: .35em .5em; border-bottom: 1px solid #DCE3EE; }
+.xr-t td { padding: .32em .5em; border-bottom: 1px solid #EEF1F6; vertical-align: top; }
+.xr-t .n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.xr-t td small { display: block; color: #7A879C; font-size: .85em; }
+.xr-tk td, .xr-tk th { padding: .22em .5em; } .xr-at { color: #7A879C; font-size: .85em; margin-left: .3em; }
+.xr-tot td { font-weight: 700; background: #F7F9FC; }
+.xr-ok { color: #1D9152; } .xr-warn { color: #B26A00; } .xr-bad { color: #D9363E; }
+.xr-dot { display: inline-block; width: .65em; height: .65em; border-radius: 50%; margin-right: .35em; vertical-align: .05em; }
+.xr-pb { display: inline-block; min-width: 2.2em; text-align: center; color: #fff; font-weight: 700; border-radius: 5px; padding: 0 .3em; margin-right: .3em; font-size: .9em; }
+.xr-c { display: inline-block; min-width: 1.6em; text-align: center; border-radius: 4px; margin-left: .2em; font-weight: 600; font-size: .9em; }
+.xr-c.ok { background: #E3F4EA; color: #1D9152; } .xr-c.on { background: #E6EEFD; color: #2360E0; } .xr-c.bad { background: #FBE7E8; color: #D9363E; } .xr-c.no { background: #EEF1F6; color: #7A879C; }
+.xr-kc { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .55em; }
+.xr-kpi { border: 1px solid #DCE3EE; border-top: 3px solid var(--st); border-radius: 8px; padding: .5em .65em; display: grid; gap: .1em; }
+.xr-kh { display: flex; justify-content: space-between; font-size: .9em; } .xr-kh span { color: #4A5872; }
+.xr-kn { font-weight: 600; font-size: .92em; } .xr-kv b { font-size: 1.6em; color: var(--st); } .xr-kv small { margin-left: .3em; color: #5B6B86; }
+.xr-kt { font-size: .82em; color: #5B6B86; }
+.xr-note { margin: .4em 0 0; font-size: .9em; color: #3A4A66; background: #F7F9FC; border-radius: 6px; padding: .35em .6em; }
+.xr-smp { font-style: normal; font-size: .8em; color: #B26A00; background: #FFF4E0; border-radius: 4px; padding: 0 .3em; }
+.xr-rk { margin: 0; padding-left: 1.3em; display: grid; gap: .15em; } .xr-rk2 { grid-template-columns: 1fr 1fr; column-gap: 1.6em; }
+.xr-lv { font-size: .82em; border-radius: 4px; padding: 0 .35em; margin-left: .3em; white-space: nowrap; } .xr-lv.xr-bad { background: #FBE7E8; } .xr-lv.xr-warn { background: #FFF4E0; } .xr-lv.xr-ok { background: #E3F4EA; }
+.xr-eng { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5em; } .xr-eng > div { border: 1px solid #DCE3EE; border-radius: 8px; padding: .4em .6em; display: grid; } .xr-eng small { color: #5B6B86; } .xr-eng b { font-size: 1.4em; color: #0E2756; } .xr-eng em { font-style: normal; font-size: .85em; }
+.xr-ins { margin-top: auto; }
+.xr-ins3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6em; }
+.xr-ic { border-radius: 10px; padding: .55em .7em; background: #F4F7FC; border: 1px solid #DCE3EE; }
+.xr-ic:nth-child(1) { background: #FDF2F2; border-color: #F4D3D5; } .xr-ic:nth-child(1) h4 { color: #C22E36; }
+.xr-ic:nth-child(2) { background: #FFF8EB; border-color: #F6E0B5; } .xr-ic:nth-child(2) h4 { color: #A55F00; }
+.xr-ic:nth-child(3) { background: #EEF5FF; border-color: #CFE0FB; } .xr-ic:nth-child(3) h4 { color: #1A5BD6; }
+.xr-ic h4 { margin: 0 0 .3em; font-size: 1em; } .xr-ic ul { margin: 0; padding-left: 1.1em; display: grid; gap: .2em; font-size: .9em; }
+.xr-ft { position: absolute; left: 34px; right: 34px; bottom: 16px; display: flex; justify-content: space-between; font-size: 10px; color: #7A879C; border-top: 1px solid #EEF1F6; padding-top: 6px; }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -2369,6 +2413,11 @@ const numOr = (x) => (x === '' || x == null || isNaN(Number(x)) ? null : Number(
 function kpiResults(k) {
   const out = {};
   Object.entries(k.res || {}).forEach(([y, v]) => { if (numOr(v) != null) out[y] = { v: Number(v), at: 'FY' + y }; });
+  if (k.id === '1.1' && S.real?.fy) Object.keys(S.real.fy).forEach((fy) => {
+    const F = realFy(fy); if (out[fy] || !F?.lines) return;
+    const ms = Object.keys(F.m || {}).map(Number).filter((m) => realHasAct(realMonth(fy, m))); if (!ms.length) return;
+    const r = realSums(fy, ms); if (r?.t) out[fy] = { v: Math.round((r.a / r.t) * 10000) / 100, at: ms.length === 12 ? 'FY' + fy : `FY${fy} สะสม ${ms.length} เดือน` };
+  });
   if (k.id === '2.3' && S.eng?.rounds?.length) S.eng.rounds.forEach((r) => { out[r.fy] = { v: r.v[0], at: r.r + '/' + r.fy }; });
   if (!Object.keys(out).length && numOr(k.latest) != null) { const y = (String(k.latestAt || '').match(/25\d\d/) || [String(KYEARS[0])])[0]; out[y] = { v: Number(k.latest), at: k.latestAt || 'FY' + y }; }
   return out;
@@ -3229,7 +3278,7 @@ function viewKpis() {
     <div class="sbs sbs-warn"><span>Near target</span><b>${ks.warn}</b></div>
     <div class="sbs sbs-bad"><span>Below target</span><b>${ks.bad}</b></div>
     <div class="sbs sbs-none"><span>No data</span><b>${ks.none}</b></div></div>`;
-  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">ผล FY${y}${y === KYEARS[0] ? ' (ค่าฐาน)' : ''} เทียบเป้า · กดการ์ดเพื่อดูผลเชิงลึก</span></div><div class="kf">${yrs}${grp}</div></div>
+  return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">ผล FY${y}${y === KYEARS[0] ? ' (ค่าฐาน)' : ''} เทียบเป้า · กดการ์ดเพื่อดูผลเชิงลึก</span></div><div class="kf">${yrs}${grp}<button type="button" class="btn btn-primary btn-sm" data-act="exec-pdf" ${S.pdfBusy ? 'disabled' : ''} title="A4 แนวตั้ง 6 หน้า: ภาพรวม · BA · C · LA · N · E">${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง…' : 'รายงานผู้บริหาร (PDF)'}</button></div></div>
   ${summary}${kpiBoard(pfs, { noHead: true, noSum: true })}
   <div class="zgrid" style="margin-top:16px">${zcard('ผลเชิงลึก', 'กองหน้า BA · C &nbsp;|&nbsp; กองกลาง LA · N &nbsp;|&nbsp; กองหลัง E — เนื้อหาเดียวกับหน้าเสาแต่ละด้านทางซ้าย', kDeep(), { span: 12, fold: 'kdeep', id: 'kdeep' })}</div>
   <div class="zgrid" style="margin-top:16px">${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ', stratOverview(), { span: 12, fold: 'kso' })}</div>`;
@@ -4214,7 +4263,7 @@ const GEO = {
   '2.1': { kind: 'avg', label: 'ทักษะพร้อมอนาคต', desc: 'ร้อยละบุคลากรที่มีสมรรถนะไม่ต่ำกว่าระดับที่กำหนด', rec: (a) => { const r = hrRec(a); return r ? { a: r.cap, w: r.staff } : null; }, central: (u) => ({ a: u.cap, w: u.staff }), sub: (r) => `บุคลากร ${money(r.w)} คน`, sample: () => hrData().sample, tip: 'แนวทาง LA2: ปิด Skill Gap ด้วย IDP เรียนรู้จากงานจริง และสร้าง AI Controller ในทุกหน่วย' },
   '2.2': { kind: 'ratio', label: 'กำลังคนตรงภารกิจ', desc: 'เจ้าหน้าที่ปฏิบัติงานจริง เทียบอัตรากำลัง', rec: (a) => { const r = hrRec(a); return r ? { a: r.staff, t: r.pos, w: r.pos } : null; }, central: (u) => ({ a: u.staff, t: u.pos, w: u.pos }), sub: (r) => `ปฏิบัติงานจริง ${money(r.a)} / อัตรากำลัง ${money(r.t)} คน`, tone: (v) => fillTone(v), tline: 90, legend: '<span><i class="mp-ok"></i>90–110% ของอัตรา</span><span><i class="mp-warn"></i>85–90% หรือเกิน 110%</span><span><i class="mp-bad"></i>ต่ำกว่า 85%</span>', sample: () => hrData().sample, tip: 'แนวทาง LA1: Strategic Workforce Planning วางแผนกำลังคนด้วยข้อมูล และปรับกำลังคนตามปริมาณงานส่วนกลาง ภาค พื้นที่' },
   '2.3': { kind: 'avg', label: 'ความผูกพันองค์กร', desc: 'คะแนนความผูกพันของบุคลากร (Engagement)', rec: (a) => { const r = hrRec(a); return r ? { a: r.eng, w: r.staff } : null; }, central: (u) => ({ a: u.eng, w: u.staff }), sub: (r) => `บุคลากร ${money(r.w)} คน`, sample: () => hrData().sample, tip: 'แนวทาง LA3–LA4: One Team & ExerCISE Culture ดูแล Work-life Balance และเชื่อมผลงานกับแรงจูงใจ', link: '2.3' },
-  '4.2': { kind: 'avg', products: true, label: 'ปฏิบัติตามกฎหมายโดยสมัครใจ', desc: 'ร้อยละผู้เสียภาษีที่ยื่นแบบและชำระภาษีถูกต้อง ครบถ้วน ภายในกำหนด', rec: (a, p) => smpRec('cr', 84, 13, a, p), sub: (r) => `ผู้ประกอบการ ${money(r.w)} ราย`, sample: () => true, tip: 'แนวทาง C1: ปิดช่องว่างการบังคับใช้ · E1: บริการ Digital First ให้ปฏิบัติตามง่ายขึ้น' },
+  '4.2': { kind: 'avg', products: true, label: 'ยื่นแบบ/ชำระภาษีถูกต้อง', desc: 'ร้อยละผู้เสียภาษีที่ยื่นแบบและชำระภาษีถูกต้อง ครบถ้วน ภายในกำหนด', rec: (a, p) => smpRec('cr', 84, 13, a, p), sub: (r) => `ผู้ประกอบการ ${money(r.w)} ราย`, sample: () => true, tip: 'แนวทาง C1: ปิดช่องว่างการบังคับใช้ · E1: บริการ Digital First ให้ปฏิบัติตามง่ายขึ้น' },
   '4.3': { kind: 'ratio', products: true, label: 'Hit rate ตรวจสอบ', desc: 'พบการไม่ปฏิบัติตามกฎหมาย ÷ ราย ที่ตรวจสอบตามความเสี่ยง', rec: (a, p) => opsRec('audit', a, p), sub: (r) => `พบ ${money(r.a)} จากตรวจ ${money(r.t)} ราย`, target: () => Number(S.ops?.targets?.audit) || 60, sample: () => !!S.ops?.sample, tip: 'แนวทาง C2: คัดเป้าหมายด้วย Risk-based Audit และ Early Warning ป้องกันความเสียหาย' },
   '4.4': { kind: 'sum', products: true, label: 'ภาษีที่รักษา/เรียกคืนได้', unit: 'ล้านบาท', desc: 'มูลค่ารายได้ภาษีที่รักษาและเรียกคืนได้จากการป้องกันและปราบปราม เทียบเป้า', rec: (a, p) => opsRec('enforce', a, p), sub: (r) => `เป้า ${fmtM(r.t)} ล้านบาท`, sample: () => !!S.ops?.sample, tip: 'แนวทาง C3: Supply Chain & Area-based Enforcement และบูรณาการข้อมูลร่วมกับภาคีรัฐ–เอกชน' },
   '5.3': { kind: 'avg', products: true, label: 'ความพึงพอใจผู้รับบริการ', desc: 'คะแนนความพึงพอใจผู้รับบริการ ถ่วงน้ำหนักตามจำนวนผู้ตอบ', rec: (a, p) => smpRec('sat', 80, 17, a, p), sub: (r) => `ผู้ตอบแบบประเมิน ${money(r.w)} ราย`, sample: () => true, tip: 'แนวทาง E1: One Journey · One Form · Once Only และ Customer Feedback Loop' }
@@ -4773,6 +4822,7 @@ document.addEventListener('click', (e) => {
     case 'ai-q': aiSend(v); break;
     case 'risk-p': S.riskP = v; renderView(); break;
     case 'kpi-drill': kpiDrill(v); break;
+    case 'exec-pdf': execPdf(); break;
     case 'kpi-nolink': toast(S.isSuper ? 'ยังไม่ได้ใส่ลิงก์หน้ารายละเอียด ใส่ได้ที่ KPI Setting' : 'ยังไม่มีหน้ารายละเอียดของตัวชี้วัดนี้'); break;
     case 'filt-reset': S.filt = { year: '', unit: '', pillar: '' }; renderView(); break;
     case 'scope': S.scope = v; renderView(); break;
@@ -5023,24 +5073,25 @@ function viewOverview() {
 }
 
 /* ---------- PDF (multi-page, landscape A4) ---------- */
-async function pdfFromPages(build, filename) {
-  if (!S.dl) { toast('ดาวน์โหลดไฟล์ไม่ได้ในมุมมองนี้ ลองเปิดหน้านี้ใน claude.ai', 'err'); return; }
+async function pdfFromPages(build, filename, opt = {}) {
+  const P = opt.orient === 'p';
+  if (!S.dl && !S.publicMode) { toast('ดาวน์โหลดไฟล์ไม่ได้ในมุมมองนี้ ลองเปิดหน้านี้ใน claude.ai', 'err'); return; }
   S.pdfBusy = true; renderView();
   const host = document.createElement('div');
-  host.style.cssText = 'position:fixed;left:-14000px;top:0;width:1123px;z-index:-1';
+  host.style.cssText = `position:fixed;left:-14000px;top:0;width:${P ? 794 : 1123}px;z-index:-1`;
   document.body.append(host);
   try {
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
     await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
     try { await document.fonts.ready; } catch (e) {}
     const pages = build(host);
-    const pdf = new window.jspdf.jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
+    const pdf = new window.jspdf.jsPDF({ orientation: P ? 'p' : 'l', unit: 'mm', format: 'a4' });
     for (let i = 0; i < pages.length; i++) {
       const c = await window.html2canvas(pages[i], { scale: 2, backgroundColor: '#ffffff', logging: false });
       if (i) pdf.addPage();
-      pdf.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 297, 210);
+      pdf.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, P ? 210 : 297, P ? 297 : 210);
     }
-    await S.dl.save({ filename, data: pdf.output('blob') });
+    if (S.dl) await S.dl.save({ filename, data: pdf.output('blob') }); else pdf.save(filename);
     toast('ดาวน์โหลด PDF แล้ว');
   } catch (e) {
     toast(e?.code === 'declined' ? 'ยกเลิกการดาวน์โหลด' : 'สร้าง PDF ไม่สำเร็จ ลองอีกครั้ง', 'err');
@@ -5492,6 +5543,15 @@ function mofLine(sel) {
   return ` · กระทรวงฯ ${fmtM(r.mof)} (${rlPct((r.a / r.mof - 1) * 100)})`;
 }
 
+/* product rows for one fiscal year: actual, previous year, dept target, MOF target (lines = months reported) */
+function realRows(fy) {
+  const F = realFy(fy), L = F?.lines || []; if (!L.length) return null;
+  const grp = (n) => (n <= 6 ? RP[n - 1] : 'อื่นๆ');
+  const rows = RP.map((p) => { const ls = L.filter((x) => grp(x.n) === p); const s = (k) => ls.reduce((a, x) => a + Number(x[k] || 0), 0); return { p, a: s('a'), prev: s('prev'), t: s('tDept'), mof: s('tMof') }; });
+  const tot = rows.reduce((o, r) => ({ a: o.a + r.a, prev: o.prev + r.prev, t: o.t + r.t, mof: o.mof + r.mof }), { a: 0, prev: 0, t: 0, mof: 0 });
+  return { rows, tot, ins: S.real?.insights?.[fy] || null };
+}
+
 /* ---------- BA: ผลรายสินค้า + Insight ---------- */
 function realPanel() {
   if (!S.real?.insights) return '';
@@ -5710,4 +5770,182 @@ document.addEventListener('input', (e) => {
   if (e.target.id !== 'es-q') return; eSt().q = e.target.value;
   const pos = e.target.selectionStart; eRerender(); const q = $('#es-q'); if (q) { q.focus(); try { q.setSelectionRange(pos, pos); } catch (_) {} }
 });
+/* ===================== รายงานสรุปสำหรับผู้บริหาร (A4 แนวตั้ง 6 หน้า) =====================
+   หน้า 1 ภาพรวม · 2 BA · 3 C · 4 LA · 5 N · 6 E
+   แต่ละหน้า: แผน (กลยุทธ์/โครงการ/งบ) · ผล (KPI + ผลรายพื้นที่) · Insight ปัญหา / อุปสรรค / ข้อเสนอ (สรุปอัตโนมัติจากข้อมูล) */
+const XR_ORDER = ['BA', 'C', 'LA', 'N', 'E'];
+const XR_TIP = {
+  '1.1': 'เร่งติดตามสินค้าที่ต่ำกว่าเป้ามากที่สุดรายเดือน และบริหารรายได้ตามศักยภาพพื้นที่ (BA1)',
+  '1.2': 'วางกรอบประเมินผลมาตรการภาษีด้าน ESG ให้ชัดตั้งแต่ปีแรก เพื่อเก็บค่าฐาน (BA3–BA4)',
+  '3.1': 'ยกระดับมิติที่คะแนนต่ำของ DG Readiness และใช้ AI ในงานจริง (N1–N2)',
+  '3.2': 'เลือกกระบวนงานที่ทำซ้ำมากมาทำ Automation ก่อน และวัดผลก่อน–หลัง (N3)',
+  '3.3': 'ทดสอบกู้คืนระบบสำคัญทุกปี กำหนด RTO/RPO และยกระดับ Cybersecurity (N4)',
+  '4.1': 'ใช้ RIA และรับฟังความเห็นเร็วขึ้น ติดตามกฎหมายที่ค้างตามขั้นตอนรายไตรมาส (C1)',
+  '5.1': 'ปิดช่องว่างหมวดที่คะแนนต่ำของ PMQA 4.0 ด้วย Process Owner และมาตรฐานกระบวนงานเดียว (E2)',
+  '5.2': 'ยกระดับ OIT และระบบควบคุมพร้อมร่องรอยดิจิทัล เพื่อไปสู่ ITA ≥ 93 (E3)'
+};
+const xrSt = { ok: ['ผ่านเป้า', '#1D9152'], warn: ['ใกล้เป้า', '#D97706'], bad: ['ต่ำกว่าเป้า', '#D9363E'], none: ['ยังไม่มีผล', '#94A3B8'] };
+const xrNum = (v, d = 2) => (v == null || !isFinite(v) ? '—' : Number(v).toLocaleString('th-TH', { maximumFractionDigits: d }));
+const xrPct = (x) => (x == null || !isFinite(x) ? '—' : `${x >= 0 ? '+' : ''}${x.toFixed(1)}%`);
+const xrDot = (k) => `<i class="xr-dot" style="background:${xrSt[k][1]}"></i>`;
+const xrPlanYear = () => Math.max(SO_YEARS[0], kyr());
+const xrDate = () => new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+
+/* ---------- data per pillar ---------- */
+function xrKpis(codes) {
+  return cfg().kpis.filter((k) => codes.includes(k.pillar)).map((k) => { const e = kpiEff(k), s = kpiState(k); return { k: e, s }; });
+}
+function xrProjects(codes) {
+  const rows = soRows(xrPlanYear()).filter((r) => codes.includes(r.p.pillar));
+  const cnt = (k) => rows.filter((r) => r.k === k).length;
+  const budget = rows.reduce((a, r) => a + (r.budget || 0), 0), spent = rows.reduce((a, r) => a + (r.spent || 0), 0);
+  return { rows, n: rows.length, done: cnt('done'), ontrack: cnt('ontrack'), late: cnt('late'), todo: cnt('todo'), budget, spent };
+}
+/* national value + weakest/strongest areas for a KPI with a GEO spec */
+function xrGeo(id) {
+  if (id === '2.3' && S.eng && typeof engGeo === 'function') GEO['2.3'] = engGeo();
+  const gs = GEO[id]; if (!gs) return null;
+  const items = REGIONS.map((u) => Object.assign({ name: u }, gsRegionRec(id, u, '') || {})).filter((x) => x.a != null);
+  if (gs.central || gs.centralList) { const c = gs.centralAgg ? gs.centralAgg() : gsAgg(gs, gsCentral(id)); if (c) items.push(Object.assign({ name: 'ส่วนกลาง' }, c)); }
+  if (!items.length) return null;
+  const key = (x) => (gs.kind === 'sum' ? (x.t ? (x.a / x.t) * 100 : null) : gsVal(gs, x));
+  const agg = gs.nationAgg ? gs.nationAgg() : gsAgg(gs, items);
+  const sorted = items.filter((x) => key(x) != null).sort((a, b) => key(a) - key(b));
+  const tgt = gs.kind === 'sum' ? 100 : gs.tline || gsTarget(id);
+  return { gs, label: gs.label, v: key(agg || {}), tgt, low: sorted.slice(0, 3).map((x) => [x.name, key(x)]), top: sorted.slice(-2).reverse().map((x) => [x.name, key(x)]), below: sorted.filter((x) => key(x) < tgt).length, n: sorted.length, sample: gs.sample(), tip: gs.tip };
+}
+function xrReported(rows) {
+  return rows.map((r) => ({ name: r.p.name, t: String(r.problems || r.last?.problems || '').trim() })).filter((x) => x.t).slice(0, 3);
+}
+
+/* ---------- Insight: ปัญหา / อุปสรรค / ข้อเสนอ ---------- */
+function xrInsight(codes, K, PJ, extra = {}) {
+  const P = [], O = [], R = [];
+  K.filter((x) => x.s.key === 'bad' || x.s.key === 'warn').forEach(({ k, s }) => P.push(`KPI ${k.id} ${k.name_en || ''} ${xrNum(s.v)} ${s.key === 'bad' ? 'ต่ำกว่า' : 'ใกล้'}เป้า ${xrNum(s.tv)}${s.tv ? ` (ขาด ${xrNum(Math.abs(s.tv - s.v))})` : ''}`));
+  (extra.p || []).forEach((t) => P.push(t));
+  K.map((x) => x.k.id).concat(codes.includes('E') ? ['5.3'] : []).filter((id) => GEO[id] && id !== '2.3').forEach((id) => { const g = xrGeo(id); if (g?.below) P.push(`${g.label} ต่ำกว่าเกณฑ์ ${g.below} จาก ${g.n} พื้นที่ (ต่ำสุด ${g.low[0][0]})${g.sample ? ' [ข้อมูลตัวอย่าง]' : ''}`); });
+  if (PJ.late) P.push(`โครงการล่าช้ากว่าแผน ${PJ.late} จาก ${PJ.n} โครงการ`);
+  const nd = K.filter((x) => x.s.key === 'none');
+  if (nd.length) { const bp = nd.filter((x) => x.k.basePhase).length; O.push(`ยังไม่มีผล KPI ${nd.length} ตัว (${nd.map((x) => x.k.id).join(', ')})${bp ? ` โดย ${bp} ตัวต้องเก็บค่าฐานในปี 2570` : ''}`); }
+  xrReported(PJ.rows).forEach((x) => O.push(`${x.name}: ${x.t}`));
+  rankedRisks().filter((x) => codes.includes(x.r.pillar) && x.sc > 0).slice(0, 2).forEach((x) => O.push(`ความเสี่ยง ${x.r.id} ${x.r.name} (ระดับ${riskLevel(x.sc).t})`));
+  (extra.o || []).forEach((t) => O.push(t));
+  (extra.r || []).forEach((t) => R.push(t));
+  K.filter((x) => x.s.key !== 'ok').forEach(({ k }) => { const t = GEO[k.id]?.tip || XR_TIP[k.id]; if (t && !R.includes(t)) R.push(t); });
+  if (PJ.late) R.push('ประชุมติดตามโครงการล่าช้ารายเดือน ปรับแผนขั้นตอนและงบให้ทันในไตรมาสถัดไป');
+  if (PJ.budget && PJ.n) { const d = PJ.spent / PJ.budget; if (!PJ.spent) R.push('ให้โครงการรายงานผลการเบิกจ่ายทุกเดือน เพื่อติดตามงบได้ทันเวลา'); else if (d < 0.3) R.push(`เร่งเบิกจ่าย ปัจจุบันเบิกจ่าย ${(d * 100).toFixed(1)}% ของงบ`); }
+  if (!P.length) P.push('ไม่พบ KPI ที่ต่ำกว่าเป้าในปีที่เลือก');
+  if (!O.length) O.push('ยังไม่มีการรายงานปัญหาจากโครงการ');
+  if (!R.length) R.push('รักษาระดับผลการดำเนินงาน และถ่ายทอดแนวปฏิบัติที่ดี');
+  const col = (t, ic0, xs) => `<div class="xr-ic"><h4>${ic0} ${t}</h4><ul>${xs.slice(0, 5).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  return `<section class="xr-ins"><div class="xr-sh">Insight</div><div class="xr-ins3">${col('ปัญหา', '●', P)}${col('อุปสรรค', '▲', O)}${col('ข้อเสนอ', '➜', R)}</div></section>`;
+}
+
+/* ---------- blocks ---------- */
+function xrHead(title, sub, color, page) {
+  return `<header class="xr-hd" style="--pc:${color}"><div><span class="xr-k">รายงานสรุปสำหรับผู้บริหาร · ปีงบประมาณ ${kyr()}${kyr() === KYEARS[0] ? ' (ค่าฐาน)' : ''}</span><h1>${title}</h1><p>${sub}</p></div><span class="xr-pg">${page}/6</span></header>`;
+}
+function xrFoot() { return `<footer class="xr-ft"><span>BALANCE Planner · แผนยุทธศาสตร์กรมสรรพสามิต 2570–2574</span><span>พิมพ์ ${xrDate()}</span></footer>`; }
+function xrKpiCards(K) {
+  return `<div class="xr-kc">${K.map(({ k, s }) => `<div class="xr-kpi" style="--st:${xrSt[s.key][1]}"><div class="xr-kh"><b>KPI ${esc(k.id)}</b><span>${xrDot(s.key)}${xrSt[s.key][0]}</span></div>
+    <div class="xr-kn">${esc(k.name_en || '')}</div><div class="xr-kv"><b>${s.v == null ? '—' : xrNum(s.v)}</b><small>${s.v == null ? (k.basePhase && kyr() <= 2570 ? 'เก็บค่าฐาน' : '') : esc(k.unit || '')}</small></div>
+    <div class="xr-kt">เป้า ${esc(k.target || '—')}${k.latestAt ? ` · ${esc(k.latestAt)}` : ''}</div></div>`).join('')}</div>`;
+}
+function xrPlanTable(codes, PJ) {
+  const strats = cfg().strategies.filter((s) => codes.includes(s.pillar));
+  const rows = strats.map((s) => { const rs = PJ.rows.filter((r) => r.p.strategy === s.code); const b = rs.reduce((a, r) => a + (r.budget || 0), 0), sp = rs.reduce((a, r) => a + (r.spent || 0), 0);
+    const c = (k) => rs.filter((r) => r.k === k).length;
+    return `<tr><td><b>${esc(s.code)}</b> ${esc(s.name)}</td><td class="n">${rs.length || '—'}</td><td class="n">${b ? mb(b) : '—'}</td><td class="n">${b && sp ? ((sp / b) * 100).toFixed(0) + '%' : '—'}</td><td class="n">${rs.length ? `<span class="xr-c ok">${c('done')}</span><span class="xr-c on">${c('ontrack')}</span><span class="xr-c bad">${c('late')}</span><span class="xr-c no">${c('todo')}</span>` : '—'}</td></tr>`; }).join('');
+  const late = PJ.rows.filter((r) => r.k === 'late').slice(0, 3);
+  return `<section><div class="xr-sh">แผน · กลยุทธ์และโครงการ ปีงบ ${xrPlanYear()}</div>
+    <table class="xr-t"><thead><tr><th>กลยุทธ์</th><th class="n">โครงการ</th><th class="n">งบ (ล้านบาท)</th><th class="n">เบิกจ่าย</th><th class="n">เสร็จ · ตามแผน · ล่าช้า · ยังไม่เริ่ม</th></tr></thead><tbody>${rows}
+    <tr class="xr-tot"><td>รวม</td><td class="n">${PJ.n}</td><td class="n">${mb(PJ.budget)}</td><td class="n">${PJ.budget && PJ.spent ? ((PJ.spent / PJ.budget) * 100).toFixed(0) + '%' : '—'}</td><td class="n"><span class="xr-c ok">${PJ.done}</span><span class="xr-c on">${PJ.ontrack}</span><span class="xr-c bad">${PJ.late}</span><span class="xr-c no">${PJ.todo}</span></td></tr></tbody></table>
+    ${late.length ? `<p class="xr-note">โครงการล่าช้า: ${late.map((r) => `${esc(r.p.name)} (ผล ${r.act ?? 0}% / แผน ${r.plan ?? 0}%)`).join(' · ')}</p>` : ''}</section>`;
+}
+function xrGeoBlock(ids) {
+  const G = ids.map((id) => [id, xrGeo(id)]).filter((x) => x[1]);
+  if (!G.length) return '';
+  const f = (g, v) => (v == null ? '—' : g.gs.kind === 'sum' ? Math.round(v) + '%' : v.toFixed(1));
+  return `<section><div class="xr-sh">ผล · รายภาค/ส่วนกลาง</div><table class="xr-t"><thead><tr><th>ตัวชี้วัด</th><th class="n">ทั้งประเทศ</th><th class="n">เกณฑ์</th><th>ต่ำสุด 3 อันดับ</th><th>สูงสุด</th></tr></thead><tbody>
+    ${G.map(([id, g]) => `<tr><td><b>${esc(id)}</b> ${esc(g.label)}${g.sample ? ' <em class="xr-smp">ตัวอย่าง</em>' : ''}</td><td class="n"><b>${f(g, g.v)}</b></td><td class="n">${g.gs.kind === 'sum' ? '100%' : g.tgt}</td><td>${g.low.map(([n, v]) => `${esc(n)} ${f(g, v)}`).join(' · ')}</td><td>${g.top.slice(0, 1).map(([n, v]) => `${esc(n)} ${f(g, v)}`).join('')}</td></tr>`).join('')}</tbody></table></section>`;
+}
+function xrRisks(codes, n = 3) {
+  const rk = rankedRisks().filter((x) => codes.includes(x.r.pillar) && x.sc > 0).slice(0, n);
+  return rk.length ? `<section><div class="xr-sh">ความเสี่ยงสำคัญ</div><ol class="xr-rk">${rk.map((x) => { const lv = riskLevel(x.sc); return `<li><b>${esc(x.r.id)}</b> ${esc(x.r.name)} <span class="xr-lv xr-${lv.k}">${lv.t} · ${x.sc}</span></li>`; }).join('')}</ol></section>` : '';
+}
+
+/* ---------- BA: revenue by product ---------- */
+function xrRevenue() {
+  const fy = realFy(kyr()) ? kyr() : realFy(KYEARS[0]) ? KYEARS[0] : null; const R = fy ? realRows(fy) : null;
+  if (!R) return { html: '', p: [], r: [] };
+  const pc = (a, b) => (b ? (a / b - 1) * 100 : null), T = R.tot;
+  const tone = (x) => (x == null ? '' : x >= 0 ? 'ok' : x >= -2 ? 'warn' : 'bad');
+  const cell = (x) => `<td class="n xr-${tone(x)}">${xrPct(x)}</td>`;
+  const html = `<section><div class="xr-sh">ผล · รายได้ภาษีรายสินค้า ${esc(R.ins?.title || 'ปีงบ ' + fy)}</div>
+    <table class="xr-t"><thead><tr><th>สินค้า</th><th class="n">เก็บจริง (ล้านบาท)</th><th class="n">เทียบปีก่อน</th><th class="n">เทียบเป้ากรมฯ</th><th class="n">เทียบเป้ากระทรวงฯ</th></tr></thead><tbody>
+    ${R.rows.map((r) => `<tr><td>${esc(r.p)}</td><td class="n">${fmtM(r.a)}</td>${cell(pc(r.a, r.prev))}${cell(pc(r.a, r.t))}${cell(pc(r.a, r.mof))}</tr>`).join('')}
+    <tr class="xr-tot"><td>รวม</td><td class="n">${fmtM(T.a)}</td>${cell(pc(T.a, T.prev))}${cell(pc(T.a, T.t))}${cell(pc(T.a, T.mof))}</tr></tbody></table>
+    ${R.ins?.overall ? `<p class="xr-note">${esc(R.ins.overall)}</p>` : ''}</section>`;
+  const gaps = R.rows.map((r) => ({ p: r.p, gap: r.a - r.t, pct: pc(r.a, r.t) })).filter((x) => x.gap < 0).sort((a, b) => a.gap - b.gap);
+  const P = gaps.slice(0, 2).map((x) => `${x.p} ต่ำกว่าเป้ากรมฯ ${fmtM(-x.gap)} ล้านบาท (${xrPct(x.pct)})`);
+  const Rr = gaps.length ? [`เน้นติดตามภาษี${gaps[0].p} ซึ่งขาดเป้ามากที่สุด ร่วมกับเฝ้าระวังภาคที่ผลต่ำกว่าเป้า`] : [];
+  return { html, p: P, r: Rr };
+}
+
+/* ---------- LA: engagement summary ---------- */
+function xrEng() {
+  if (!S.eng?.rounds?.length) return { html: '', p: [], r: [] };
+  const rs = S.eng.rounds.filter((r) => r.fy <= Math.max(kyr(), S.eng.rounds[0].fy)); const R = rs[rs.length - 1] || S.eng.rounds[S.eng.rounds.length - 1];
+  const C = S.eng.rounds[S.eng.rounds.indexOf(R) - 1];
+  const U = (R.units?.length ? R : [...S.eng.rounds].reverse().find((r) => r.units?.length))?.units || [];
+  const low = [...U].sort((a, b) => a.v[0] - b.v[0]).slice(0, 5);
+  const html = `<section><div class="xr-sh">ผล · Engagement ${esc(R.label)}</div><div class="xr-eng">${['ภาพรวม', 'เก่ง', 'ดี', 'มีสุข'].map((t, i) => `<div><small>${t}</small><b>${xrNum(R.v[i])}</b>${C ? `<em class="xr-${R.v[i] - C.v[i] >= 0 ? 'ok' : 'bad'}">${R.v[i] - C.v[i] >= 0 ? '▲' : '▼'} ${Math.abs(R.v[i] - C.v[i]).toFixed(2)}</em>` : ''}</div>`).join('')}</div>
+    ${low.length ? `<p class="xr-note">หน่วยงานคะแนนต่ำสุด: ${low.map((u) => `${esc(u.n)} ${u.v[0].toFixed(1)}`).join(' · ')}</p>` : ''}</section>`;
+  const dims = [1, 2, 3].map((i) => [['', 'เก่ง', 'ดี', 'มีสุข'][i], R.v[i]]).sort((a, b) => a[1] - b[1]);
+  return { html, p: [`ด้านที่ต่ำสุดของความผูกพันคือ "${dims[0][0]}" ${xrNum(dims[0][1])}`], o: (R.notes || []).slice(0, 1), r: ['จัดแผนพัฒนาเฉพาะหน่วยงาน 10 อันดับสุดท้ายและส่วนกลาง ภายใต้กลยุทธ์ LA3', 'ขอข้อมูลดิบผลสำรวจเป็น Excel และวิเคราะห์ปัจจัยขับเคลื่อนทุกครั้ง'] };
+}
+
+/* ---------- pages ---------- */
+function xrPillarPage(code, page) {
+  const pl = pillarOf(code), color = PCOL[code] || '#1A5BD6', grp = (kGroup(kGroupOf(code)) || [])[1] || '';
+  const K = xrKpis([code]), PJ = xrProjects([code]);
+  const geoIds = K.map((x) => x.k.id).filter((id) => GEO[id] && id !== '2.3');
+  let special = { html: '', p: [], r: [] };
+  if (code === 'BA') special = xrRevenue();
+  if (code === 'LA') special = xrEng();
+  if (code === 'E' && GEO['5.3']) geoIds.push('5.3');
+  return `<div class="xr-page">${xrHead(`${esc(grp)} · ${esc(code)} ${esc(pl ? pillarShort(pl) : code)}`, `ยุทธศาสตร์ที่ ${pl?.num || ''} ${esc(pl?.name_en || '')} · เป้าหมาย 5 ปี: ${esc(PGOAL[code] || pl?.goal || '')}`, color, page)}
+    <div class="xr-sh">ผล · KPI ปีงบ ${kyr()}</div>${xrKpiCards(K)}
+    ${special.html}${xrGeoBlock(geoIds)}${xrPlanTable([code], PJ)}${xrRisks([code])}
+    ${xrInsight([code], K, PJ, { p: special.p, o: special.o, r: special.r })}${xrFoot()}</div>`;
+}
+function xrOverview() {
+  const C = cfg(), K = xrKpis(XR_ORDER), PJ = xrProjects(XR_ORDER);
+  const cnt = (k) => K.filter((x) => x.s.key === k).length;
+  const rev = realFy(kyr()) ? realRows(kyr()) : null;
+  const tiles = [['KPI ผ่านเป้า', `${cnt('ok')}/${K.length}`, `ใกล้ ${cnt('warn')} · ต่ำกว่า ${cnt('bad')} · ยังไม่มีผล ${cnt('none')}`],
+    ['โครงการปีงบ ' + xrPlanYear(), PJ.n, `ล่าช้า ${PJ.late} · เสร็จ ${PJ.done}`],
+    ['งบประมาณ (ล้านบาท)', mb(PJ.budget), `เบิกจ่าย ${PJ.budget && PJ.spent ? ((PJ.spent / PJ.budget) * 100).toFixed(1) + '%' : '—'}`],
+    ['รายได้ภาษี (ล้านบาท)', rev ? fmtM(rev.tot.a) : '—', rev ? `เทียบเป้ากรมฯ ${xrPct((rev.tot.a / rev.tot.t - 1) * 100)}` : 'ยังไม่มีข้อมูลปีนี้']];
+  const prow = XR_ORDER.map((code) => { const pl = pillarOf(code), k = xrKpis([code]), pj = xrProjects([code]); const weak = k.filter((x) => x.s.key === 'bad' || x.s.key === 'warn');
+    return `<tr><td><span class="xr-pb" style="background:${PCOL[code]}">${code}</span> ${esc(pl ? pillarShort(pl) : code)}<small>${esc((kGroup(kGroupOf(code)) || [])[1] || '')}</small></td><td class="n">${k.filter((x) => x.s.key === 'ok').length}/${k.length}</td><td class="n">${pj.n}</td><td class="n">${mb(pj.budget)}</td><td class="n">${pj.late || '—'}</td><td>${weak.length ? weak.map((x) => `${x.k.id} ${xrNum(x.s.v)} (เป้า ${xrNum(x.s.tv)})`).join(' · ') : k.some((x) => x.s.key === 'none') ? 'รอผล ' + k.filter((x) => x.s.key === 'none').map((x) => x.k.id).join(', ') : 'ผ่านเป้าทุกตัว'}</td></tr>`; }).join('');
+  const ktab = `<table class="xr-t xr-tk"><thead><tr><th>KPI</th><th class="n">ผล</th><th class="n">เป้า</th><th>สถานะ</th></tr></thead><tbody>${K.map(({ k, s }) => `<tr><td><b>${esc(k.id)}</b> ${esc(k.name_en || '')}</td><td class="n">${s.v == null ? '—' : xrNum(s.v)}</td><td class="n">${s.tv == null ? '—' : xrNum(s.tv)}</td><td>${xrDot(s.key)}${xrSt[s.key][0]}${k.latestAt ? ` <span class="xr-at">${esc(k.latestAt)}</span>` : ''}</td></tr>`).join('')}</tbody></table>`;
+  const rk = rankedRisks().filter((x) => x.sc > 0).slice(0, 5);
+  const revSp = xrRevenue(), engSp = xrEng();
+  return `<div class="xr-page">${xrHead('ภาพรวมแผนยุทธศาสตร์ 2570–2574', `${esc(C.vision || 'กรมสรรพสามิต')} · ข้อมูล ณ ${xrDate()}`, '#0E2756', 1)}
+    <div class="xr-tiles">${tiles.map(([a, b, c]) => `<div><small>${a}</small><b>${b}</b><span>${c}</span></div>`).join('')}</div>
+    <section><div class="xr-sh">ผลรายเสา · กองหน้า กองกลาง กองหลัง</div><table class="xr-t"><thead><tr><th>เสา</th><th class="n">KPI ผ่าน</th><th class="n">โครงการ</th><th class="n">งบ (ลบ.)</th><th class="n">ล่าช้า</th><th>ประเด็นที่ต้องติดตาม</th></tr></thead><tbody>${prow}</tbody></table></section>
+    <section><div class="xr-sh">KPI ทั้ง 14 ตัว ปีงบ ${kyr()}</div>${ktab}</section>
+    ${rk.length ? `<section><div class="xr-sh">Top 5 ความเสี่ยงระดับกรม</div><ol class="xr-rk xr-rk2">${rk.map((x) => { const lv = riskLevel(x.sc); return `<li><b>${esc(x.r.id)}</b> ${esc(x.r.name)} <span class="xr-lv xr-${lv.k}">${esc(x.r.pillar)} · ${lv.t}</span></li>`; }).join('')}</ol></section>` : ''}
+    ${xrInsight(XR_ORDER, K, PJ, { p: revSp.p.slice(0, 1).concat(engSp.p || []).slice(0, 2), r: revSp.r.slice(0, 1) })}${xrFoot()}</div>`;
+}
+function execPdf() {
+  const y = kyr();
+  pdfFromPages((host) => {
+    host.innerHTML = [xrOverview(), ...XR_ORDER.map((c, i) => xrPillarPage(c, i + 2))].join('');
+    const pages = [...host.querySelectorAll('.xr-page')];
+    pages.forEach((pg) => { const body = pg; let f = 1; while (body.scrollHeight > 1123 && f > 0.78) { f -= 0.04; body.style.setProperty('--xf', f); } });
+    return pages;
+  }, `รายงานผู้บริหาร-BALANCE-FY${y}.pdf`, { orient: 'p' });
+}
 </script>

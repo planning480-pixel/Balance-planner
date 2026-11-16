@@ -48,6 +48,11 @@ const numOr = (x) => (x === '' || x == null || isNaN(Number(x)) ? null : Number(
 function kpiResults(k) {
   const out = {};
   Object.entries(k.res || {}).forEach(([y, v]) => { if (numOr(v) != null) out[y] = { v: Number(v), at: 'FY' + y }; });
+  if (k.id === '1.1' && S.real?.fy) Object.keys(S.real.fy).forEach((fy) => {
+    const F = realFy(fy); if (out[fy] || !F?.lines) return;
+    const ms = Object.keys(F.m || {}).map(Number).filter((m) => realHasAct(realMonth(fy, m))); if (!ms.length) return;
+    const r = realSums(fy, ms); if (r?.t) out[fy] = { v: Math.round((r.a / r.t) * 10000) / 100, at: ms.length === 12 ? 'FY' + fy : `FY${fy} สะสม ${ms.length} เดือน` };
+  });
   if (k.id === '2.3' && S.eng?.rounds?.length) S.eng.rounds.forEach((r) => { out[r.fy] = { v: r.v[0], at: r.r + '/' + r.fy }; });
   if (!Object.keys(out).length && numOr(k.latest) != null) { const y = (String(k.latestAt || '').match(/25\d\d/) || [String(KYEARS[0])])[0]; out[y] = { v: Number(k.latest), at: k.latestAt || 'FY' + y }; }
   return out;
