@@ -1692,6 +1692,21 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 .sx-ermgrid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: start; }
 .sx-ermgrid .sx-risk { grid-template-columns: auto auto; gap: 12px; }
 .sx-ermgrid .sx-erm { grid-template-columns: 84px minmax(0, 1fr) 84px minmax(0, 1fr); gap: 4px 10px; align-content: start; }
+
+/* BA: ผลจัดเก็บรายสินค้า + Insight */
+.rl { display: grid; gap: 8px; }
+.rl-tbl { min-width: 900px; }
+.rl-tbl td { vertical-align: top; }
+.rl-tbl td small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 400; }
+.rl-p { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.rl-ok { color: var(--ok); } .rl-p.rl-ok { background: var(--ok-soft); }
+.rl-warn { color: var(--warn); } .rl-p.rl-warn { background: var(--warn-soft); }
+.rl-bad { color: var(--bad); } .rl-p.rl-bad { background: var(--bad-soft); }
+.rl-none { color: var(--muted); }
+.rl-ins { font-size: 13px; line-height: 1.5; min-width: 320px; max-width: 520px; }
+.rl-sub { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: 12px; color: var(--muted); }
+.rl-sub em { font-style: normal; font-weight: 600; }
+.rl-tot td { background: var(--surface-2); }
 /* พิมพ์รายงานแผน 1 หน้า: A4 แนวนอนเสมอ */
 @media print {
   @page { size: A4 landscape; margin: 0; }
@@ -1938,6 +1953,7 @@ async function publicBoot() {
     cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: Array.isArray(P.plans) ? P.plans : [], plans: [], reports: {}, profiles: {},
     profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
   scopePlans();
+  loadReal();
   fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
   document.body.classList.add('public');
   enterApp();
@@ -1964,6 +1980,7 @@ async function boot() {
   db.doc('profiles/' + S.uid).onSnapshot((snap) => { S.profile = snap.exists ? snap.data() : null; S.profileLoaded = true; scopePlans(); onData('profile'); }, () => { S.profileLoaded = true; onData('profile'); });
   db.collection('profiles').onSnapshot((q) => { const m = {}; q.docs.forEach((d) => { m[d.id] = d.data(); }); S.profiles = m; onData('profiles'); }, () => {});
   db.collection('plans').onSnapshot((q) => { S.allPlans = q.docs.map((d) => d.data()).filter((p) => p && p.id); scopePlans(); S.plansLoaded = true; onData('plans'); }, () => { S.plansLoaded = true; onData('plans'); });
+  loadReal();
   fetch('news.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j?.items) { S.news = j; if (S.inApp && S.route === 'dashboard') renderView(); } }).catch(() => {});
   db.doc('config/hr').onSnapshot((snap) => { S.hr = snap.exists ? snap.data() : null; if (S.inApp && S.route === 'pillar' && S.param === 'LA') renderView(); }, () => {});
   db.doc('config/ops').onSnapshot((snap) => { S.ops = snap.exists ? snap.data() : null; if (S.inApp && S.route === 'dashboard') renderView(); }, () => {});
@@ -3070,7 +3087,7 @@ function viewDashboard() {
 
   return `
   <section class="xhead">
-    <div class="xh-t"><span class="xh-ic">${ic('chart')}</span><div class="xh-tt"><h1>Excise Dashboard${S.ops?.sample ? ' <span class="chip chip-warn" title="ผลการจัดเก็บ ปราบปราม ตรวจสอบ และสัดส่วนสินค้า เป็นข้อมูลตัวอย่าง รอข้อมูลจริง">ข้อมูลตัวอย่าง</span>' : ''}</h1><p class="xh-v" title="${esc(C.vision)}"><b>วิสัยทัศน์</b> ${esc(C.vision)}</p></div></div>
+    <div class="xh-t"><span class="xh-ic">${ic('chart')}</span><div class="xh-tt"><h1>Excise Dashboard${S.real ? ' <span class="chip chip-ok" title="ผลการจัดเก็บรายได้: ข้อมูลจริงทั้งประเทศรายสินค้าและรายภาค (รายจังหวัดเป็นค่าประมาณ) · ปราบปรามและตรวจสอบยังเป็นข้อมูลตัวอย่าง">รายได้: ข้อมูลจริง</span>' : ''}${S.ops?.sample ? ` <span class="chip chip-warn" title="${S.real ? 'ปราบปรามและตรวจสอบ' : 'ผลการจัดเก็บ ปราบปราม ตรวจสอบ และสัดส่วนสินค้า'} เป็นข้อมูลตัวอย่าง รอข้อมูลจริง">${S.real ? 'ปราบปราม/ตรวจสอบ: ตัวอย่าง' : 'ข้อมูลตัวอย่าง'}</span>` : ''}</h1><p class="xh-v" title="${esc(C.vision)}"><b>วิสัยทัศน์</b> ${esc(C.vision)}</p></div></div>
     <div class="xh-f">
       <label><span>ปีงบประมาณ</span><select class="select zsel" data-filt="year">${yOpts}</select></label>
       <label><span>หน่วยงาน</span><select class="select zsel" data-filt="unit">${uOpts}</select></label>
@@ -3199,7 +3216,7 @@ const monFy = (m, fy) => MONTHS[m].replace(/(\d+)$/, (x) => String(Number(x) - (
 const QN = ['Q1 (ต.ค.–ธ.ค.)', 'Q2 (ม.ค.–มี.ค.)', 'Q3 (เม.ย.–มิ.ย.)', 'Q4 (ก.ค.–ก.ย.)'];
 /* sample yearly totals used to synthesise past months until real monthly files are imported */
 const YEAR_BASE = { revenue: { 2568: [537540, 609700], 2569: [565000, 578200] }, enforce: { 2568: [900, 850], 2569: [960, 900] }, audit: { 2568: [0.43, 1], 2569: [0.45, 1] } };
-function lastMonth(fy) { if (fy !== fyCur()) return 11; const ks = Object.keys(S.ops?.months || {}).map(Number); return ks.length ? Math.max(...ks) : -1; }
+function lastMonth(fy) { if (fy !== fyCur()) return 11; const ks = Object.keys(S.ops?.months || {}).map(Number); const rk = Object.entries(realFy(fy)?.m || {}).filter(([, R]) => realHasAct(R)).map(([k]) => Number(k)); const all = ks.concat(rk); return all.length ? Math.max(...all) : -1; }
 
 /* ---------- period modes ---------- */
 const PER_T = [['year', 'ทั้งปี (สะสม)'], ['month', 'รายเดือน']];
@@ -3239,7 +3256,7 @@ function splitBkk(M) {
   return o;
 }
 let MD_CACHE = {};
-const mdKey = () => String(S.ops?.updatedAt || '') + '|' + Object.keys(S.ops?.months || {}).join(',');
+const mdKey = () => String(S.ops?.updatedAt || '') + '|' + Object.keys(S.ops?.months || {}).join(',') + '|' + (S.realV || '');
 function tmplMonth() { const ks = Object.keys(S.ops?.months || {}).map(Number).sort((a, b) => a - b); return ks.length ? { m: ks[0], d: S.ops.months[String(ks[0])] } : null; }
 /* synthesise a month from the first real month: scale = seasonality × year size */
 function genMonth(fy, m, targetOnly) {
@@ -3272,8 +3289,9 @@ function monthData(fy, m, opt = {}) {
   let raw = null;
   if (fy === fyCur()) raw = S.ops?.months?.[String(m)] || (opt.tgt ? genMonth(fy, m, true) : null);
   else raw = S.ops?.hist?.[fy]?.[String(m)] || genMonth(fy, m, false);
-  const d = raw ? Object.fromEntries(['revenue', 'enforce', 'audit'].filter((k) => raw[k]).map((k) => [k, splitBkk(raw[k])])) : null;
+  let d = raw ? Object.fromEntries(['revenue', 'enforce', 'audit'].filter((k) => raw[k]).map((k) => [k, splitBkk(raw[k])])) : null;
   if (d && raw.sample) d.sample = true;
+  if (S.real && (opt.tgt || realHasAct(realMonth(fy, m)))) { const rr = realRevenue(fy, m, raw?.revenue); if (rr) { d = d || {}; d.revenue = splitBkk(rr); d.revReal = true; } }
   MD_CACHE[key] = d; return d;
 }
 const isSampleFy = (fy) => fy !== fyCur() && !S.ops?.hist?.[fy];
@@ -3314,7 +3332,7 @@ function opsPeriodData() {
 /* full-year target for a scope (for the “ทั้งปี” secondary line) */
 function fullYearTarget(metric, provs, prod) {
   const fy = selFy(); let t = 0;
-  if (!prod && provs.length === allProvs().length && metric !== 'audit') { const ann = fy === fyCur() ? Number(S.ops?.annual?.[metric]) : YEAR_BASE[metric]?.[fy]?.[1]; if (ann) return ann; }
+  if (!prod && provs.length === allProvs().length && metric !== 'audit') { const ann = metric === 'revenue' && realFy(fy)?.annual?.dept ? Number(realFy(fy).annual.dept) : fy === fyCur() ? Number(S.ops?.annual?.[metric]) : YEAR_BASE[metric]?.[fy]?.[1]; if (ann) return ann; }
   for (let m = 0; m < 12; m++) { const d = monthData(fy, m, { tgt: true }); const r = opsAgg(metric, d, provs, prod); if (!r.none) t += metric === 'audit' ? 0 : r.target || 0; }
   return t;
 }
@@ -3348,10 +3366,10 @@ function opsCards(opt = {}) {
       body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${tone}">${g == null ? '—' : `${g >= 0 ? '▲ +' : '▼ '}${aud ? g.toFixed(1) + ' จุด' : (g * 100).toFixed(1) + '%'}`}</span><span class="pc-s">ปีก่อน ${fmt(r.target)}${isSampleFy(sel.fy - 1) ? ' <i title="ข้อมูลปีก่อนเป็นตัวอย่าง">*</i>' : ''}</span>`;
     } else if (sel.p === 'year' && !aud) {
       const full = fullYearTarget(k, provs, prod), pf = full ? r.value / full : null, part = sel.last < 11;
-      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${part ? 'info' : achTone(pf)}">${pf == null ? '—' : (pf * 100).toFixed(1) + '%'} ของเป้าทั้งปี</span><span class="pc-s">เป้าทั้งปี ${fmt(full)}${part ? ` · ช่วงเดียวกัน <b class="t-${achTone(r.pct)}">${(r.pct * 100).toFixed(1)}%</b> ของเป้า ${fmt(r.target)}` : ''}</span><span class="pc-bar"><i class="hb-${part ? 'info' : achTone(pf)}" style="width:${Math.min(100, (pf || 0) * 100)}%"></i></span>`;
+      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${part ? 'info' : achTone(pf)}">${pf == null ? '—' : (pf * 100).toFixed(1) + '%'} ของเป้าทั้งปี</span><span class="pc-s">เป้าทั้งปี ${fmt(full)}${part ? ` · ช่วงเดียวกัน <b class="t-${achTone(r.pct)}">${(r.pct * 100).toFixed(1)}%</b> ของเป้า ${fmt(r.target)}` : ''}${k === 'revenue' ? mofLine(sel) : ''}</span><span class="pc-bar"><i class="hb-${part ? 'info' : achTone(pf)}" style="width:${Math.min(100, (pf || 0) * 100)}%"></i></span>`;
     } else {
       const tone = achTone(r.pct);
-      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${tone}">${r.pct == null ? '—' : (r.pct * 100).toFixed(1) + '%'} ของเป้า</span><span class="pc-s">เป้า ${fmt(r.target)}</span><span class="pc-bar"><i class="hb-${tone}" style="width:${Math.min(100, (r.pct || 0) * 100)}%"></i></span>`;
+      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${tone}">${r.pct == null ? '—' : (r.pct * 100).toFixed(1) + '%'} ของเป้า</span><span class="pc-s">เป้า ${fmt(r.target)}${k === 'revenue' ? mofLine(sel) : ''}</span><span class="pc-bar"><i class="hb-${tone}" style="width:${Math.min(100, (r.pct || 0) * 100)}%"></i></span>`;
     }
     return `<button type="button" class="pc pc-m ${metric === k ? 'on' : ''}" data-act="${opt.act || 'ops-metric'}" data-v="${k}" aria-pressed="${metric === k}">
       <span class="pc-h"><span class="pc-ic">${ic(o.icon, 'ic-sm')}</span><span class="pc-t">${o.label}<small>${scope}</small></span><em>${o.unit}</em></span>${body}</button>`;
@@ -3512,7 +3530,16 @@ const HIST_DEFAULT = {
     2570: { a: null, t: 611200, ev: [{ i: 'str', t: 'แผนการคลังระยะปานกลางเสนอปรับภาษีน้ำมัน +1 บาท/ลิตร ภาษีสินค้าบาป และภาษีสิ่งแวดล้อม/คาร์บอน', u: SRC.tpb70 }] }
   }
 };
-const histData = () => (S.ops?.history?.years ? S.ops.history : HIST_DEFAULT);
+const histData = () => {
+  const H = S.ops?.history?.years ? S.ops.history : HIST_DEFAULT;
+  if (!S.real?.fy) return H;
+  const o = clone(H); o.years = o.years || {};
+  [2568, 2569].forEach((fy) => { const F = S.real.fy[String(fy)]; if (!F?.m) return; let a = 0; const prod = {};
+    Object.values(F.m).forEach((R) => Object.entries(R.nat || {}).forEach(([p, v]) => { a += Number(v[0] || 0); prod[p] = (prod[p] || 0) + Number(v[0] || 0); }));
+    if (!a) return; const y = o.years[fy] = Object.assign({}, o.years[fy] || {}); y.a = Math.round(a); y.prod = Object.fromEntries(Object.entries(prod).map(([p, v]) => [p, Math.round(v)]));
+    if (F.annual?.dept) y.t = F.annual.dept; delete y.partial; delete y.tp; delete y.derived; });
+  return o;
+};
 const k1 = (v) => (v == null ? '—' : (v / 1000).toLocaleString('th-TH', { maximumFractionDigits: 1, minimumFractionDigits: 1 }));
 const EVI = { pos: ['▲', 'บวก'], neg: ['▼', 'ลบ'], mix: ['◆', 'ผสม'], str: ['●', 'เชิงนโยบาย/โครงสร้าง'] };
 function evTone(ev) {
@@ -3878,6 +3905,7 @@ function viewPillarBA() {
   return `${pillarHead(code, pl)}
   ${cards}
   ${opsPanel('revenue')}
+  ${S.real?.insights ? zcard('ผลจัดเก็บรายสินค้า และ Insight', 'แผน (เป้ากรมฯ / เป้ากระทรวงฯ) เทียบผลจริง · กดเลือกปีงบ', realPanel(), { fold: 'ba-real' }) : ''}
   ${opsTail('revenue', 'ba-')}
   ${zcard('สถิติรายได้ภาษีสรรพสามิต', 'ย้อนหลัง 10 ปีงบประมาณ · เลือกภาพรวมหรือรายสินค้า · กดปีเพื่อดูเหตุการณ์สำคัญ', `<div id="hist-body">${histBody()}</div>`, { fold: 'hist' })}
   ${zcard('นโยบายภาษีตามกลยุทธ์ BA', 'กลยุทธ์ แนวทางพัฒนา 2570–2574 และมาตรการภาษีที่กระทบรายได้', policy, { fold: 'ba-pol' })}
@@ -5226,4 +5254,95 @@ document.addEventListener('click', (e) => {
   else if (p) { soState().p = p.dataset.soP; soRerender(); }
 });
 document.addEventListener('change', (e) => { if (e.target.dataset?.so === 'year') { soState().year = Number(e.target.value); soRerender(); } });
+/* ===================== ข้อมูลรายได้จริง (ops-real.json) =====================
+   ทั้งประเทศรายสินค้า + รายภาค จากรายงานสถิติของสำนักแผนภาษี
+   รายภาค×สินค้า และรายจังหวัด เป็นค่าประมาณ (ปรับสัดส่วนให้ยอดรวมภาคและยอดรวมสินค้าตรงข้อมูลจริง) */
+const RP = ['น้ำมัน', 'รถยนต์', 'เบียร์', 'สุรา', 'ยาสูบ', 'เครื่องดื่ม', 'อื่นๆ'];
+const realFy = (fy) => S.real?.fy?.[String(fy)] || null;
+const realMonth = (fy, m) => realFy(fy)?.m?.[String(m)] || null;
+const realHasAct = (R) => !!R && Object.values(R.nat || {}).some((v) => v[0] != null);
+function loadReal() {
+  fetch('ops-real.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((j) => {
+    if (!j?.fy) return; S.real = j; S.realV = j.updatedAt || '1'; MD_CACHE = {}; PD_CACHE = { key: '', d: null };
+    if (S.inApp) renderView();
+  }).catch(() => {});
+}
+/* iterative proportional fitting: seed[region][prod] → matches row (region) and column (product) totals */
+function ras(seed, rowM, colM) {
+  const G = Object.keys(rowM), P = RP.filter((p) => (colM[p] || 0) > 0 || G.some((g) => (seed[g]?.[p] || 0) > 0));
+  const X = {}; const colT = P.reduce((s, p) => s + (colM[p] || 0), 0) || 1;
+  G.forEach((g) => { X[g] = {}; const rs = P.reduce((s, p) => s + (seed[g]?.[p] || 0), 0); P.forEach((p) => { X[g][p] = rs > 0 ? (seed[g]?.[p] || 0) : (colM[p] || 0) / colT; }); });
+  for (let it = 0; it < 60; it++) {
+    G.forEach((g) => { const s = P.reduce((a, p) => a + X[g][p], 0); const f = s > 0 ? (rowM[g] || 0) / s : 0; P.forEach((p) => { X[g][p] *= f; }); });
+    P.forEach((p) => { const s = G.reduce((a, g) => a + X[g][p], 0); const f = s > 0 ? (colM[p] || 0) / s : 0; G.forEach((g) => { X[g][p] *= f; }); });
+  }
+  return X;
+}
+/* real revenue for one month in the app's {prov, pp} shape (Bangkok as one province; splitBkk runs after) */
+function realRevenue(fy, m, base) {
+  const R = realMonth(fy, m); if (!R) return null;
+  const F = realFy(fy), seed = F.seed || realFy(2569)?.seed || {};
+  const hasA = realHasAct(R), hasT = Object.values(R.nat || {}).some((v) => v[1] != null);
+  const regs = REGIONS.filter((g) => R.reg?.[g]);
+  const col = (j) => Object.fromEntries(RP.map((p) => [p, Number(R.nat?.[p]?.[j] || 0)]));
+  const row = (j) => Object.fromEntries(regs.map((g) => [g, Number(R.reg[g][j] || 0)]));
+  const A = hasA ? ras(seed, row(0), col(0)) : null, T = hasT ? ras(seed, row(1), col(1)) : null;
+  const tpl = S.ops?.months?.[String(tmplMonth()?.m ?? 0)]?.revenue || {};
+  const out = { prov: {}, pp: {} };
+  regs.forEach((g) => {
+    const provs = regionProvs(g);
+    RP.forEach((p) => {
+      const av = A?.[g]?.[p] || 0, tv = T?.[g]?.[p] || 0; if (!av && !tv) return;
+      let w = provs.map((pv) => Number(tpl.pp?.[pv]?.[p]?.[1] || tpl.pp?.[pv]?.[p]?.[0] || 0));
+      if (!w.some((x) => x > 0)) w = provs.map((pv) => Number(tpl.prov?.[pv]?.[1] || tpl.prov?.[pv]?.[0] || 0));
+      if (!w.some((x) => x > 0)) w = provs.map(() => 1);
+      const ws = w.reduce((a, b) => a + b, 0);
+      provs.forEach((pv, i) => {
+        const k = w[i] / ws; if (!k) return;
+        const bt = base?.pp?.[pv]?.[p]?.[1];
+        out.pp[pv] = out.pp[pv] || {};
+        out.pp[pv][p] = [hasA ? av * k : null, hasT ? tv * k : (bt ?? 0)];
+      });
+    });
+  });
+  Object.entries(out.pp).forEach(([pv, ob]) => { out.prov[pv] = Object.values(ob).reduce((s, x) => [x[0] == null ? s[0] : (s[0] || 0) + x[0], s[1] + (x[1] || 0)], [hasA ? 0 : null, 0]); });
+  return out;
+}
+/* national sums for the selected months: actual, dept target, MOF target */
+function realSums(fy, months, prod) {
+  let a = 0, t = 0, mof = 0, ok = false;
+  months.forEach((m) => { const R = realMonth(fy, m); if (!R) return; ok = true;
+    Object.entries(R.nat || {}).forEach(([p, v]) => { if (prod && p !== prod) return; a += Number(v[0] || 0); t += Number(v[1] || 0); mof += Number(v[2] || 0); }); });
+  return ok ? { a, t, mof } : null;
+}
+const rlPct = (x) => (x == null || !isFinite(x) ? '—' : `${x >= 0 ? '+' : ''}${x.toFixed(1)}%`);
+const pTone = (x) => (x == null ? 'none' : x >= 0 ? 'ok' : x >= -2 ? 'warn' : 'bad');
+/* MOF line for the revenue card (national scope only) */
+function mofLine(sel) {
+  if (!S.real || S.opsRegion || S.opsProv || isGrowth(sel.p)) return '';
+  const r = realSums(sel.fy, sel.months, S.opsProd || ''); if (!r || !r.mof || !r.a) return '';
+  return ` · กระทรวงฯ ${fmtM(r.mof)} (${rlPct((r.a / r.mof - 1) * 100)})`;
+}
+
+/* ---------- BA: ผลรายสินค้า + Insight ---------- */
+function realPanel() {
+  if (!S.real?.insights) return '';
+  const yrs = Object.keys(S.real.insights).sort();
+  const fy = S.realFy && S.real.insights[S.realFy] ? S.realFy : yrs[yrs.length - 1];
+  const I = S.real.insights[fy], F = realFy(fy), L = F?.lines || [];
+  const grp = (n) => (n <= 6 ? RP[n - 1] : 'อื่นๆ');
+  const rows = RP.map((p) => { const ls = L.filter((x) => grp(x.n) === p); const s = (k) => ls.reduce((a, x) => a + Number(x[k] || 0), 0);
+    return { p, a: s('a'), prev: s('prev'), t: s('tDept'), mof: s('tMof'), ls }; });
+  const tot = rows.reduce((o, r) => ({ a: o.a + r.a, prev: o.prev + r.prev, t: o.t + r.t, mof: o.mof + r.mof }), { a: 0, prev: 0, t: 0, mof: 0 });
+  const pc = (a, b) => (b ? (a / b - 1) * 100 : null);
+  const cell = (x) => `<td class="num"><span class="rl-p rl-${pTone(x)}">${rlPct(x)}</span></td>`;
+  const sub = (r) => r.p !== 'อื่นๆ' ? '' : `<div class="rl-sub">${r.ls.filter((x) => x.a >= 200).sort((x, y) => y.a - x.a).slice(0, 4).map((x) => `<span>${esc(x.name.replace(/^ภาษี/, ''))} <b class="num">${fmtM(x.a)}</b> <em class="rl-${pTone(pc(x.a, x.prev))}">${rlPct(pc(x.a, x.prev))}</em></span>`).join('')}</div>`;
+  const tb = `<div class="tbl-wrap"><table class="tbl rl-tbl"><thead><tr><th>สินค้า</th><th class="num">เก็บจริง (ล้านบาท)</th><th class="num">เทียบปีก่อน</th><th class="num">เทียบเป้ากรมฯ</th><th class="num">เทียบเป้ากระทรวงฯ</th><th>Insight</th></tr></thead><tbody>
+    ${rows.map((r) => `<tr><td><b>${esc(r.p)}</b></td><td class="num"><b>${fmtM(r.a)}</b><small>เป้ากรมฯ ${fmtM(r.t)}</small></td>${cell(pc(r.a, r.prev))}${cell(pc(r.a, r.t))}${cell(pc(r.a, r.mof))}<td class="rl-ins">${esc(I.p?.[r.p] || '—')}${sub(r)}</td></tr>`).join('')}
+    <tr class="rl-tot"><td><b>รวม</b></td><td class="num"><b>${fmtM(tot.a)}</b><small>เป้ากรมฯ ${fmtM(tot.t)}</small></td>${cell(pc(tot.a, tot.prev))}${cell(pc(tot.a, tot.t))}${cell(pc(tot.a, tot.mof))}<td class="rl-ins">${esc(I.overall || '')}</td></tr>
+    </tbody></table></div>`;
+  const tabs = `<div class="seg seg-sm" role="group" aria-label="เลือกปี">${yrs.map((y) => `<button type="button" data-realfy="${y}" aria-pressed="${y === fy}">${esc(S.real.insights[y].title.replace('ปีงบประมาณ ', 'ปีงบ '))}</button>`).join('')}</div>`;
+  return `<div class="rl" id="rl">${tabs}<p class="muted small">ที่มา: ${esc(I.src)} · ตัวเลขรวมใช้ข้อมูลเบื้องต้นจากระบบ BI</p>${tb}</div>`;
+}
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-realfy]'); if (!b) return; S.realFy = b.dataset.realfy; const el = $('#rl'); if (el) el.outerHTML = realPanel(); });
 </script>

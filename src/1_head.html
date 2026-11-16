@@ -1692,6 +1692,21 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 .sx-ermgrid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: start; }
 .sx-ermgrid .sx-risk { grid-template-columns: auto auto; gap: 12px; }
 .sx-ermgrid .sx-erm { grid-template-columns: 84px minmax(0, 1fr) 84px minmax(0, 1fr); gap: 4px 10px; align-content: start; }
+
+/* BA: ผลจัดเก็บรายสินค้า + Insight */
+.rl { display: grid; gap: 8px; }
+.rl-tbl { min-width: 900px; }
+.rl-tbl td { vertical-align: top; }
+.rl-tbl td small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 400; }
+.rl-p { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.rl-ok { color: var(--ok); } .rl-p.rl-ok { background: var(--ok-soft); }
+.rl-warn { color: var(--warn); } .rl-p.rl-warn { background: var(--warn-soft); }
+.rl-bad { color: var(--bad); } .rl-p.rl-bad { background: var(--bad-soft); }
+.rl-none { color: var(--muted); }
+.rl-ins { font-size: 13px; line-height: 1.5; min-width: 320px; max-width: 520px; }
+.rl-sub { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: 12px; color: var(--muted); }
+.rl-sub em { font-style: normal; font-weight: 600; }
+.rl-tot td { background: var(--surface-2); }
 /* พิมพ์รายงานแผน 1 หน้า: A4 แนวนอนเสมอ */
 @media print {
   @page { size: A4 landscape; margin: 0; }

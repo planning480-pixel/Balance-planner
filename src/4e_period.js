@@ -15,7 +15,7 @@ const monFy = (m, fy) => MONTHS[m].replace(/(\d+)$/, (x) => String(Number(x) - (
 const QN = ['Q1 (ต.ค.–ธ.ค.)', 'Q2 (ม.ค.–มี.ค.)', 'Q3 (เม.ย.–มิ.ย.)', 'Q4 (ก.ค.–ก.ย.)'];
 /* sample yearly totals used to synthesise past months until real monthly files are imported */
 const YEAR_BASE = { revenue: { 2568: [537540, 609700], 2569: [565000, 578200] }, enforce: { 2568: [900, 850], 2569: [960, 900] }, audit: { 2568: [0.43, 1], 2569: [0.45, 1] } };
-function lastMonth(fy) { if (fy !== fyCur()) return 11; const ks = Object.keys(S.ops?.months || {}).map(Number); return ks.length ? Math.max(...ks) : -1; }
+function lastMonth(fy) { if (fy !== fyCur()) return 11; const ks = Object.keys(S.ops?.months || {}).map(Number); const rk = Object.entries(realFy(fy)?.m || {}).filter(([, R]) => realHasAct(R)).map(([k]) => Number(k)); const all = ks.concat(rk); return all.length ? Math.max(...all) : -1; }
 
 /* ---------- period modes ---------- */
 const PER_T = [['year', 'ทั้งปี (สะสม)'], ['month', 'รายเดือน']];
@@ -55,7 +55,7 @@ function splitBkk(M) {
   return o;
 }
 let MD_CACHE = {};
-const mdKey = () => String(S.ops?.updatedAt || '') + '|' + Object.keys(S.ops?.months || {}).join(',');
+const mdKey = () => String(S.ops?.updatedAt || '') + '|' + Object.keys(S.ops?.months || {}).join(',') + '|' + (S.realV || '');
 function tmplMonth() { const ks = Object.keys(S.ops?.months || {}).map(Number).sort((a, b) => a - b); return ks.length ? { m: ks[0], d: S.ops.months[String(ks[0])] } : null; }
 /* synthesise a month from the first real month: scale = seasonality × year size */
 function genMonth(fy, m, targetOnly) {
@@ -88,8 +88,9 @@ function monthData(fy, m, opt = {}) {
   let raw = null;
   if (fy === fyCur()) raw = S.ops?.months?.[String(m)] || (opt.tgt ? genMonth(fy, m, true) : null);
   else raw = S.ops?.hist?.[fy]?.[String(m)] || genMonth(fy, m, false);
-  const d = raw ? Object.fromEntries(['revenue', 'enforce', 'audit'].filter((k) => raw[k]).map((k) => [k, splitBkk(raw[k])])) : null;
+  let d = raw ? Object.fromEntries(['revenue', 'enforce', 'audit'].filter((k) => raw[k]).map((k) => [k, splitBkk(raw[k])])) : null;
   if (d && raw.sample) d.sample = true;
+  if (S.real && (opt.tgt || realHasAct(realMonth(fy, m)))) { const rr = realRevenue(fy, m, raw?.revenue); if (rr) { d = d || {}; d.revenue = splitBkk(rr); d.revReal = true; } }
   MD_CACHE[key] = d; return d;
 }
 const isSampleFy = (fy) => fy !== fyCur() && !S.ops?.hist?.[fy];
@@ -130,7 +131,7 @@ function opsPeriodData() {
 /* full-year target for a scope (for the “ทั้งปี” secondary line) */
 function fullYearTarget(metric, provs, prod) {
   const fy = selFy(); let t = 0;
-  if (!prod && provs.length === allProvs().length && metric !== 'audit') { const ann = fy === fyCur() ? Number(S.ops?.annual?.[metric]) : YEAR_BASE[metric]?.[fy]?.[1]; if (ann) return ann; }
+  if (!prod && provs.length === allProvs().length && metric !== 'audit') { const ann = metric === 'revenue' && realFy(fy)?.annual?.dept ? Number(realFy(fy).annual.dept) : fy === fyCur() ? Number(S.ops?.annual?.[metric]) : YEAR_BASE[metric]?.[fy]?.[1]; if (ann) return ann; }
   for (let m = 0; m < 12; m++) { const d = monthData(fy, m, { tgt: true }); const r = opsAgg(metric, d, provs, prod); if (!r.none) t += metric === 'audit' ? 0 : r.target || 0; }
   return t;
 }
@@ -164,10 +165,10 @@ function opsCards(opt = {}) {
       body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${tone}">${g == null ? '—' : `${g >= 0 ? '▲ +' : '▼ '}${aud ? g.toFixed(1) + ' จุด' : (g * 100).toFixed(1) + '%'}`}</span><span class="pc-s">ปีก่อน ${fmt(r.target)}${isSampleFy(sel.fy - 1) ? ' <i title="ข้อมูลปีก่อนเป็นตัวอย่าง">*</i>' : ''}</span>`;
     } else if (sel.p === 'year' && !aud) {
       const full = fullYearTarget(k, provs, prod), pf = full ? r.value / full : null, part = sel.last < 11;
-      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${part ? 'info' : achTone(pf)}">${pf == null ? '—' : (pf * 100).toFixed(1) + '%'} ของเป้าทั้งปี</span><span class="pc-s">เป้าทั้งปี ${fmt(full)}${part ? ` · ช่วงเดียวกัน <b class="t-${achTone(r.pct)}">${(r.pct * 100).toFixed(1)}%</b> ของเป้า ${fmt(r.target)}` : ''}</span><span class="pc-bar"><i class="hb-${part ? 'info' : achTone(pf)}" style="width:${Math.min(100, (pf || 0) * 100)}%"></i></span>`;
+      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${part ? 'info' : achTone(pf)}">${pf == null ? '—' : (pf * 100).toFixed(1) + '%'} ของเป้าทั้งปี</span><span class="pc-s">เป้าทั้งปี ${fmt(full)}${part ? ` · ช่วงเดียวกัน <b class="t-${achTone(r.pct)}">${(r.pct * 100).toFixed(1)}%</b> ของเป้า ${fmt(r.target)}` : ''}${k === 'revenue' ? mofLine(sel) : ''}</span><span class="pc-bar"><i class="hb-${part ? 'info' : achTone(pf)}" style="width:${Math.min(100, (pf || 0) * 100)}%"></i></span>`;
     } else {
       const tone = achTone(r.pct);
-      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${tone}">${r.pct == null ? '—' : (r.pct * 100).toFixed(1) + '%'} ของเป้า</span><span class="pc-s">เป้า ${fmt(r.target)}</span><span class="pc-bar"><i class="hb-${tone}" style="width:${Math.min(100, (r.pct || 0) * 100)}%"></i></span>`;
+      body = `<b class="pc-v num">${fmt(r.value)}</b><span class="pc-pill pc-${tone}">${r.pct == null ? '—' : (r.pct * 100).toFixed(1) + '%'} ของเป้า</span><span class="pc-s">เป้า ${fmt(r.target)}${k === 'revenue' ? mofLine(sel) : ''}</span><span class="pc-bar"><i class="hb-${tone}" style="width:${Math.min(100, (r.pct || 0) * 100)}%"></i></span>`;
     }
     return `<button type="button" class="pc pc-m ${metric === k ? 'on' : ''}" data-act="${opt.act || 'ops-metric'}" data-v="${k}" aria-pressed="${metric === k}">
       <span class="pc-h"><span class="pc-ic">${ic(o.icon, 'ic-sm')}</span><span class="pc-t">${o.label}<small>${scope}</small></span><em>${o.unit}</em></span>${body}</button>`;

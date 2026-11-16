@@ -294,7 +294,7 @@ function viewDashboard() {
 
   return `
   <section class="xhead">
-    <div class="xh-t"><span class="xh-ic">${ic('chart')}</span><div class="xh-tt"><h1>Excise Dashboard${S.ops?.sample ? ' <span class="chip chip-warn" title="ผลการจัดเก็บ ปราบปราม ตรวจสอบ และสัดส่วนสินค้า เป็นข้อมูลตัวอย่าง รอข้อมูลจริง">ข้อมูลตัวอย่าง</span>' : ''}</h1><p class="xh-v" title="${esc(C.vision)}"><b>วิสัยทัศน์</b> ${esc(C.vision)}</p></div></div>
+    <div class="xh-t"><span class="xh-ic">${ic('chart')}</span><div class="xh-tt"><h1>Excise Dashboard${S.real ? ' <span class="chip chip-ok" title="ผลการจัดเก็บรายได้: ข้อมูลจริงทั้งประเทศรายสินค้าและรายภาค (รายจังหวัดเป็นค่าประมาณ) · ปราบปรามและตรวจสอบยังเป็นข้อมูลตัวอย่าง">รายได้: ข้อมูลจริง</span>' : ''}${S.ops?.sample ? ` <span class="chip chip-warn" title="${S.real ? 'ปราบปรามและตรวจสอบ' : 'ผลการจัดเก็บ ปราบปราม ตรวจสอบ และสัดส่วนสินค้า'} เป็นข้อมูลตัวอย่าง รอข้อมูลจริง">${S.real ? 'ปราบปราม/ตรวจสอบ: ตัวอย่าง' : 'ข้อมูลตัวอย่าง'}</span>` : ''}</h1><p class="xh-v" title="${esc(C.vision)}"><b>วิสัยทัศน์</b> ${esc(C.vision)}</p></div></div>
     <div class="xh-f">
       <label><span>ปีงบประมาณ</span><select class="select zsel" data-filt="year">${yOpts}</select></label>
       <label><span>หน่วยงาน</span><select class="select zsel" data-filt="unit">${uOpts}</select></label>

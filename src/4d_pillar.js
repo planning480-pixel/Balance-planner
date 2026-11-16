@@ -133,6 +133,7 @@ function viewPillarBA() {
   return `${pillarHead(code, pl)}
   ${cards}
   ${opsPanel('revenue')}
+  ${S.real?.insights ? zcard('ผลจัดเก็บรายสินค้า และ Insight', 'แผน (เป้ากรมฯ / เป้ากระทรวงฯ) เทียบผลจริง · กดเลือกปีงบ', realPanel(), { fold: 'ba-real' }) : ''}
   ${opsTail('revenue', 'ba-')}
   ${zcard('สถิติรายได้ภาษีสรรพสามิต', 'ย้อนหลัง 10 ปีงบประมาณ · เลือกภาพรวมหรือรายสินค้า · กดปีเพื่อดูเหตุการณ์สำคัญ', `<div id="hist-body">${histBody()}</div>`, { fold: 'hist' })}
   ${zcard('นโยบายภาษีตามกลยุทธ์ BA', 'กลยุทธ์ แนวทางพัฒนา 2570–2574 และมาตรการภาษีที่กระทบรายได้', policy, { fold: 'ba-pol' })}

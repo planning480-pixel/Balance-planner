@@ -55,7 +55,16 @@ const HIST_DEFAULT = {
     2570: { a: null, t: 611200, ev: [{ i: 'str', t: 'แผนการคลังระยะปานกลางเสนอปรับภาษีน้ำมัน +1 บาท/ลิตร ภาษีสินค้าบาป และภาษีสิ่งแวดล้อม/คาร์บอน', u: SRC.tpb70 }] }
   }
 };
-const histData = () => (S.ops?.history?.years ? S.ops.history : HIST_DEFAULT);
+const histData = () => {
+  const H = S.ops?.history?.years ? S.ops.history : HIST_DEFAULT;
+  if (!S.real?.fy) return H;
+  const o = clone(H); o.years = o.years || {};
+  [2568, 2569].forEach((fy) => { const F = S.real.fy[String(fy)]; if (!F?.m) return; let a = 0; const prod = {};
+    Object.values(F.m).forEach((R) => Object.entries(R.nat || {}).forEach(([p, v]) => { a += Number(v[0] || 0); prod[p] = (prod[p] || 0) + Number(v[0] || 0); }));
+    if (!a) return; const y = o.years[fy] = Object.assign({}, o.years[fy] || {}); y.a = Math.round(a); y.prod = Object.fromEntries(Object.entries(prod).map(([p, v]) => [p, Math.round(v)]));
+    if (F.annual?.dept) y.t = F.annual.dept; delete y.partial; delete y.tp; delete y.derived; });
+  return o;
+};
 const k1 = (v) => (v == null ? '—' : (v / 1000).toLocaleString('th-TH', { maximumFractionDigits: 1, minimumFractionDigits: 1 }));
 const EVI = { pos: ['▲', 'บวก'], neg: ['▼', 'ลบ'], mix: ['◆', 'ผสม'], str: ['●', 'เชิงนโยบาย/โครงสร้าง'] };
 function evTone(ev) {
