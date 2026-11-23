@@ -1,6 +1,28 @@
-{"week":"46/2569","range":"9 – 15 พ.ย. 2569","url":"https://claude.ai/artifact/A6aFeSRLYqU44TJZ1k3X69","items":[
-{"cat":"ยาสูบ","icon":"smoke","title":"คอลัมน์จี้เดินหน้าภาษีบุหรี่อัตราเดียว ชี้รายได้หายปีละ 1–2 หมื่นล้าน","date":"13 พ.ย. 69","url":"https://www.naewna.com/n/todays-columns/business-columns/162229/"},
-{"cat":"ปราบปราม","icon":"shield","title":"สรรพสามิตปราบสินค้าเถื่อน ต.ค. 69 จับ 3,693 คดี ค่าปรับ 87.61 ล้านบาท","date":"10 พ.ย. 69","url":"https://www.bangkokbiznews.com/economics/1260069"},
-{"cat":"สุรา","icon":"liquor","title":"ป.ป.ท.–กทม. ดัน Sandbox ข้าวสาร–รามบุตรี สรรพสามิตร่วมถกใบอนุญาตสุรา","date":"12 พ.ย. 69","url":"https://www.siamnews.com/news/politics/57251"},
-{"cat":"รถยนต์","icon":"car","title":"ภาษี EV นำเข้า 35% สกัดอีวีนำเข้า ค่ายรถเตรียมหั่นราคาก่อน 1 ม.ค. 70","date":"9 พ.ย. 69","url":"https://marketeeronline.co/archives/498608"}
-]}
+{
+  "week": "47/2569",
+  "range": "16 – 22 พ.ย. 2569",
+  "url": "https://claude.ai/artifact/A6aFeSRLYqU44TJZ1k3X69",
+  "items": [
+    {
+      "cat": "ยาสูบ",
+      "icon": "smoke",
+      "title": "ยสท. กำไรทรุดเหลือหลักร้อยล้าน จี้คลังรื้อภาษีบุหรี่ 2 อัตรา",
+      "date": "18 พ.ย. 69",
+      "url": "https://www.thaipost.net/economy-news/1110942/"
+    },
+    {
+      "cat": "รถยนต์",
+      "icon": "car",
+      "title": "ญี่ปุ่นขานรับภาษีสรรพสามิตรถ EV นำเข้า 35% ช่วงคลังโรดโชว์โตเกียว",
+      "date": "18 พ.ย. 69",
+      "url": "https://infoquest.co.th/2026/681839"
+    },
+    {
+      "cat": "น้ำมัน",
+      "icon": "fuel",
+      "title": "โครงสร้างราคาน้ำมัน 17 พ.ย.: ภาษีดีเซล 6.92 บ. B20 0.431 บ./ลิตร",
+      "date": "17 พ.ย. 69",
+      "url": "https://www.thansettakij.com/economy/energy/673950"
+    }
+  ]
+}
