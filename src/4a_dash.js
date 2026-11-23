@@ -332,15 +332,25 @@ function viewKpis() {
     <div class="sbs sbs-none"><span>No data</span><b>${ks.none}</b></div></div>`;
   return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">ผล FY${y}${y === KYEARS[0] ? ' (ค่าฐาน)' : ''} เทียบเป้า · กดการ์ดเพื่อดูผลเชิงลึก</span></div><div class="kf">${yrs}${grp}<button type="button" class="btn btn-primary btn-sm" data-act="exec-pdf" ${S.pdfBusy ? 'disabled' : ''} title="A4 แนวตั้ง 6 หน้า: ภาพรวม · BA · C · LA · N · E">${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง…' : 'รายงานผู้บริหาร (PDF)'}</button></div></div>
   ${hotBar()}${summary}${kpiBoard(pfs, { noHead: true, noSum: true })}
-  <div class="zgrid" style="margin-top:16px">${zcard('ผลเชิงลึก', 'กองหน้า BA · C &nbsp;|&nbsp; กองกลาง LA · N &nbsp;|&nbsp; กองหลัง E — เนื้อหาเดียวกับหน้าเสาแต่ละด้านทางซ้าย', kDeep(), { span: 12, fold: 'kdeep', id: 'kdeep' })}</div>
+  <div class="zgrid" style="margin-top:16px">${zcard('ผลเชิงลึก', 'กองหน้า BA &nbsp;|&nbsp; กองกลาง LA · N &nbsp;|&nbsp; กองหลัง C · E — เนื้อหาเดียวกับหน้าเสาแต่ละด้านทางซ้าย', kDeep(), { span: 12, fold: 'kdeep', id: 'kdeep' })}</div>
   <div class="zgrid" style="margin-top:16px">${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ', stratOverview(), { span: 12, fold: 'kso' })}</div>`;
+}
+/* Key Reform Priority strip (from the 5-year plan) */
+function kReform(code) {
+  const R = REFORM[code]; if (!R) return '';
+  const strats = cfg().strategies.filter((x) => x.pillar === code).map((x) => x.code);
+  const ks = cfg().kpis.filter((k) => k.pillar === code).map(kno);
+  return `<div class="kd-rf" data-p="${code}"><span class="kd-rn">${esc(R[0])}</span><div class="kd-rm"><div class="kd-rt"><b>${esc(R[1])}</b><span class="kd-rp">${esc(R[2])}</span><span class="kd-rd">${esc(R[3])}</span></div>
+    <div class="kd-rs">เจ้าภาพ ${esc(R[4])} · <b>${esc(strats.length ? strats[0] + '–' + strats[strats.length - 1] : code)}</b> · KPI ${esc(ks.length > 1 ? ks[0] + '–' + ks[ks.length - 1] : ks[0] || '—')}</div>
+    <div class="kd-ry"><b>ปีแรก</b> ${esc(R[5])}</div></div></div>`;
 }
 /* deep-dive under the scoreboard: group tabs → pillar tabs → the pillar page body */
 function kDeep() {
   const gid = S.kgrp || S.kdg || 'F', gr = kGroup(gid);
   const pc = gr[2].includes(S.kdp) ? S.kdp : gr[2][0];
   const gt = `<div class="kd-tabs"><div class="seg" role="tablist" aria-label="เลือกกอง">${KGROUPS.map(([id, n, ps]) => `<button type="button" role="tab" data-act="kd-g" data-v="${id}" aria-selected="${id === gid}" aria-pressed="${id === gid}">${n} <small>${ps.join(' · ')}</small></button>`).join('')}</div>
-    ${gr[2].length > 1 ? `<div class="kd-ps" role="tablist" aria-label="เลือกเสา">${gr[2].map((c) => { const pl = pillarOf(c); const st = kpiStats(c); return `<button type="button" role="tab" class="kd-p" data-p="${c}" data-act="kd-p" data-v="${c}" aria-selected="${c === pc}"><span class="pbadge">${c}</span><b>${esc(pl ? pillarShort(pl) : c)}</b><small>${st.ok}/${st.n} on target</small></button>`; }).join('')}</div>` : ''}</div>`;
+    ${gr[2].length > 1 ? `<div class="kd-ps" role="tablist" aria-label="เลือกเสา">${gr[2].map((c) => { const R = REFORM[c] || []; const st = kpiStats(c); return `<button type="button" role="tab" class="kd-p" data-p="${c}" data-act="kd-p" data-v="${c}" aria-selected="${c === pc}"><span class="pbadge">${c}</span><b>${esc(R[0] || '')} ${esc(R[1] || c)}</b><small>${st.ok}/${st.n} on target</small></button>`; }).join('')}</div>` : ''}</div>
+  ${kReform(pc)}`;
   S.embed = true;
   let body = '';
   try { body = pc === 'BA' ? viewPillarBA() : PSPEC[pc] ? viewPillarGeneric(pc) : ''; } finally { S.embed = false; }

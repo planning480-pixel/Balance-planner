@@ -50,6 +50,14 @@ function toast(msg, kind) {
 }
 
 /* ---- config helpers ---- */
+/* ปรับตามแผนฉบับล่าสุด (KPI 1–14 + ชื่อ KPI): ใช้กับข้อมูลที่ยังไม่เคยบันทึกเลขลำดับ (no) — แก้ใน KPI Setting แล้วบันทึกเมื่อไร ค่าที่บันทึกจะใช้แทน */
+const PLAN_PATCH = {"1.1": {"name_en": "รายได้ตามเป้า MTFF", "no": 1, "target": "100% ทุกปี (เทียบเป้า MTFF)"}, "1.2": {"name_en": "มาตรการภาษีบรรลุตาม MTFF", "no": 2, "target": "> 80% (ตาม MTFF)"}, "2.1": {"name_en": "Future Skills Readiness", "no": 3, "target": "≥ 90% ภายในปีที่ 5"}, "2.2": {"name_en": "Workforce Alignment", "no": 4, "target": "≥ 90% ภายในปีที่ 5"}, "2.3": {"name_en": "Engagement Survey", "no": 5, "target": "≥ 90% ทุกปี"}, "3.1": {"name_en": "DG Readiness", "no": 6, "target": "≥ 90 คะแนน ทุกปี"}, "3.2": {"name_en": "Digital Productivity", "no": 7, "target": "≥ 80% ภายในปีที่ 5"}, "3.3": {"name_en": "Digital Resilience", "no": 8, "target": "≥ 80% ภายในปีที่ 5"}, "4.1": {"name_en": "Law Modernization", "no": 9, "target": "100% ทุกปี"}, "4.2": {"name_en": "Compliance Support", "no": 10, "target": "100% ทุกปี"}, "4.3": {"name_en": "Audit Hit Rate", "no": 11, "target": "≥ 60% ภายในปีที่ 5"}, "4.4": {"name_en": "เงินนำส่งคลังเทียบเป้า", "no": 12, "target": "100% ทุกปี (เทียบเป้า)"}, "5.1": {"name_en": "ผลประเมิน PMQA 4.0", "no": 13, "target": "≥ 470 คะแนน ทุกปี"}, "5.2": {"name_en": "คะแนน ITA", "no": 14, "target": "≥ 93 คะแนน ภายในปี 2574 (อิงคะแนนสูงสุดที่เคยได้)"}};
+function planPatch(o) {
+  if (!o || !Array.isArray(o.kpis)) return o;
+  const kpis = o.kpis.map((k) => (k.no || !PLAN_PATCH[k.id] ? k : Object.assign({}, k, PLAN_PATCH[k.id]))).sort((a, b) => (a.no || 99) - (b.no || 99));
+  const pillars = (o.pillars || []).map((p) => (p.code === 'E' && p.name_en === 'Excellent Operation System' ? Object.assign({}, p, { name_en: 'Excellence Operating System' }) : p));
+  return Object.assign({}, o, { kpis, pillars });
+}
 const cfg = () => S.cfg || { pillars: [], strategies: [], kpis: [], units: [], planLevels: [], challenges: [], risks: [], vision: '' };
 const pillarOf = (code) => cfg().pillars.find((p) => p.code === code);
 const stratOf = (code) => cfg().strategies.find((s) => s.code === code);
@@ -110,7 +118,7 @@ async function publicBoot() {
   let P = null;
   try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
   if (!P || !P.org) return false;
-  Object.assign(S, { publicMode: true, uid: 'public', isSuper: false, canAdmin: false, readOnly: true, cfg: P.org, ops: P.ops || null, hr: P.hr || null,
+  Object.assign(S, { publicMode: true, uid: 'public', isSuper: false, canAdmin: false, readOnly: true, cfg: planPatch(P.org), ops: P.ops || null, hr: P.hr || null,
     cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: Array.isArray(P.plans) ? P.plans : [], plans: [], reports: {}, profiles: {},
     profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
   scopePlans();
@@ -137,7 +145,7 @@ async function boot() {
   }
   if (!db || !S.uid) { S.noRuntime = true; renderAuth(); return; }
 
-  db.doc('config/org').onSnapshot((snap) => { S.cfg = snap.exists ? snap.data() : null; S.cfgLoaded = true; onData('cfg'); }, () => { S.cfgLoaded = true; onData('cfg'); });
+  db.doc('config/org').onSnapshot((snap) => { S.cfg = snap.exists ? planPatch(snap.data()) : null; S.cfgLoaded = true; onData('cfg'); }, () => { S.cfgLoaded = true; onData('cfg'); });
   db.doc('profiles/' + S.uid).onSnapshot((snap) => { S.profile = snap.exists ? snap.data() : null; S.profileLoaded = true; scopePlans(); onData('profile'); }, () => { S.profileLoaded = true; onData('profile'); });
   db.collection('profiles').onSnapshot((q) => { const m = {}; q.docs.forEach((d) => { m[d.id] = d.data(); }); S.profiles = m; onData('profiles'); }, () => {});
   db.collection('plans').onSnapshot((q) => { S.allPlans = q.docs.map((d) => d.data()).filter((p) => p && p.id); scopePlans(); S.plansLoaded = true; onData('plans'); }, () => { S.plansLoaded = true; onData('plans'); });

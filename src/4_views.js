@@ -41,7 +41,18 @@ function riskMapHTML({ pick = false, sel = {}, markers = [], size = 'lg' } = {})
    k.res = { 2568: v, 2569: v, ... } ผลรายปี · k.ty = { 2570: v } เป้ารายปี (ว่าง = ใช้ tval)
    ปี 2569 (ก่อนเริ่มแผน) แสดงผลล่าสุดที่มีถึงปีนั้นเป็นค่าฐาน · ปี 2570 ขึ้นไปแสดงเฉพาะผลของปีนั้น */
 const KYEARS = [2569, 2570, 2571, 2572, 2573, 2574];
-const KGROUPS = [['F', 'กองหน้า', ['BA', 'C']], ['M', 'กองกลาง', ['LA', 'N']], ['B', 'กองหลัง', ['E']]];
+const KGROUPS = [['F', 'กองหน้า', ['BA'], 'Value Targeting · ทำประตู: รายได้และผลลัพธ์ต่อประเทศ'], ['M', 'กองกลาง', ['LA', 'N'], 'Enabling Capabilities · คุมเกม: คนเก่ง และเทคโนโลยีที่พร้อม'], ['B', 'กองหลัง', ['C', 'E'], 'Enabling Capabilities · คุมแนวรับ: กฎหมาย ตรวจสอบ ปราบปราม บริการ และความเชื่อมั่น']];
+/* 5 เรื่องสำคัญ Key Reform Priorities (ระยะ 5 ปี) */
+const REFORM = {
+  BA: ['01', 'Revenue Resilient', 'MTFF', 'ปกป้องฐานหลัก ปรับโครงสร้าง เปิดฐานใหม่', 'สผษ. สมฐ.1 สมฐ.2 กรส.', 'UPGRADE PQT Model · Dashboard และทักษะคนหน้างาน · Know Your Area'],
+  LA: ['02', 'HR Transformation', 'HR PLAN', 'คนเก่ง ดี มีสุข พร้อมปรับตัวสู่อนาคต', 'สบค. กพร.', 'เร่งปรับโครงสร้าง อัตรากำลัง · IDP เป็นระบบ · พัฒนา KM working Team · แก้หน่วยงาน Engagement ต่ำ'],
+  N: ['03', 'Future Work Transformation', 'IT PLAN', 'AI Data เพิ่มผลิตภาพงาน', 'ศทส. กพร. สคร.', 'กำหนดเจ้าของ มาตรฐาน · พัฒนาคุณภาพข้อมูลเป็นระบบ · AI Use case · ทดสอบ BCP กู้คืนระบบภาวะวิกฤต'],
+  C: ['04', 'Smart Compliance', 'LAW PLAN', 'กฎหมายทันโลก ตรวจสอบตรงกลุ่ม ปราบปรามเชิงรุก', 'สกม. กตส. สตป.', 'พัฒนา Risk Scoring & Early Warning ตรวจสอบภาษี · ยกระดับศูนย์ปราบปรามออนไลน์ภาค · RIA กฎหมาย'],
+  E: ['05', 'Trusted Excise', 'OECD PLAN', 'บริการง่าย โปร่งใส ไร้ทุจริต', 'กพร. สบค. ศทส. สผษ.', 'ทบทวน One Journey & SLA มาตรฐานเดียว · ระบบ Customer Feedback · Set GRC Working Team']
+};
+/* KPI เลขลำดับ 1–14 ตามแผน (รหัสภายในยังเป็น 1.1, 1.2 …) */
+const KPI_NO = { '1.1': 1, '1.2': 2, '2.1': 3, '2.2': 4, '2.3': 5, '3.1': 6, '3.2': 7, '3.3': 8, '4.1': 9, '4.2': 10, '4.3': 11, '4.4': 12, '5.1': 13, '5.2': 14, '5.3': 'เสริม' };
+const kno = (k) => { const id = typeof k === 'string' ? k : k?.id; return String((typeof k === 'object' && k?.no) || KPI_NO[id] || id || ''); };
 const kGroupOf = (code) => (KGROUPS.find((g) => g[2].includes(code)) || KGROUPS[0])[0];
 const kGroup = (g) => KGROUPS.find((x) => x[0] === g) || null;
 const numOr = (x) => (x === '' || x == null || isNaN(Number(x)) ? null : Number(x));
@@ -98,9 +109,9 @@ function kpiBoard(pf, opt = {}) {
   const fy = (t) => String(t || '').replace(/ปีงบ(ประมาณ)?\s*/, 'FY').replace(/ไตรมาส\s*/, 'Q');
   const tile = ({ k, s }) => {
     const unit = k.unit === 'คะแนน' ? 'pts' : (k.unit || '');
-    const go = `<button type="button" class="kt-go" data-act="kpi-drill" data-v="${esc(k.id)}" aria-label="ลงลึก ${esc(k.id)} ${esc(k.name_en || '')}" title="ดูรายละเอียดเชิงลึก">${ic('chevron', 'ic-sm kt-chev')}</button>`;
+    const go = `<button type="button" class="kt-go" data-act="kpi-drill" data-v="${esc(k.id)}" aria-label="ลงลึก KPI ${esc(kno(k))} ${esc(k.name_en || '')}" title="ดูรายละเอียดเชิงลึก">${ic('chevron', 'ic-sm kt-chev')}</button>`;
     return `<article class="kt kt-click" data-p="${esc(k.pillar)}" data-st="${s.key}">
-      <div class="kt-top"><span class="kt-id">${esc(k.id)}</span><span class="kt-dot" aria-hidden="true"></span><span class="kt-st">${EN[s.key]}</span>
+      <div class="kt-top"><span class="kt-id">KPI ${esc(kno(k))}</span><span class="kt-dot" aria-hidden="true"></span><span class="kt-st">${EN[s.key]}</span>
         <button type="button" class="kt-info" data-act="kpi-info" aria-expanded="false" aria-label="รายละเอียดภาษาไทยของ ${esc(k.id)}">${ic('info', 'ic-sm')}</button>${go}</div>
       <h3 class="kt-name" title="${esc(k.name_en || '')}">${esc(k.name_en || k.id)}</h3>
       <div class="kt-val">${s.v == null ? `<small class="kt-base">${kyr() === 2570 && k.basePhase ? 'เก็บค่าฐานปีนี้' : kyr() > 2570 && k.basePhase && !Object.keys(k.res || {}).length ? 'รอค่าฐาน' : 'ยังไม่มีผล FY' + kyr()}</small>` : `<b>${fmtNum(s.v)}</b>`}${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
@@ -116,7 +127,7 @@ function kpiBoard(pf, opt = {}) {
     <div class="sbs sbs-none"><span>No data</span><b>${n('none')}</b></div></div>`;
   const cols = cfg().pillars.filter((pl) => st.some((x) => x.k.pillar === pl.code)).map((pl) => {
     const g = st.filter((x) => x.k.pillar === pl.code);
-    return `<div class="sb-col" data-p="${pl.code}"><div class="sb-h"><span class="pbadge">${esc(pl.code)}</span><span class="sb-ht"><b>${esc(pillarShort(pl))}</b><span>${g.filter((x) => x.s.key === 'ok').length}/${g.length} on target</span></span></div>${g.map(tile).join('')}</div>`;
+    return `<div class="sb-col" data-p="${pl.code}"><div class="sb-h"><span class="pbadge">${esc(pl.code)}</span><span class="sb-ht"><b>${esc(pillarShort(pl))}</b><span>${REFORM[pl.code] ? esc(REFORM[pl.code][0] + ' ' + REFORM[pl.code][1]) + ' · ' : ''}${g.filter((x) => x.s.key === 'ok').length}/${g.length} on target</span></span></div>${g.map(tile).join('')}</div>`;
   }).join('');
   return `<section class="dsec" id="kpi-board" aria-labelledby="h-kpi">
     ${noHead ? '<h2 id="h-kpi" class="sr">KPI Scoreboard</h2>' : `<div class="dsec-h"><div><h2 id="h-kpi">KPI Scoreboard</h2><span class="sub">Latest result vs target · กด ${ic('info', 'ic-sm')} ดูคำอธิบายภาษาไทย</span></div></div>`}
@@ -488,7 +499,7 @@ function sheetHTML(p, cut) {
       <div><div class="sh-h">ความเชื่อมโยงยุทธศาสตร์</div><dl class="sh-kv">
         <dt>เสา</dt><dd>${pil ? `<span class="pill-p" style="background:${pc}">${esc(pil.code)}</span> ${esc(pil.name_en)}` : '—'}</dd>
         <dt>กลยุทธ์</dt><dd>${st ? `${esc(st.code)} ${esc(st.name)}` : '—'}</dd>
-        <dt>ตัวชี้วัด</dt><dd>${kpis.length ? kpis.map((k) => `${esc(k.id)} ${esc(k.name_en || k.name)} <span class="sh-m">(เป้า ${esc(k.target)})</span>`).join('<br>') : '—'}</dd>
+        <dt>ตัวชี้วัด</dt><dd>${kpis.length ? kpis.map((k) => `KPI ${esc(kno(k))} ${esc(k.name_en || k.name)} <span class="sh-m">(เป้า ${esc(k.target)})</span>`).join('<br>') : '—'}</dd>
         <dt>ความท้าทาย</dt><dd>${chals.length ? chals.map((c) => esc(c.name)).join('<br>') : '—'}</dd></dl></div>
       <div><div class="sh-h">แผนระดับต่างๆ</div><div class="sh-chain">${chain || '<span class="sh-m">—</span>'}</div></div>
     </div></section>`;

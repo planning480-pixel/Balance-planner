@@ -108,7 +108,7 @@ function pillarHead(code, pl, extra = '') {
 function bigKpi(k, val, sub, opts = {}) {
   const t = Number(k?.tval), pct = val != null && t ? val / t : null, tone = val == null ? 'none' : achTone(pct);
   return `<${opts.act ? 'button type="button"' : 'div'} class="bk bk-${tone} ${opts.on ? 'on' : ''}" ${opts.act ? `data-act="${opts.act}" data-v="${esc(opts.v ?? k.id)}" aria-pressed="${!!opts.on}"` : ''}>
-    <span class="bk-h"><span class="bk-id">KPI ${esc(k.id)}</span><span class="bk-en">${esc(k.name_en || '')}</span>${opts.badge || ''}</span>
+    <span class="bk-h"><span class="bk-id">KPI ${esc(kno(k))}</span><span class="bk-en">${esc(k.name_en || '')}</span>${opts.badge || ''}</span>
     <span class="bk-v"><b class="num">${val == null ? '—' : (Math.round(val * 100) / 100).toLocaleString('th-TH')}</b><small>${val == null ? 'รอข้อมูล' : esc(k.unit || '')}</small></span>
     <span class="bk-t" title="${esc(k.name)}">${esc(k.name)}</span>
     <span class="bk-f"><span>เป้า ${esc(k.target || '—')}</span>${sub ? `<span>${sub}</span>` : ''}</span></${opts.act ? 'button' : 'div'}>`;

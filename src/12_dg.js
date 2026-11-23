@@ -1,6 +1,6 @@
 /* ===================== N · ความพร้อมรัฐบาลดิจิทัล (DG Readiness) =====================
    ข้อมูลจริงปี 2568 จากรายงานผลสำรวจระดับความพร้อมรัฐบาลดิจิทัล (สพร./DGA) ของกรมสรรพสามิต
-   ปี 2569–2574 ยังไม่ประกาศผล → กรอกผลรายปีได้ที่ KPI Setting (KPI 3.1) แล้วกราฟจะต่อให้เอง */
+   ปี 2569–2574 ยังไม่ประกาศผล → กรอกผลรายปีได้ที่ KPI Setting (KPI 6) แล้วกราฟจะต่อให้เอง */
 const DG = {
   year: 2568, score: 91.12, level: 4,
   bench: [['กรมอันดับ 1 (กลุ่มกรมที่ให้บริการ)', 93.81, 'top'], ['กรมสรรพสามิต', 91.12, 'me'], ['เฉลี่ยกรมในประเภทหน่วยงานราชการ', 77.40], ['เฉลี่ยกรมในกระทรวงการคลัง', 68.44], ['เฉลี่ยกรมที่ให้บริการเป็นหลัก', 68.24]],
@@ -36,7 +36,7 @@ function dgTimeline() {
   const lo = 80, hi = 100, x = (i) => L + (i * (W - L - Rr)) / (DG_YEARS.length - 1), y = (v) => T + ((hi - v) * (H - T - B)) / (hi - lo);
   const pts = S0.map((p, i) => (p.v == null ? null : [x(i), y(p.v), p])).filter(Boolean);
   const grid = [80, 85, 90, 95, 100].map((g) => `<line x1="${L}" x2="${W - Rr}" y1="${y(g)}" y2="${y(g)}" class="dgt-g"/><text x="${L - 6}" y="${y(g) + 4}" class="dgt-a" text-anchor="end">${g}</text>`).join('');
-  const tgt = `<line x1="${L}" x2="${W - Rr}" y1="${y(90)}" y2="${y(90)}" class="dgt-t"/><text x="${W - Rr}" y="${y(90) + 13}" class="dgt-tl" text-anchor="end">เป้า KPI 3.1 ≥ 90</text>`;
+  const tgt = `<line x1="${L}" x2="${W - Rr}" y1="${y(90)}" y2="${y(90)}" class="dgt-t"/><text x="${W - Rr}" y="${y(90) + 13}" class="dgt-tl" text-anchor="end">เป้า KPI 6 ≥ 90</text>`;
   const top = `<line x1="${L}" x2="${W - Rr}" y1="${y(93.81)}" y2="${y(93.81)}" class="dgt-top"/><text x="${W - Rr}" y="${y(93.81) - 5}" class="dgt-tl dgt-tl2" text-anchor="end">กรมอันดับ 1 ปี 2568 = 93.81</text>`;
   const line = pts.length > 1 ? `<polyline points="${pts.map((p) => p[0] + ',' + p[1]).join(' ')}" class="dgt-l"/>` : '';
   const dots = S0.map((p, i) => p.v == null
@@ -69,7 +69,7 @@ function dgPanel() {
     '6 จาก 7 ด้านยังอยู่ระดับ 4 เพราะมีด้านย่อยอย่างน้อย 1 เรื่องยังไม่ถึงระดับ 5'];
   const rec = ['ยกด้านย่อย 6 เรื่องให้ถึงระดับ 5 ทุกด้านมีโอกาสขึ้นระดับ 5 Optimizing',
     'Quick win ปี 2569: Open Data และแผนดิจิทัลกรมให้ครอบคลุมแผนรัฐบาลดิจิทัล ≥ 10/12 ข้อ',
-    'รักษา KPI 3.1 ≥ 90 ทุกปี และตั้งเป้าท้าทายให้ถึงระดับกรมอันดับ 1 (≥ 93.81)',
+    'รักษา KPI 6 ≥ 90 ทุกปี และตั้งเป้าท้าทายให้ถึงระดับกรมอันดับ 1 (≥ 93.81)',
     'มอบเจ้าภาพรายด้านย่อยตามกลยุทธ์ N1–N4 และติดตามผลทุกไตรมาส'];
   const col = (t, cls, xs) => `<div class="dg-ic ${cls}"><h4>${t}</h4><ul>${xs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
   return `<div class="dg">
@@ -86,6 +86,6 @@ function xrDG() {
   const html = `<section><div class="xr-sh">ผล · ความพร้อมรัฐบาลดิจิทัล ปี ${DG.year} (ข้อมูลจริง) · ${DG.score}% ระดับ ${DG.level} ${DG_LV[DG.level]} · อันดับ 1 = 93.81 · เฉลี่ยกรมบริการ 68.24</div>
     <table class="xr-t"><thead><tr><th>ด้าน</th><th class="n">กรม</th><th class="n">เฉลี่ยกรมบริการ</th><th class="n">อันดับ 1</th><th class="n">ระดับ</th><th>ด้านย่อยที่ยังไม่ถึงระดับ 5</th></tr></thead><tbody>
     ${P.map((p) => `<tr><td>${esc(p[0])}</td><td class="n"><b>${p[2].toFixed(2)}</b></td><td class="n">${p[3].toFixed(2)}</td><td class="n">${p[6].toFixed(2)}</td><td class="n">${p[7]}</td><td>${p[8].filter((s) => s[1] < 5).map((s) => `${esc(s[0])} (${s[1]})`).join(', ') || '—'}</td></tr>`).join('')}</tbody></table>
-    <p class="xr-note">ปี 2569–2574 รอประกาศผล · เป้า KPI 3.1 ≥ 90 ทุกปี</p></section>`;
+    <p class="xr-note">ปี 2569–2574 รอประกาศผล · เป้า KPI 6 ≥ 90 ทุกปี</p></section>`;
   return { html, p: ['ยังห่างกรมอันดับ 1 อยู่ 2.69 คะแนน · ห่างมากสุดด้านโครงสร้างพื้นฐาน (−7.75) และเทคโนโลยีดิจิทัล (−7.15)', 'Open Data อยู่ระดับ 3 ต่ำสุดในด้านย่อย'], r: ['ยกด้านย่อย 6 เรื่องให้ถึงระดับ 5 (Open Data, Digital Policy, Customer Experience, Process Optimization, Training, Reliable Infrastructure)', 'Quick win ปี 2569: Open Data และแผนดิจิทัลกรมให้ครอบคลุมแผนรัฐบาลดิจิทัล ≥ 10/12 ข้อ'] };
 }

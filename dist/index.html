@@ -1894,6 +1894,18 @@ body.public .journey, body.public .miss, body.public .cut-note { display: none !
 .dg-ic.g { background: var(--ok-soft); } .dg-ic.g h4 { color: var(--ok); } .dg-ic.r { background: var(--warn-soft); } .dg-ic.r h4 { color: #A86400; } .dg-ic.b { background: var(--accent-soft); } .dg-ic.b h4 { color: var(--accent); }
 @media (max-width: 1200px) { .dg-row { grid-template-columns: 1fr 1fr; } .dg-row > :nth-child(2) { grid-column: 1 / -1; order: 3; } .dg-2 { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .dg-row, .dg-ins { grid-template-columns: 1fr; } }
+
+/* ---------- Key Reform Priority strip ---------- */
+#kdeep { grid-template-columns: minmax(0, 1fr); } #kdeep > * { min-width: 0; } .kd-body { min-width: 0; }
+.kd-rf { margin-top: 2px; display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--line); border-left: 4px solid var(--pc, var(--accent)); border-radius: 12px; padding: 10px 14px; background: var(--surface); }
+.kd-rf[data-p="BA"] { --pc: #1F9D55; } .kd-rf[data-p="LA"] { --pc: #1E4A9A; } .kd-rf[data-p="N"] { --pc: #6B7A8F; } .kd-rf[data-p="C"] { --pc: #F07C00; } .kd-rf[data-p="E"] { --pc: #2AA7E8; }
+.kd-rn { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 9px; background: var(--pc); color: #fff; font-weight: 800; font-size: 16px; }
+.kd-rm { display: grid; gap: 3px; min-width: 0; }
+.kd-rt { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .kd-rt b { font-size: 16px; color: var(--fg); }
+.kd-rp { font-size: 11px; font-weight: 700; color: #fff; background: var(--pc); border-radius: 5px; padding: 1px 7px; }
+.kd-rd { font-size: 13px; color: var(--muted); }
+.kd-rs { font-size: 12.5px; color: var(--muted); } .kd-rs b { color: var(--pc); }
+.kd-ry { font-size: 12.5px; background: var(--accent-soft); border-radius: 7px; padding: 4px 9px; } .kd-ry b { color: var(--accent); margin-right: 4px; }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -2070,6 +2082,14 @@ function toast(msg, kind) {
 }
 
 /* ---- config helpers ---- */
+/* ปรับตามแผนฉบับล่าสุด (KPI 1–14 + ชื่อ KPI): ใช้กับข้อมูลที่ยังไม่เคยบันทึกเลขลำดับ (no) — แก้ใน KPI Setting แล้วบันทึกเมื่อไร ค่าที่บันทึกจะใช้แทน */
+const PLAN_PATCH = {"1.1": {"name_en": "รายได้ตามเป้า MTFF", "no": 1, "target": "100% ทุกปี (เทียบเป้า MTFF)"}, "1.2": {"name_en": "มาตรการภาษีบรรลุตาม MTFF", "no": 2, "target": "> 80% (ตาม MTFF)"}, "2.1": {"name_en": "Future Skills Readiness", "no": 3, "target": "≥ 90% ภายในปีที่ 5"}, "2.2": {"name_en": "Workforce Alignment", "no": 4, "target": "≥ 90% ภายในปีที่ 5"}, "2.3": {"name_en": "Engagement Survey", "no": 5, "target": "≥ 90% ทุกปี"}, "3.1": {"name_en": "DG Readiness", "no": 6, "target": "≥ 90 คะแนน ทุกปี"}, "3.2": {"name_en": "Digital Productivity", "no": 7, "target": "≥ 80% ภายในปีที่ 5"}, "3.3": {"name_en": "Digital Resilience", "no": 8, "target": "≥ 80% ภายในปีที่ 5"}, "4.1": {"name_en": "Law Modernization", "no": 9, "target": "100% ทุกปี"}, "4.2": {"name_en": "Compliance Support", "no": 10, "target": "100% ทุกปี"}, "4.3": {"name_en": "Audit Hit Rate", "no": 11, "target": "≥ 60% ภายในปีที่ 5"}, "4.4": {"name_en": "เงินนำส่งคลังเทียบเป้า", "no": 12, "target": "100% ทุกปี (เทียบเป้า)"}, "5.1": {"name_en": "ผลประเมิน PMQA 4.0", "no": 13, "target": "≥ 470 คะแนน ทุกปี"}, "5.2": {"name_en": "คะแนน ITA", "no": 14, "target": "≥ 93 คะแนน ภายในปี 2574 (อิงคะแนนสูงสุดที่เคยได้)"}};
+function planPatch(o) {
+  if (!o || !Array.isArray(o.kpis)) return o;
+  const kpis = o.kpis.map((k) => (k.no || !PLAN_PATCH[k.id] ? k : Object.assign({}, k, PLAN_PATCH[k.id]))).sort((a, b) => (a.no || 99) - (b.no || 99));
+  const pillars = (o.pillars || []).map((p) => (p.code === 'E' && p.name_en === 'Excellent Operation System' ? Object.assign({}, p, { name_en: 'Excellence Operating System' }) : p));
+  return Object.assign({}, o, { kpis, pillars });
+}
 const cfg = () => S.cfg || { pillars: [], strategies: [], kpis: [], units: [], planLevels: [], challenges: [], risks: [], vision: '' };
 const pillarOf = (code) => cfg().pillars.find((p) => p.code === code);
 const stratOf = (code) => cfg().strategies.find((s) => s.code === code);
@@ -2130,7 +2150,7 @@ async function publicBoot() {
   let P = null;
   try { const r = await fetch('public-data.json', { cache: 'no-store' }); if (r.ok) P = await r.json(); } catch (e) {}
   if (!P || !P.org) return false;
-  Object.assign(S, { publicMode: true, uid: 'public', isSuper: false, canAdmin: false, readOnly: true, cfg: P.org, ops: P.ops || null, hr: P.hr || null,
+  Object.assign(S, { publicMode: true, uid: 'public', isSuper: false, canAdmin: false, readOnly: true, cfg: planPatch(P.org), ops: P.ops || null, hr: P.hr || null,
     cfgLoaded: true, profileLoaded: true, privLoaded: true, plansLoaded: true, reportsLoaded: true, allPlans: Array.isArray(P.plans) ? P.plans : [], plans: [], reports: {}, profiles: {},
     profile: { name: 'ผู้เยี่ยมชม', unitId: '' }, account: { name: 'ผู้เยี่ยมชม' }, publicAsOf: P.exportedAt || 0 });
   scopePlans();
@@ -2157,7 +2177,7 @@ async function boot() {
   }
   if (!db || !S.uid) { S.noRuntime = true; renderAuth(); return; }
 
-  db.doc('config/org').onSnapshot((snap) => { S.cfg = snap.exists ? snap.data() : null; S.cfgLoaded = true; onData('cfg'); }, () => { S.cfgLoaded = true; onData('cfg'); });
+  db.doc('config/org').onSnapshot((snap) => { S.cfg = snap.exists ? planPatch(snap.data()) : null; S.cfgLoaded = true; onData('cfg'); }, () => { S.cfgLoaded = true; onData('cfg'); });
   db.doc('profiles/' + S.uid).onSnapshot((snap) => { S.profile = snap.exists ? snap.data() : null; S.profileLoaded = true; scopePlans(); onData('profile'); }, () => { S.profileLoaded = true; onData('profile'); });
   db.collection('profiles').onSnapshot((q) => { const m = {}; q.docs.forEach((d) => { m[d.id] = d.data(); }); S.profiles = m; onData('profiles'); }, () => {});
   db.collection('plans').onSnapshot((q) => { S.allPlans = q.docs.map((d) => d.data()).filter((p) => p && p.id); scopePlans(); S.plansLoaded = true; onData('plans'); }, () => { S.plansLoaded = true; onData('plans'); });
@@ -2473,7 +2493,18 @@ function riskMapHTML({ pick = false, sel = {}, markers = [], size = 'lg' } = {})
    k.res = { 2568: v, 2569: v, ... } ผลรายปี · k.ty = { 2570: v } เป้ารายปี (ว่าง = ใช้ tval)
    ปี 2569 (ก่อนเริ่มแผน) แสดงผลล่าสุดที่มีถึงปีนั้นเป็นค่าฐาน · ปี 2570 ขึ้นไปแสดงเฉพาะผลของปีนั้น */
 const KYEARS = [2569, 2570, 2571, 2572, 2573, 2574];
-const KGROUPS = [['F', 'กองหน้า', ['BA', 'C']], ['M', 'กองกลาง', ['LA', 'N']], ['B', 'กองหลัง', ['E']]];
+const KGROUPS = [['F', 'กองหน้า', ['BA'], 'Value Targeting · ทำประตู: รายได้และผลลัพธ์ต่อประเทศ'], ['M', 'กองกลาง', ['LA', 'N'], 'Enabling Capabilities · คุมเกม: คนเก่ง และเทคโนโลยีที่พร้อม'], ['B', 'กองหลัง', ['C', 'E'], 'Enabling Capabilities · คุมแนวรับ: กฎหมาย ตรวจสอบ ปราบปราม บริการ และความเชื่อมั่น']];
+/* 5 เรื่องสำคัญ Key Reform Priorities (ระยะ 5 ปี) */
+const REFORM = {
+  BA: ['01', 'Revenue Resilient', 'MTFF', 'ปกป้องฐานหลัก ปรับโครงสร้าง เปิดฐานใหม่', 'สผษ. สมฐ.1 สมฐ.2 กรส.', 'UPGRADE PQT Model · Dashboard และทักษะคนหน้างาน · Know Your Area'],
+  LA: ['02', 'HR Transformation', 'HR PLAN', 'คนเก่ง ดี มีสุข พร้อมปรับตัวสู่อนาคต', 'สบค. กพร.', 'เร่งปรับโครงสร้าง อัตรากำลัง · IDP เป็นระบบ · พัฒนา KM working Team · แก้หน่วยงาน Engagement ต่ำ'],
+  N: ['03', 'Future Work Transformation', 'IT PLAN', 'AI Data เพิ่มผลิตภาพงาน', 'ศทส. กพร. สคร.', 'กำหนดเจ้าของ มาตรฐาน · พัฒนาคุณภาพข้อมูลเป็นระบบ · AI Use case · ทดสอบ BCP กู้คืนระบบภาวะวิกฤต'],
+  C: ['04', 'Smart Compliance', 'LAW PLAN', 'กฎหมายทันโลก ตรวจสอบตรงกลุ่ม ปราบปรามเชิงรุก', 'สกม. กตส. สตป.', 'พัฒนา Risk Scoring & Early Warning ตรวจสอบภาษี · ยกระดับศูนย์ปราบปรามออนไลน์ภาค · RIA กฎหมาย'],
+  E: ['05', 'Trusted Excise', 'OECD PLAN', 'บริการง่าย โปร่งใส ไร้ทุจริต', 'กพร. สบค. ศทส. สผษ.', 'ทบทวน One Journey & SLA มาตรฐานเดียว · ระบบ Customer Feedback · Set GRC Working Team']
+};
+/* KPI เลขลำดับ 1–14 ตามแผน (รหัสภายในยังเป็น 1.1, 1.2 …) */
+const KPI_NO = { '1.1': 1, '1.2': 2, '2.1': 3, '2.2': 4, '2.3': 5, '3.1': 6, '3.2': 7, '3.3': 8, '4.1': 9, '4.2': 10, '4.3': 11, '4.4': 12, '5.1': 13, '5.2': 14, '5.3': 'เสริม' };
+const kno = (k) => { const id = typeof k === 'string' ? k : k?.id; return String((typeof k === 'object' && k?.no) || KPI_NO[id] || id || ''); };
 const kGroupOf = (code) => (KGROUPS.find((g) => g[2].includes(code)) || KGROUPS[0])[0];
 const kGroup = (g) => KGROUPS.find((x) => x[0] === g) || null;
 const numOr = (x) => (x === '' || x == null || isNaN(Number(x)) ? null : Number(x));
@@ -2530,9 +2561,9 @@ function kpiBoard(pf, opt = {}) {
   const fy = (t) => String(t || '').replace(/ปีงบ(ประมาณ)?\s*/, 'FY').replace(/ไตรมาส\s*/, 'Q');
   const tile = ({ k, s }) => {
     const unit = k.unit === 'คะแนน' ? 'pts' : (k.unit || '');
-    const go = `<button type="button" class="kt-go" data-act="kpi-drill" data-v="${esc(k.id)}" aria-label="ลงลึก ${esc(k.id)} ${esc(k.name_en || '')}" title="ดูรายละเอียดเชิงลึก">${ic('chevron', 'ic-sm kt-chev')}</button>`;
+    const go = `<button type="button" class="kt-go" data-act="kpi-drill" data-v="${esc(k.id)}" aria-label="ลงลึก KPI ${esc(kno(k))} ${esc(k.name_en || '')}" title="ดูรายละเอียดเชิงลึก">${ic('chevron', 'ic-sm kt-chev')}</button>`;
     return `<article class="kt kt-click" data-p="${esc(k.pillar)}" data-st="${s.key}">
-      <div class="kt-top"><span class="kt-id">${esc(k.id)}</span><span class="kt-dot" aria-hidden="true"></span><span class="kt-st">${EN[s.key]}</span>
+      <div class="kt-top"><span class="kt-id">KPI ${esc(kno(k))}</span><span class="kt-dot" aria-hidden="true"></span><span class="kt-st">${EN[s.key]}</span>
         <button type="button" class="kt-info" data-act="kpi-info" aria-expanded="false" aria-label="รายละเอียดภาษาไทยของ ${esc(k.id)}">${ic('info', 'ic-sm')}</button>${go}</div>
       <h3 class="kt-name" title="${esc(k.name_en || '')}">${esc(k.name_en || k.id)}</h3>
       <div class="kt-val">${s.v == null ? `<small class="kt-base">${kyr() === 2570 && k.basePhase ? 'เก็บค่าฐานปีนี้' : kyr() > 2570 && k.basePhase && !Object.keys(k.res || {}).length ? 'รอค่าฐาน' : 'ยังไม่มีผล FY' + kyr()}</small>` : `<b>${fmtNum(s.v)}</b>`}${s.v == null ? '' : `<small>${esc(unit)}</small>`}<span class="kt-tgt">${k.dir === 'le' ? '≤' : '≥'} ${s.tv == null ? '—' : fmtNum(s.tv)}${k.latestAt ? ` · ${esc(fy(k.latestAt))}` : ''}</span></div>
@@ -2548,7 +2579,7 @@ function kpiBoard(pf, opt = {}) {
     <div class="sbs sbs-none"><span>No data</span><b>${n('none')}</b></div></div>`;
   const cols = cfg().pillars.filter((pl) => st.some((x) => x.k.pillar === pl.code)).map((pl) => {
     const g = st.filter((x) => x.k.pillar === pl.code);
-    return `<div class="sb-col" data-p="${pl.code}"><div class="sb-h"><span class="pbadge">${esc(pl.code)}</span><span class="sb-ht"><b>${esc(pillarShort(pl))}</b><span>${g.filter((x) => x.s.key === 'ok').length}/${g.length} on target</span></span></div>${g.map(tile).join('')}</div>`;
+    return `<div class="sb-col" data-p="${pl.code}"><div class="sb-h"><span class="pbadge">${esc(pl.code)}</span><span class="sb-ht"><b>${esc(pillarShort(pl))}</b><span>${REFORM[pl.code] ? esc(REFORM[pl.code][0] + ' ' + REFORM[pl.code][1]) + ' · ' : ''}${g.filter((x) => x.s.key === 'ok').length}/${g.length} on target</span></span></div>${g.map(tile).join('')}</div>`;
   }).join('');
   return `<section class="dsec" id="kpi-board" aria-labelledby="h-kpi">
     ${noHead ? '<h2 id="h-kpi" class="sr">KPI Scoreboard</h2>' : `<div class="dsec-h"><div><h2 id="h-kpi">KPI Scoreboard</h2><span class="sub">Latest result vs target · กด ${ic('info', 'ic-sm')} ดูคำอธิบายภาษาไทย</span></div></div>`}
@@ -2920,7 +2951,7 @@ function sheetHTML(p, cut) {
       <div><div class="sh-h">ความเชื่อมโยงยุทธศาสตร์</div><dl class="sh-kv">
         <dt>เสา</dt><dd>${pil ? `<span class="pill-p" style="background:${pc}">${esc(pil.code)}</span> ${esc(pil.name_en)}` : '—'}</dd>
         <dt>กลยุทธ์</dt><dd>${st ? `${esc(st.code)} ${esc(st.name)}` : '—'}</dd>
-        <dt>ตัวชี้วัด</dt><dd>${kpis.length ? kpis.map((k) => `${esc(k.id)} ${esc(k.name_en || k.name)} <span class="sh-m">(เป้า ${esc(k.target)})</span>`).join('<br>') : '—'}</dd>
+        <dt>ตัวชี้วัด</dt><dd>${kpis.length ? kpis.map((k) => `KPI ${esc(kno(k))} ${esc(k.name_en || k.name)} <span class="sh-m">(เป้า ${esc(k.target)})</span>`).join('<br>') : '—'}</dd>
         <dt>ความท้าทาย</dt><dd>${chals.length ? chals.map((c) => esc(c.name)).join('<br>') : '—'}</dd></dl></div>
       <div><div class="sh-h">แผนระดับต่างๆ</div><div class="sh-chain">${chain || '<span class="sh-m">—</span>'}</div></div>
     </div></section>`;
@@ -3347,15 +3378,25 @@ function viewKpis() {
     <div class="sbs sbs-none"><span>No data</span><b>${ks.none}</b></div></div>`;
   return `<div class="ph"><div class="ph-t"><h1>KPI Scoreboard</h1><span class="sub">ผล FY${y}${y === KYEARS[0] ? ' (ค่าฐาน)' : ''} เทียบเป้า · กดการ์ดเพื่อดูผลเชิงลึก</span></div><div class="kf">${yrs}${grp}<button type="button" class="btn btn-primary btn-sm" data-act="exec-pdf" ${S.pdfBusy ? 'disabled' : ''} title="A4 แนวตั้ง 6 หน้า: ภาพรวม · BA · C · LA · N · E">${ic('download', 'ic-sm')}${S.pdfBusy ? 'กำลังสร้าง…' : 'รายงานผู้บริหาร (PDF)'}</button></div></div>
   ${hotBar()}${summary}${kpiBoard(pfs, { noHead: true, noSum: true })}
-  <div class="zgrid" style="margin-top:16px">${zcard('ผลเชิงลึก', 'กองหน้า BA · C &nbsp;|&nbsp; กองกลาง LA · N &nbsp;|&nbsp; กองหลัง E — เนื้อหาเดียวกับหน้าเสาแต่ละด้านทางซ้าย', kDeep(), { span: 12, fold: 'kdeep', id: 'kdeep' })}</div>
+  <div class="zgrid" style="margin-top:16px">${zcard('ผลเชิงลึก', 'กองหน้า BA &nbsp;|&nbsp; กองกลาง LA · N &nbsp;|&nbsp; กองหลัง C · E — เนื้อหาเดียวกับหน้าเสาแต่ละด้านทางซ้าย', kDeep(), { span: 12, fold: 'kdeep', id: 'kdeep' })}</div>
   <div class="zgrid" style="margin-top:16px">${zcard('ภาพรวมยุทธศาสตร์', '18 กลยุทธ์ · สถานะโครงการ ความคืบหน้า และงบประมาณ', stratOverview(), { span: 12, fold: 'kso' })}</div>`;
+}
+/* Key Reform Priority strip (from the 5-year plan) */
+function kReform(code) {
+  const R = REFORM[code]; if (!R) return '';
+  const strats = cfg().strategies.filter((x) => x.pillar === code).map((x) => x.code);
+  const ks = cfg().kpis.filter((k) => k.pillar === code).map(kno);
+  return `<div class="kd-rf" data-p="${code}"><span class="kd-rn">${esc(R[0])}</span><div class="kd-rm"><div class="kd-rt"><b>${esc(R[1])}</b><span class="kd-rp">${esc(R[2])}</span><span class="kd-rd">${esc(R[3])}</span></div>
+    <div class="kd-rs">เจ้าภาพ ${esc(R[4])} · <b>${esc(strats.length ? strats[0] + '–' + strats[strats.length - 1] : code)}</b> · KPI ${esc(ks.length > 1 ? ks[0] + '–' + ks[ks.length - 1] : ks[0] || '—')}</div>
+    <div class="kd-ry"><b>ปีแรก</b> ${esc(R[5])}</div></div></div>`;
 }
 /* deep-dive under the scoreboard: group tabs → pillar tabs → the pillar page body */
 function kDeep() {
   const gid = S.kgrp || S.kdg || 'F', gr = kGroup(gid);
   const pc = gr[2].includes(S.kdp) ? S.kdp : gr[2][0];
   const gt = `<div class="kd-tabs"><div class="seg" role="tablist" aria-label="เลือกกอง">${KGROUPS.map(([id, n, ps]) => `<button type="button" role="tab" data-act="kd-g" data-v="${id}" aria-selected="${id === gid}" aria-pressed="${id === gid}">${n} <small>${ps.join(' · ')}</small></button>`).join('')}</div>
-    ${gr[2].length > 1 ? `<div class="kd-ps" role="tablist" aria-label="เลือกเสา">${gr[2].map((c) => { const pl = pillarOf(c); const st = kpiStats(c); return `<button type="button" role="tab" class="kd-p" data-p="${c}" data-act="kd-p" data-v="${c}" aria-selected="${c === pc}"><span class="pbadge">${c}</span><b>${esc(pl ? pillarShort(pl) : c)}</b><small>${st.ok}/${st.n} on target</small></button>`; }).join('')}</div>` : ''}</div>`;
+    ${gr[2].length > 1 ? `<div class="kd-ps" role="tablist" aria-label="เลือกเสา">${gr[2].map((c) => { const R = REFORM[c] || []; const st = kpiStats(c); return `<button type="button" role="tab" class="kd-p" data-p="${c}" data-act="kd-p" data-v="${c}" aria-selected="${c === pc}"><span class="pbadge">${c}</span><b>${esc(R[0] || '')} ${esc(R[1] || c)}</b><small>${st.ok}/${st.n} on target</small></button>`; }).join('')}</div>` : ''}</div>
+  ${kReform(pc)}`;
   S.embed = true;
   let body = '';
   try { body = pc === 'BA' ? viewPillarBA() : PSPEC[pc] ? viewPillarGeneric(pc) : ''; } finally { S.embed = false; }
@@ -4125,7 +4166,7 @@ function pillarHead(code, pl, extra = '') {
 function bigKpi(k, val, sub, opts = {}) {
   const t = Number(k?.tval), pct = val != null && t ? val / t : null, tone = val == null ? 'none' : achTone(pct);
   return `<${opts.act ? 'button type="button"' : 'div'} class="bk bk-${tone} ${opts.on ? 'on' : ''}" ${opts.act ? `data-act="${opts.act}" data-v="${esc(opts.v ?? k.id)}" aria-pressed="${!!opts.on}"` : ''}>
-    <span class="bk-h"><span class="bk-id">KPI ${esc(k.id)}</span><span class="bk-en">${esc(k.name_en || '')}</span>${opts.badge || ''}</span>
+    <span class="bk-h"><span class="bk-id">KPI ${esc(kno(k))}</span><span class="bk-en">${esc(k.name_en || '')}</span>${opts.badge || ''}</span>
     <span class="bk-v"><b class="num">${val == null ? '—' : (Math.round(val * 100) / 100).toLocaleString('th-TH')}</b><small>${val == null ? 'รอข้อมูล' : esc(k.unit || '')}</small></span>
     <span class="bk-t" title="${esc(k.name)}">${esc(k.name)}</span>
     <span class="bk-f"><span>เป้า ${esc(k.target || '—')}</span>${sub ? `<span>${sub}</span>` : ''}</span></${opts.act ? 'button' : 'div'}>`;
@@ -4697,7 +4738,7 @@ function aiContext() {
     'ตอบจากข้อมูลด้านล่างเป็นหลัก ถ้าไม่มีข้อมูลให้บอกตรงๆ ห้ามแต่งตัวเลข อย่าใช้ markdown หัวข้อใหญ่ ใช้ขีดหรือเลขข้อได้',
     `แผน: ${C.planTitle || ''}`, `วิสัยทัศน์: ${C.vision}`,
     'เสาและกลยุทธ์:', ...C.pillars.map((p) => `- ${p.code} ${p.name_en}: ${p.desc} | เป้าหมาย: ${p.goal} | กลยุทธ์: ${C.strategies.filter((s) => s.pillar === p.code).map((s) => `${s.code} ${s.name}`).join('; ')}`),
-    'ตัวชี้วัด:', ...C.kpis.map((k) => `- ${k.id} ${k.name} (เป้า ${k.target})`),
+    'ตัวชี้วัด:', ...C.kpis.map((k) => `- KPI ${kno(k)} ${k.name_en || k.name} (เป้า ${k.target})`),
     `ความเสี่ยงระดับกรม: ${C.risks.map((r) => `${r.id} ${r.name}`).join('; ')}`,
     `ผู้ใช้: ${S.profile?.name || ''} หน่วยงาน ${unitName(S.profile?.unitId)}`,
     `หน้าที่ผู้ใช้เปิดอยู่: ${TITLES[S.route]}`
@@ -4705,7 +4746,7 @@ function aiContext() {
   const p = S.route === 'edit' ? S.plan : S.route === 'report' ? reportPlan() : null;
   if (p) lines.push('แผนที่กำลังดู (JSON): ' + JSON.stringify(planForAi(p)));
   if (S.route === 'monthly') lines.push(...monthlyAiLines());
-  if (S.route === 'kpis' || S.route === 'dashboard') lines.push(`ผล KPI ปีงบ ${kyr()}: ` + cfg().kpis.map(kpiEff).map((k) => `${k.id} ${k.name_en || k.name}: ${k.latest ?? '-'} / เป้า ${k.tval ?? k.target}`).join('; '));
+  if (S.route === 'kpis' || S.route === 'dashboard') lines.push(`ผล KPI ปีงบ ${kyr()}: ` + cfg().kpis.map(kpiEff).map((k) => `KPI ${kno(k)} ${k.name_en || k.name}: ${k.latest ?? '-'} / เป้า ${k.tval ?? k.target}`).join('; '));
   if (S.route === 'risks' || S.route === 'kpis') lines.push('ความเสี่ยงระดับกรม (โอกาส×ผลกระทบ): ' + cfg().risks.map((r) => `${r.id} ${r.name} [${r.pillar}] ${(Number(r.l) || 0) * (Number(r.i) || 0)}`).join('; '));
   if (S.route === 'pillar') { const pp = filteredPlans().filter((p) => p.pillar === S.param); lines.push(`เสาที่เปิด: ${S.param}; กลยุทธ์: ${cfg().strategies.filter((x) => x.pillar === S.param).map((x) => x.code + ' ' + x.name).join('; ')}; โครงการ: ` + pp.map((p) => `${p.name} [${p.strategy}, ${unitName(p.unitId)}, ${money(p.budget)} บาท]`).join(' | ')); }
   if (S.route === 'users' && S.isSuper) lines.push('ผู้ใช้: ' + Object.values(S.accounts).map((a) => `${a.name} (${unitName(a.unitId)})`).join('; '));
@@ -5841,7 +5882,7 @@ document.addEventListener('input', (e) => {
 /* ===================== รายงานสรุปสำหรับผู้บริหาร (A4 แนวตั้ง 6 หน้า) =====================
    หน้า 1 ภาพรวม · 2 BA · 3 C · 4 LA · 5 N · 6 E
    แต่ละหน้า: แผน (กลยุทธ์/โครงการ/งบ) · ผล (KPI + ผลรายพื้นที่) · Insight ปัญหา / อุปสรรค / ข้อเสนอ (สรุปอัตโนมัติจากข้อมูล) */
-const XR_ORDER = ['BA', 'C', 'LA', 'N', 'E'];
+const XR_ORDER = ['BA', 'LA', 'N', 'C', 'E'];
 const XR_TIP = {
   '1.1': 'เร่งติดตามสินค้าที่ต่ำกว่าเป้ามากที่สุดรายเดือน และบริหารรายได้ตามศักยภาพพื้นที่ (BA1)',
   '1.2': 'วางกรอบประเมินผลมาตรการภาษีด้าน ESG ให้ชัดตั้งแต่ปีแรก เพื่อเก็บค่าฐาน (BA3–BA4)',
@@ -5889,12 +5930,12 @@ function xrReported(rows) {
 /* ---------- Insight: ปัญหา / อุปสรรค / ข้อเสนอ ---------- */
 function xrInsight(codes, K, PJ, extra = {}) {
   const P = [], O = [], R = [];
-  K.filter((x) => x.s.key === 'bad' || x.s.key === 'warn').forEach(({ k, s }) => P.push(`KPI ${k.id} ${k.name_en || ''} ${xrNum(s.v)} ${s.key === 'bad' ? 'ต่ำกว่า' : 'ใกล้'}เป้า ${xrNum(s.tv)}${s.tv ? ` (ขาด ${xrNum(Math.abs(s.tv - s.v))})` : ''}`));
+  K.filter((x) => x.s.key === 'bad' || x.s.key === 'warn').forEach(({ k, s }) => P.push(`KPI ${kno(k)} ${k.name_en || ''} ${xrNum(s.v)} ${s.key === 'bad' ? 'ต่ำกว่า' : 'ใกล้'}เป้า ${xrNum(s.tv)}${s.tv ? ` (ขาด ${xrNum(Math.abs(s.tv - s.v))})` : ''}`));
   (extra.p || []).forEach((t) => P.push(t));
   K.map((x) => x.k.id).concat(codes.includes('E') ? ['5.3'] : []).filter((id) => GEO[id] && id !== '2.3').forEach((id) => { const g = xrGeo(id); if (g?.below) P.push(`${g.label} ต่ำกว่าเกณฑ์ ${g.below} จาก ${g.n} พื้นที่ (ต่ำสุด ${g.low[0][0]})${g.sample ? ' [ข้อมูลตัวอย่าง]' : ''}`); });
   if (PJ.late) P.push(`โครงการล่าช้ากว่าแผน ${PJ.late} จาก ${PJ.n} โครงการ`);
   const nd = K.filter((x) => x.s.key === 'none');
-  if (nd.length) { const bp = nd.filter((x) => x.k.basePhase).length; O.push(`ยังไม่มีผล KPI ${nd.length} ตัว (${nd.map((x) => x.k.id).join(', ')})${bp ? ` โดย ${bp} ตัวต้องเก็บค่าฐานในปี 2570` : ''}`); }
+  if (nd.length) { const bp = nd.filter((x) => x.k.basePhase).length; O.push(`ยังไม่มีผล KPI ${nd.length} ตัว (${nd.map((x) => kno(x.k)).join(', ')})${bp ? ` โดย ${bp} ตัวต้องเก็บค่าฐานในปี 2570` : ''}`); }
   xrReported(PJ.rows).forEach((x) => O.push(`${x.name}: ${x.t}`));
   rankedRisks().filter((x) => codes.includes(x.r.pillar) && x.sc > 0).slice(0, 2).forEach((x) => O.push(`ความเสี่ยง ${x.r.id} ${x.r.name} (ระดับ${riskLevel(x.sc).t})`));
   (extra.o || []).forEach((t) => O.push(t));
@@ -5915,7 +5956,7 @@ function xrHead(title, sub, color, page) {
 }
 function xrFoot() { return `<footer class="xr-ft"><span>BALANCE Planner · แผนยุทธศาสตร์กรมสรรพสามิต 2570–2574</span><span>พิมพ์ ${xrDate()}</span></footer>`; }
 function xrKpiCards(K) {
-  return `<div class="xr-kc">${K.map(({ k, s }) => `<div class="xr-kpi" style="--st:${xrSt[s.key][1]}"><div class="xr-kh"><b>KPI ${esc(k.id)}</b><span>${xrDot(s.key)}${xrSt[s.key][0]}</span></div>
+  return `<div class="xr-kc">${K.map(({ k, s }) => `<div class="xr-kpi" style="--st:${xrSt[s.key][1]}"><div class="xr-kh"><b>KPI ${esc(kno(k))}</b><span>${xrDot(s.key)}${xrSt[s.key][0]}</span></div>
     <div class="xr-kn">${esc(k.name_en || '')}</div><div class="xr-kv"><b>${s.v == null ? '—' : xrNum(s.v)}</b><small>${s.v == null ? (k.basePhase && kyr() <= 2570 ? 'เก็บค่าฐาน' : '') : esc(k.unit || '')}</small></div>
     <div class="xr-kt">เป้า ${esc(k.target || '—')}${k.latestAt ? ` · ${esc(k.latestAt)}` : ''}</div></div>`).join('')}</div>`;
 }
@@ -5983,7 +6024,7 @@ function xrPillarPage(code, page) {
   if (code === 'LA') special = xrEng();
   if (code === 'N' && typeof xrDG === 'function') special = xrDG();
   if (code === 'E' && GEO['5.3']) geoIds.push('5.3');
-  return `<div class="xr-page">${xrHead(`${esc(grp)} · ${esc(code)} ${esc(pl ? pillarShort(pl) : code)}`, `ยุทธศาสตร์ที่ ${pl?.num || ''} ${esc(pl?.name_en || '')} · เป้าหมาย 5 ปี: ${esc(PGOAL[code] || pl?.goal || '')}`, color, page)}
+  return `<div class="xr-page">${xrHead(`${esc(grp)} · ${esc(code)} ${esc(pl ? pillarShort(pl) : code)}`, `${REFORM[code] ? esc(REFORM[code][0] + ' ' + REFORM[code][1]) + ' · ' : ''}ยุทธศาสตร์ที่ ${pl?.num || ''} ${esc(pl?.name_en || '')} · เป้าหมาย 5 ปี: ${esc(PGOAL[code] || pl?.goal || '')}`, color, page)}
     <div class="xr-sh">ผล · KPI ปีงบ ${kyr()}</div>${xrKpiCards(K)}
     ${special.html}${xrGeoBlock(geoIds)}${xrPlanTable([code], PJ)}${xrRisks([code])}
     ${xrInsight([code], K, PJ, { p: special.p, o: special.o, r: special.r })}${xrFoot()}</div>`;
@@ -5997,14 +6038,14 @@ function xrOverview() {
     ['งบประมาณ (ล้านบาท)', mb(PJ.budget), `เบิกจ่าย ${PJ.budget && PJ.spent ? ((PJ.spent / PJ.budget) * 100).toFixed(1) + '%' : '—'}`],
     ['รายได้ภาษี (ล้านบาท)', rev ? fmtM(rev.tot.a) : '—', rev ? `เทียบเป้ากรมฯ ${xrPct((rev.tot.a / rev.tot.t - 1) * 100)}` : 'ยังไม่มีข้อมูลปีนี้']];
   const prow = XR_ORDER.map((code) => { const pl = pillarOf(code), k = xrKpis([code]), pj = xrProjects([code]); const weak = k.filter((x) => x.s.key === 'bad' || x.s.key === 'warn');
-    return `<tr><td><span class="xr-pb" style="background:${PCOL[code]}">${code}</span> ${esc(pl ? pillarShort(pl) : code)}<small>${esc((kGroup(kGroupOf(code)) || [])[1] || '')}</small></td><td class="n">${k.filter((x) => x.s.key === 'ok').length}/${k.length}</td><td class="n">${pj.n}</td><td class="n">${mb(pj.budget)}</td><td class="n">${pj.late || '—'}</td><td>${weak.length ? weak.map((x) => `${x.k.id} ${xrNum(x.s.v)} (เป้า ${xrNum(x.s.tv)})`).join(' · ') : k.some((x) => x.s.key === 'none') ? 'รอผล ' + k.filter((x) => x.s.key === 'none').map((x) => x.k.id).join(', ') : 'ผ่านเป้าทุกตัว'}</td></tr>`; }).join('');
-  const ktab = `<table class="xr-t xr-tk"><thead><tr><th>KPI</th><th class="n">ผล</th><th class="n">เป้า</th><th>สถานะ</th></tr></thead><tbody>${K.map(({ k, s }) => `<tr><td><b>${esc(k.id)}</b> ${esc(k.name_en || '')}</td><td class="n">${s.v == null ? '—' : xrNum(s.v)}</td><td class="n">${s.tv == null ? '—' : xrNum(s.tv)}</td><td>${xrDot(s.key)}${xrSt[s.key][0]}${k.latestAt ? ` <span class="xr-at">${esc(k.latestAt)}</span>` : ''}</td></tr>`).join('')}</tbody></table>`;
+    return `<tr><td><span class="xr-pb" style="background:${PCOL[code]}">${code}</span> ${esc(pl ? pillarShort(pl) : code)}<small>${esc((kGroup(kGroupOf(code)) || [])[1] || '')}${REFORM[code] ? ' · ' + esc(REFORM[code][0] + ' ' + REFORM[code][1]) : ''}</small></td><td class="n">${k.filter((x) => x.s.key === 'ok').length}/${k.length}</td><td class="n">${pj.n}</td><td class="n">${mb(pj.budget)}</td><td class="n">${pj.late || '—'}</td><td>${weak.length ? weak.map((x) => `KPI ${kno(x.k)} ${xrNum(x.s.v)} (เป้า ${xrNum(x.s.tv)})`).join(' · ') : k.some((x) => x.s.key === 'none') ? 'รอผล ' + k.filter((x) => x.s.key === 'none').map((x) => kno(x.k)).join(', ') : 'ผ่านเป้าทุกตัว'}</td></tr>`; }).join('');
+  const ktab = `<table class="xr-t xr-tk"><thead><tr><th>KPI</th><th class="n">ผล</th><th class="n">เป้า</th><th>สถานะ</th></tr></thead><tbody>${K.map(({ k, s }) => `<tr><td><b>${esc(kno(k))}</b> ${esc(k.name_en || '')}</td><td class="n">${s.v == null ? '—' : xrNum(s.v)}</td><td class="n">${s.tv == null ? '—' : xrNum(s.tv)}</td><td>${xrDot(s.key)}${xrSt[s.key][0]}${k.latestAt ? ` <span class="xr-at">${esc(k.latestAt)}</span>` : ''}</td></tr>`).join('')}</tbody></table>`;
   const rk = rankedRisks().filter((x) => x.sc > 0).slice(0, 5);
   const revSp = xrRevenue(), engSp = xrEng();
   return `<div class="xr-page">${xrHead('ภาพรวมแผนยุทธศาสตร์ 2570–2574', `${esc(C.vision || 'กรมสรรพสามิต')} · ข้อมูล ณ ${xrDate()}`, '#0E2756', 1)}
     <div class="xr-tiles">${tiles.map(([a, b, c]) => `<div><small>${a}</small><b>${b}</b><span>${c}</span></div>`).join('')}</div>
     <section><div class="xr-sh">ผลรายเสา · กองหน้า กองกลาง กองหลัง</div><table class="xr-t"><thead><tr><th>เสา</th><th class="n">KPI ผ่าน</th><th class="n">โครงการ</th><th class="n">งบ (ลบ.)</th><th class="n">ล่าช้า</th><th>ประเด็นที่ต้องติดตาม</th></tr></thead><tbody>${prow}</tbody></table></section>
-    <section><div class="xr-sh">KPI ทั้ง 14 ตัว ปีงบ ${kyr()}</div>${ktab}</section>
+    <section><div class="xr-sh">KPI 14 ตัว ปีงบ ${kyr()}</div>${ktab}</section>
     ${rk.length ? `<section><div class="xr-sh">Top 5 ความเสี่ยงระดับกรม</div><ol class="xr-rk xr-rk2">${rk.map((x) => { const lv = riskLevel(x.sc); return `<li><b>${esc(x.r.id)}</b> ${esc(x.r.name)} <span class="xr-lv xr-${lv.k}">${esc(x.r.pillar)} · ${lv.t}</span></li>`; }).join('')}</ol></section>` : ''}
     ${xrInsight(XR_ORDER, K, PJ, { p: revSp.p.slice(0, 1).concat(engSp.p || []).slice(0, 2), r: revSp.r.slice(0, 1) })}${xrFoot()}</div>`;
 }
@@ -6019,7 +6060,7 @@ function execPdf() {
 }
 /* ===================== N · ความพร้อมรัฐบาลดิจิทัล (DG Readiness) =====================
    ข้อมูลจริงปี 2568 จากรายงานผลสำรวจระดับความพร้อมรัฐบาลดิจิทัล (สพร./DGA) ของกรมสรรพสามิต
-   ปี 2569–2574 ยังไม่ประกาศผล → กรอกผลรายปีได้ที่ KPI Setting (KPI 3.1) แล้วกราฟจะต่อให้เอง */
+   ปี 2569–2574 ยังไม่ประกาศผล → กรอกผลรายปีได้ที่ KPI Setting (KPI 6) แล้วกราฟจะต่อให้เอง */
 const DG = {
   year: 2568, score: 91.12, level: 4,
   bench: [['กรมอันดับ 1 (กลุ่มกรมที่ให้บริการ)', 93.81, 'top'], ['กรมสรรพสามิต', 91.12, 'me'], ['เฉลี่ยกรมในประเภทหน่วยงานราชการ', 77.40], ['เฉลี่ยกรมในกระทรวงการคลัง', 68.44], ['เฉลี่ยกรมที่ให้บริการเป็นหลัก', 68.24]],
@@ -6055,7 +6096,7 @@ function dgTimeline() {
   const lo = 80, hi = 100, x = (i) => L + (i * (W - L - Rr)) / (DG_YEARS.length - 1), y = (v) => T + ((hi - v) * (H - T - B)) / (hi - lo);
   const pts = S0.map((p, i) => (p.v == null ? null : [x(i), y(p.v), p])).filter(Boolean);
   const grid = [80, 85, 90, 95, 100].map((g) => `<line x1="${L}" x2="${W - Rr}" y1="${y(g)}" y2="${y(g)}" class="dgt-g"/><text x="${L - 6}" y="${y(g) + 4}" class="dgt-a" text-anchor="end">${g}</text>`).join('');
-  const tgt = `<line x1="${L}" x2="${W - Rr}" y1="${y(90)}" y2="${y(90)}" class="dgt-t"/><text x="${W - Rr}" y="${y(90) + 13}" class="dgt-tl" text-anchor="end">เป้า KPI 3.1 ≥ 90</text>`;
+  const tgt = `<line x1="${L}" x2="${W - Rr}" y1="${y(90)}" y2="${y(90)}" class="dgt-t"/><text x="${W - Rr}" y="${y(90) + 13}" class="dgt-tl" text-anchor="end">เป้า KPI 6 ≥ 90</text>`;
   const top = `<line x1="${L}" x2="${W - Rr}" y1="${y(93.81)}" y2="${y(93.81)}" class="dgt-top"/><text x="${W - Rr}" y="${y(93.81) - 5}" class="dgt-tl dgt-tl2" text-anchor="end">กรมอันดับ 1 ปี 2568 = 93.81</text>`;
   const line = pts.length > 1 ? `<polyline points="${pts.map((p) => p[0] + ',' + p[1]).join(' ')}" class="dgt-l"/>` : '';
   const dots = S0.map((p, i) => p.v == null
@@ -6088,7 +6129,7 @@ function dgPanel() {
     '6 จาก 7 ด้านยังอยู่ระดับ 4 เพราะมีด้านย่อยอย่างน้อย 1 เรื่องยังไม่ถึงระดับ 5'];
   const rec = ['ยกด้านย่อย 6 เรื่องให้ถึงระดับ 5 ทุกด้านมีโอกาสขึ้นระดับ 5 Optimizing',
     'Quick win ปี 2569: Open Data และแผนดิจิทัลกรมให้ครอบคลุมแผนรัฐบาลดิจิทัล ≥ 10/12 ข้อ',
-    'รักษา KPI 3.1 ≥ 90 ทุกปี และตั้งเป้าท้าทายให้ถึงระดับกรมอันดับ 1 (≥ 93.81)',
+    'รักษา KPI 6 ≥ 90 ทุกปี และตั้งเป้าท้าทายให้ถึงระดับกรมอันดับ 1 (≥ 93.81)',
     'มอบเจ้าภาพรายด้านย่อยตามกลยุทธ์ N1–N4 และติดตามผลทุกไตรมาส'];
   const col = (t, cls, xs) => `<div class="dg-ic ${cls}"><h4>${t}</h4><ul>${xs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
   return `<div class="dg">
@@ -6105,7 +6146,7 @@ function xrDG() {
   const html = `<section><div class="xr-sh">ผล · ความพร้อมรัฐบาลดิจิทัล ปี ${DG.year} (ข้อมูลจริง) · ${DG.score}% ระดับ ${DG.level} ${DG_LV[DG.level]} · อันดับ 1 = 93.81 · เฉลี่ยกรมบริการ 68.24</div>
     <table class="xr-t"><thead><tr><th>ด้าน</th><th class="n">กรม</th><th class="n">เฉลี่ยกรมบริการ</th><th class="n">อันดับ 1</th><th class="n">ระดับ</th><th>ด้านย่อยที่ยังไม่ถึงระดับ 5</th></tr></thead><tbody>
     ${P.map((p) => `<tr><td>${esc(p[0])}</td><td class="n"><b>${p[2].toFixed(2)}</b></td><td class="n">${p[3].toFixed(2)}</td><td class="n">${p[6].toFixed(2)}</td><td class="n">${p[7]}</td><td>${p[8].filter((s) => s[1] < 5).map((s) => `${esc(s[0])} (${s[1]})`).join(', ') || '—'}</td></tr>`).join('')}</tbody></table>
-    <p class="xr-note">ปี 2569–2574 รอประกาศผล · เป้า KPI 3.1 ≥ 90 ทุกปี</p></section>`;
+    <p class="xr-note">ปี 2569–2574 รอประกาศผล · เป้า KPI 6 ≥ 90 ทุกปี</p></section>`;
   return { html, p: ['ยังห่างกรมอันดับ 1 อยู่ 2.69 คะแนน · ห่างมากสุดด้านโครงสร้างพื้นฐาน (−7.75) และเทคโนโลยีดิจิทัล (−7.15)', 'Open Data อยู่ระดับ 3 ต่ำสุดในด้านย่อย'], r: ['ยกด้านย่อย 6 เรื่องให้ถึงระดับ 5 (Open Data, Digital Policy, Customer Experience, Process Optimization, Training, Reliable Infrastructure)', 'Quick win ปี 2569: Open Data และแผนดิจิทัลกรมให้ครอบคลุมแผนรัฐบาลดิจิทัล ≥ 10/12 ข้อ'] };
 }
 </script>

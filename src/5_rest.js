@@ -118,7 +118,7 @@ function aiContext() {
     'ตอบจากข้อมูลด้านล่างเป็นหลัก ถ้าไม่มีข้อมูลให้บอกตรงๆ ห้ามแต่งตัวเลข อย่าใช้ markdown หัวข้อใหญ่ ใช้ขีดหรือเลขข้อได้',
     `แผน: ${C.planTitle || ''}`, `วิสัยทัศน์: ${C.vision}`,
     'เสาและกลยุทธ์:', ...C.pillars.map((p) => `- ${p.code} ${p.name_en}: ${p.desc} | เป้าหมาย: ${p.goal} | กลยุทธ์: ${C.strategies.filter((s) => s.pillar === p.code).map((s) => `${s.code} ${s.name}`).join('; ')}`),
-    'ตัวชี้วัด:', ...C.kpis.map((k) => `- ${k.id} ${k.name} (เป้า ${k.target})`),
+    'ตัวชี้วัด:', ...C.kpis.map((k) => `- KPI ${kno(k)} ${k.name_en || k.name} (เป้า ${k.target})`),
     `ความเสี่ยงระดับกรม: ${C.risks.map((r) => `${r.id} ${r.name}`).join('; ')}`,
     `ผู้ใช้: ${S.profile?.name || ''} หน่วยงาน ${unitName(S.profile?.unitId)}`,
     `หน้าที่ผู้ใช้เปิดอยู่: ${TITLES[S.route]}`
@@ -126,7 +126,7 @@ function aiContext() {
   const p = S.route === 'edit' ? S.plan : S.route === 'report' ? reportPlan() : null;
   if (p) lines.push('แผนที่กำลังดู (JSON): ' + JSON.stringify(planForAi(p)));
   if (S.route === 'monthly') lines.push(...monthlyAiLines());
-  if (S.route === 'kpis' || S.route === 'dashboard') lines.push(`ผล KPI ปีงบ ${kyr()}: ` + cfg().kpis.map(kpiEff).map((k) => `${k.id} ${k.name_en || k.name}: ${k.latest ?? '-'} / เป้า ${k.tval ?? k.target}`).join('; '));
+  if (S.route === 'kpis' || S.route === 'dashboard') lines.push(`ผล KPI ปีงบ ${kyr()}: ` + cfg().kpis.map(kpiEff).map((k) => `KPI ${kno(k)} ${k.name_en || k.name}: ${k.latest ?? '-'} / เป้า ${k.tval ?? k.target}`).join('; '));
   if (S.route === 'risks' || S.route === 'kpis') lines.push('ความเสี่ยงระดับกรม (โอกาส×ผลกระทบ): ' + cfg().risks.map((r) => `${r.id} ${r.name} [${r.pillar}] ${(Number(r.l) || 0) * (Number(r.i) || 0)}`).join('; '));
   if (S.route === 'pillar') { const pp = filteredPlans().filter((p) => p.pillar === S.param); lines.push(`เสาที่เปิด: ${S.param}; กลยุทธ์: ${cfg().strategies.filter((x) => x.pillar === S.param).map((x) => x.code + ' ' + x.name).join('; ')}; โครงการ: ` + pp.map((p) => `${p.name} [${p.strategy}, ${unitName(p.unitId)}, ${money(p.budget)} บาท]`).join(' | ')); }
   if (S.route === 'users' && S.isSuper) lines.push('ผู้ใช้: ' + Object.values(S.accounts).map((a) => `${a.name} (${unitName(a.unitId)})`).join('; '));

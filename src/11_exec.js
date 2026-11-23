@@ -1,7 +1,7 @@
 /* ===================== รายงานสรุปสำหรับผู้บริหาร (A4 แนวตั้ง 6 หน้า) =====================
    หน้า 1 ภาพรวม · 2 BA · 3 C · 4 LA · 5 N · 6 E
    แต่ละหน้า: แผน (กลยุทธ์/โครงการ/งบ) · ผล (KPI + ผลรายพื้นที่) · Insight ปัญหา / อุปสรรค / ข้อเสนอ (สรุปอัตโนมัติจากข้อมูล) */
-const XR_ORDER = ['BA', 'C', 'LA', 'N', 'E'];
+const XR_ORDER = ['BA', 'LA', 'N', 'C', 'E'];
 const XR_TIP = {
   '1.1': 'เร่งติดตามสินค้าที่ต่ำกว่าเป้ามากที่สุดรายเดือน และบริหารรายได้ตามศักยภาพพื้นที่ (BA1)',
   '1.2': 'วางกรอบประเมินผลมาตรการภาษีด้าน ESG ให้ชัดตั้งแต่ปีแรก เพื่อเก็บค่าฐาน (BA3–BA4)',
@@ -49,12 +49,12 @@ function xrReported(rows) {
 /* ---------- Insight: ปัญหา / อุปสรรค / ข้อเสนอ ---------- */
 function xrInsight(codes, K, PJ, extra = {}) {
   const P = [], O = [], R = [];
-  K.filter((x) => x.s.key === 'bad' || x.s.key === 'warn').forEach(({ k, s }) => P.push(`KPI ${k.id} ${k.name_en || ''} ${xrNum(s.v)} ${s.key === 'bad' ? 'ต่ำกว่า' : 'ใกล้'}เป้า ${xrNum(s.tv)}${s.tv ? ` (ขาด ${xrNum(Math.abs(s.tv - s.v))})` : ''}`));
+  K.filter((x) => x.s.key === 'bad' || x.s.key === 'warn').forEach(({ k, s }) => P.push(`KPI ${kno(k)} ${k.name_en || ''} ${xrNum(s.v)} ${s.key === 'bad' ? 'ต่ำกว่า' : 'ใกล้'}เป้า ${xrNum(s.tv)}${s.tv ? ` (ขาด ${xrNum(Math.abs(s.tv - s.v))})` : ''}`));
   (extra.p || []).forEach((t) => P.push(t));
   K.map((x) => x.k.id).concat(codes.includes('E') ? ['5.3'] : []).filter((id) => GEO[id] && id !== '2.3').forEach((id) => { const g = xrGeo(id); if (g?.below) P.push(`${g.label} ต่ำกว่าเกณฑ์ ${g.below} จาก ${g.n} พื้นที่ (ต่ำสุด ${g.low[0][0]})${g.sample ? ' [ข้อมูลตัวอย่าง]' : ''}`); });
   if (PJ.late) P.push(`โครงการล่าช้ากว่าแผน ${PJ.late} จาก ${PJ.n} โครงการ`);
   const nd = K.filter((x) => x.s.key === 'none');
-  if (nd.length) { const bp = nd.filter((x) => x.k.basePhase).length; O.push(`ยังไม่มีผล KPI ${nd.length} ตัว (${nd.map((x) => x.k.id).join(', ')})${bp ? ` โดย ${bp} ตัวต้องเก็บค่าฐานในปี 2570` : ''}`); }
+  if (nd.length) { const bp = nd.filter((x) => x.k.basePhase).length; O.push(`ยังไม่มีผล KPI ${nd.length} ตัว (${nd.map((x) => kno(x.k)).join(', ')})${bp ? ` โดย ${bp} ตัวต้องเก็บค่าฐานในปี 2570` : ''}`); }
   xrReported(PJ.rows).forEach((x) => O.push(`${x.name}: ${x.t}`));
   rankedRisks().filter((x) => codes.includes(x.r.pillar) && x.sc > 0).slice(0, 2).forEach((x) => O.push(`ความเสี่ยง ${x.r.id} ${x.r.name} (ระดับ${riskLevel(x.sc).t})`));
   (extra.o || []).forEach((t) => O.push(t));
@@ -75,7 +75,7 @@ function xrHead(title, sub, color, page) {
 }
 function xrFoot() { return `<footer class="xr-ft"><span>BALANCE Planner · แผนยุทธศาสตร์กรมสรรพสามิต 2570–2574</span><span>พิมพ์ ${xrDate()}</span></footer>`; }
 function xrKpiCards(K) {
-  return `<div class="xr-kc">${K.map(({ k, s }) => `<div class="xr-kpi" style="--st:${xrSt[s.key][1]}"><div class="xr-kh"><b>KPI ${esc(k.id)}</b><span>${xrDot(s.key)}${xrSt[s.key][0]}</span></div>
+  return `<div class="xr-kc">${K.map(({ k, s }) => `<div class="xr-kpi" style="--st:${xrSt[s.key][1]}"><div class="xr-kh"><b>KPI ${esc(kno(k))}</b><span>${xrDot(s.key)}${xrSt[s.key][0]}</span></div>
     <div class="xr-kn">${esc(k.name_en || '')}</div><div class="xr-kv"><b>${s.v == null ? '—' : xrNum(s.v)}</b><small>${s.v == null ? (k.basePhase && kyr() <= 2570 ? 'เก็บค่าฐาน' : '') : esc(k.unit || '')}</small></div>
     <div class="xr-kt">เป้า ${esc(k.target || '—')}${k.latestAt ? ` · ${esc(k.latestAt)}` : ''}</div></div>`).join('')}</div>`;
 }
@@ -143,7 +143,7 @@ function xrPillarPage(code, page) {
   if (code === 'LA') special = xrEng();
   if (code === 'N' && typeof xrDG === 'function') special = xrDG();
   if (code === 'E' && GEO['5.3']) geoIds.push('5.3');
-  return `<div class="xr-page">${xrHead(`${esc(grp)} · ${esc(code)} ${esc(pl ? pillarShort(pl) : code)}`, `ยุทธศาสตร์ที่ ${pl?.num || ''} ${esc(pl?.name_en || '')} · เป้าหมาย 5 ปี: ${esc(PGOAL[code] || pl?.goal || '')}`, color, page)}
+  return `<div class="xr-page">${xrHead(`${esc(grp)} · ${esc(code)} ${esc(pl ? pillarShort(pl) : code)}`, `${REFORM[code] ? esc(REFORM[code][0] + ' ' + REFORM[code][1]) + ' · ' : ''}ยุทธศาสตร์ที่ ${pl?.num || ''} ${esc(pl?.name_en || '')} · เป้าหมาย 5 ปี: ${esc(PGOAL[code] || pl?.goal || '')}`, color, page)}
     <div class="xr-sh">ผล · KPI ปีงบ ${kyr()}</div>${xrKpiCards(K)}
     ${special.html}${xrGeoBlock(geoIds)}${xrPlanTable([code], PJ)}${xrRisks([code])}
     ${xrInsight([code], K, PJ, { p: special.p, o: special.o, r: special.r })}${xrFoot()}</div>`;
@@ -157,14 +157,14 @@ function xrOverview() {
     ['งบประมาณ (ล้านบาท)', mb(PJ.budget), `เบิกจ่าย ${PJ.budget && PJ.spent ? ((PJ.spent / PJ.budget) * 100).toFixed(1) + '%' : '—'}`],
     ['รายได้ภาษี (ล้านบาท)', rev ? fmtM(rev.tot.a) : '—', rev ? `เทียบเป้ากรมฯ ${xrPct((rev.tot.a / rev.tot.t - 1) * 100)}` : 'ยังไม่มีข้อมูลปีนี้']];
   const prow = XR_ORDER.map((code) => { const pl = pillarOf(code), k = xrKpis([code]), pj = xrProjects([code]); const weak = k.filter((x) => x.s.key === 'bad' || x.s.key === 'warn');
-    return `<tr><td><span class="xr-pb" style="background:${PCOL[code]}">${code}</span> ${esc(pl ? pillarShort(pl) : code)}<small>${esc((kGroup(kGroupOf(code)) || [])[1] || '')}</small></td><td class="n">${k.filter((x) => x.s.key === 'ok').length}/${k.length}</td><td class="n">${pj.n}</td><td class="n">${mb(pj.budget)}</td><td class="n">${pj.late || '—'}</td><td>${weak.length ? weak.map((x) => `${x.k.id} ${xrNum(x.s.v)} (เป้า ${xrNum(x.s.tv)})`).join(' · ') : k.some((x) => x.s.key === 'none') ? 'รอผล ' + k.filter((x) => x.s.key === 'none').map((x) => x.k.id).join(', ') : 'ผ่านเป้าทุกตัว'}</td></tr>`; }).join('');
-  const ktab = `<table class="xr-t xr-tk"><thead><tr><th>KPI</th><th class="n">ผล</th><th class="n">เป้า</th><th>สถานะ</th></tr></thead><tbody>${K.map(({ k, s }) => `<tr><td><b>${esc(k.id)}</b> ${esc(k.name_en || '')}</td><td class="n">${s.v == null ? '—' : xrNum(s.v)}</td><td class="n">${s.tv == null ? '—' : xrNum(s.tv)}</td><td>${xrDot(s.key)}${xrSt[s.key][0]}${k.latestAt ? ` <span class="xr-at">${esc(k.latestAt)}</span>` : ''}</td></tr>`).join('')}</tbody></table>`;
+    return `<tr><td><span class="xr-pb" style="background:${PCOL[code]}">${code}</span> ${esc(pl ? pillarShort(pl) : code)}<small>${esc((kGroup(kGroupOf(code)) || [])[1] || '')}${REFORM[code] ? ' · ' + esc(REFORM[code][0] + ' ' + REFORM[code][1]) : ''}</small></td><td class="n">${k.filter((x) => x.s.key === 'ok').length}/${k.length}</td><td class="n">${pj.n}</td><td class="n">${mb(pj.budget)}</td><td class="n">${pj.late || '—'}</td><td>${weak.length ? weak.map((x) => `KPI ${kno(x.k)} ${xrNum(x.s.v)} (เป้า ${xrNum(x.s.tv)})`).join(' · ') : k.some((x) => x.s.key === 'none') ? 'รอผล ' + k.filter((x) => x.s.key === 'none').map((x) => kno(x.k)).join(', ') : 'ผ่านเป้าทุกตัว'}</td></tr>`; }).join('');
+  const ktab = `<table class="xr-t xr-tk"><thead><tr><th>KPI</th><th class="n">ผล</th><th class="n">เป้า</th><th>สถานะ</th></tr></thead><tbody>${K.map(({ k, s }) => `<tr><td><b>${esc(kno(k))}</b> ${esc(k.name_en || '')}</td><td class="n">${s.v == null ? '—' : xrNum(s.v)}</td><td class="n">${s.tv == null ? '—' : xrNum(s.tv)}</td><td>${xrDot(s.key)}${xrSt[s.key][0]}${k.latestAt ? ` <span class="xr-at">${esc(k.latestAt)}</span>` : ''}</td></tr>`).join('')}</tbody></table>`;
   const rk = rankedRisks().filter((x) => x.sc > 0).slice(0, 5);
   const revSp = xrRevenue(), engSp = xrEng();
   return `<div class="xr-page">${xrHead('ภาพรวมแผนยุทธศาสตร์ 2570–2574', `${esc(C.vision || 'กรมสรรพสามิต')} · ข้อมูล ณ ${xrDate()}`, '#0E2756', 1)}
     <div class="xr-tiles">${tiles.map(([a, b, c]) => `<div><small>${a}</small><b>${b}</b><span>${c}</span></div>`).join('')}</div>
     <section><div class="xr-sh">ผลรายเสา · กองหน้า กองกลาง กองหลัง</div><table class="xr-t"><thead><tr><th>เสา</th><th class="n">KPI ผ่าน</th><th class="n">โครงการ</th><th class="n">งบ (ลบ.)</th><th class="n">ล่าช้า</th><th>ประเด็นที่ต้องติดตาม</th></tr></thead><tbody>${prow}</tbody></table></section>
-    <section><div class="xr-sh">KPI ทั้ง 14 ตัว ปีงบ ${kyr()}</div>${ktab}</section>
+    <section><div class="xr-sh">KPI 14 ตัว ปีงบ ${kyr()}</div>${ktab}</section>
     ${rk.length ? `<section><div class="xr-sh">Top 5 ความเสี่ยงระดับกรม</div><ol class="xr-rk xr-rk2">${rk.map((x) => { const lv = riskLevel(x.sc); return `<li><b>${esc(x.r.id)}</b> ${esc(x.r.name)} <span class="xr-lv xr-${lv.k}">${esc(x.r.pillar)} · ${lv.t}</span></li>`; }).join('')}</ol></section>` : ''}
     ${xrInsight(XR_ORDER, K, PJ, { p: revSp.p.slice(0, 1).concat(engSp.p || []).slice(0, 2), r: revSp.r.slice(0, 1) })}${xrFoot()}</div>`;
 }
