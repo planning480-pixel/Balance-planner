@@ -1,28 +1,28 @@
 {
-  "week": "47/2569",
-  "range": "16 – 22 พ.ย. 2569",
+  "week": "48/2569",
+  "range": "23 – 29 พ.ย. 2569",
   "url": "https://claude.ai/artifact/A6aFeSRLYqU44TJZ1k3X69",
   "items": [
     {
-      "cat": "ยาสูบ",
-      "icon": "smoke",
-      "title": "ยสท. กำไรทรุดเหลือหลักร้อยล้าน จี้คลังรื้อภาษีบุหรี่ 2 อัตรา",
-      "date": "18 พ.ย. 69",
-      "url": "https://www.thaipost.net/economy-news/1110942/"
-    },
-    {
       "cat": "รถยนต์",
       "icon": "car",
-      "title": "ญี่ปุ่นขานรับภาษีสรรพสามิตรถ EV นำเข้า 35% ช่วงคลังโรดโชว์โตเกียว",
-      "date": "18 พ.ย. 69",
-      "url": "https://infoquest.co.th/2026/681839"
+      "title": "ค่ายรถญี่ปุ่น–จีนยืนยันลงทุนไทยต่อ ขานรับภาษีสรรพสามิต EV นำเข้า 35%",
+      "date": "23 พ.ย. 69",
+      "url": "https://www.nationthailand.com/business/automobile/40073821"
     },
     {
       "cat": "น้ำมัน",
       "icon": "fuel",
-      "title": "โครงสร้างราคาน้ำมัน 17 พ.ย.: ภาษีดีเซล 6.92 บ. B20 0.431 บ./ลิตร",
-      "date": "17 พ.ย. 69",
-      "url": "https://www.thansettakij.com/economy/energy/673950"
+      "title": "โครงสร้างราคาน้ำมัน 24 พ.ย.: ภาษีดีเซล 6.92 บ. E20 0.358 B20 0.431 บ./ลิตร",
+      "date": "24 พ.ย. 69",
+      "url": "https://www.thansettakij.com/economy/energy/674483"
+    },
+    {
+      "cat": "น้ำมัน",
+      "icon": "fuel",
+      "title": "ราคาน้ำมัน 25 พ.ย.: หน้าโรงกลั่นดีเซลลดเหลือ 29.56 บ. ภาษีสรรพสามิตคงเดิม",
+      "date": "25 พ.ย. 69",
+      "url": "https://www.thansettakij.com/economy/energy/674552"
     }
   ]
 }
